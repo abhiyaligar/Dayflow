@@ -14,10 +14,10 @@
     --surface: 255 255 255;          /* #FFFFFF - Cards */
     
     /* Primary */
-    --primary: 102 88 245;           /* #6658F5 - Indigo/Purple */
-    --primary-hover: 87 72 232;      /* #5748E8 */
-    --primary-light: 238 234 254;    /* #EEEAFE */
-    --primary-vlight: 245 243 255;   /* #F5F3FF */
+    --primary: 23 23 23;           /* #171717 - Indigo/Purple */
+    --primary-hover: 38 38 38;      /* #262626 */
+    --primary-light: 229 231 235;    /* #EAEAEA */
+    --primary-vlight: 243 244 246;   /* #F5F5F5 */
     
     /* Text */
     --text-primary: 23 26 69;        /* #171A45 - Deep Navy */
