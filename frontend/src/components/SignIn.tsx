@@ -65,7 +65,7 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess }) =>
         
         {/* Company Header */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-[#6658F5] flex items-center justify-center font-bold text-white text-2xl tracking-wider mx-auto mb-3.5 shadow-md shadow-[#6658F5]/10">
+          <div className="w-14 h-14 rounded-2xl bg-[#171717] flex items-center justify-center font-bold text-white text-2xl tracking-wider mx-auto mb-3.5 shadow-md shadow-[#171717]/10">
             DF
           </div>
           <h2 className="text-2xl font-extrabold text-[#171A45] tracking-tight">Sign in Page</h2>
@@ -91,7 +91,7 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess }) =>
               value={loginId}
               onChange={(e) => setLoginId(e.target.value)}
               placeholder="e.g. JADO2026001 or email"
-              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-3 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-3 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
             />
           </div>
 
@@ -108,7 +108,7 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess }) =>
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl pl-4 pr-10 py-3 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl pl-4 pr-10 py-3 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
               />
               <button
                 type="button"
@@ -131,7 +131,7 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess }) =>
 
           <button
             type="submit"
-            className="w-full bg-[#6658F5] hover:bg-[#5748E8] active:bg-[#5243EF] text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md shadow-[#6658F5]/10 mt-2"
+            className="w-full bg-[#171717] hover:bg-[#262626] active:bg-[#111111] text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md shadow-[#171717]/10 mt-2"
           >
             SIGN IN
           </button>
@@ -141,9 +141,9 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess }) =>
         <div className="text-center mt-6">
           <button
             onClick={() => onNavigate('SIGN_UP')}
-            className="text-xs text-[#70738D] hover:text-[#6658F5] font-semibold transition-colors focus:outline-none"
+            className="text-xs text-[#70738D] hover:text-[#171717] font-semibold transition-colors focus:outline-none"
           >
-            Don't have an Account? <span className="underline font-bold text-[#171A45] hover:text-[#6658F5]">Sign Up</span>
+            Don't have an Account? <span className="underline font-bold text-[#171A45] hover:text-[#171717]">Sign Up</span>
           </button>
         </div>
       </div>

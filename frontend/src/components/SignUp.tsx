@@ -84,7 +84,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
         
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="w-14 h-14 rounded-2xl bg-[#6658F5] flex items-center justify-center font-bold text-white text-2xl tracking-wider mx-auto mb-2 shadow-md shadow-[#6658F5]/10">
+          <div className="w-14 h-14 rounded-2xl bg-[#171717] flex items-center justify-center font-bold text-white text-2xl tracking-wider mx-auto mb-2 shadow-md shadow-[#171717]/10">
             DF
           </div>
           <h2 className="text-2xl font-extrabold text-[#171A45] tracking-tight">Sign Up Page</h2>
@@ -127,7 +127,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
                 type="file"
                 accept="image/*"
                 onChange={handleLogoChange}
-                className="text-xs text-[#70738D] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#6658F5]/10 file:text-[#6658F5] hover:file:bg-[#6658F5]/20 cursor-pointer"
+                className="text-xs text-[#70738D] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#171717]/10 file:text-[#171717] hover:file:bg-[#171717]/20 cursor-pointer"
               />
             </div>
           </div>
@@ -142,7 +142,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
               placeholder="e.g. Acme Corporation"
-              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
             />
           </div>
 
@@ -157,7 +157,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
                 value={employeeId}
                 onChange={(e) => setEmployeeId(e.target.value)}
                 placeholder="e.g. JASM2026001"
-                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
               />
             </div>
 
@@ -169,7 +169,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
                 id="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value as 'Employee' | 'HR')}
-                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
               >
                 <option value="Employee">Employee</option>
                 <option value="HR">HR Officer</option>
@@ -187,7 +187,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="e.g. jane.smith@dayflow.com"
-              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
             />
           </div>
 
@@ -203,7 +203,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl pl-3.5 pr-9 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl pl-3.5 pr-9 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
                 />
                 <button
                   type="button"
@@ -235,7 +235,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl pl-3.5 pr-9 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl pl-3.5 pr-9 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
                 />
                 <button
                   type="button"
@@ -259,7 +259,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
 
           <button
             type="submit"
-            className="w-full bg-[#6658F5] hover:bg-[#5748E8] active:bg-[#5243EF] text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md shadow-[#6658F5]/10 mt-4"
+            className="w-full bg-[#171717] hover:bg-[#262626] active:bg-[#111111] text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md shadow-[#171717]/10 mt-4"
           >
             Register Account
           </button>
@@ -269,9 +269,9 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
         <div className="text-center mt-5">
           <button
             onClick={() => onNavigate('SIGN_IN')}
-            className="text-xs text-[#70738D] hover:text-[#6658F5] font-semibold transition-colors focus:outline-none"
+            className="text-xs text-[#70738D] hover:text-[#171717] font-semibold transition-colors focus:outline-none"
           >
-            Already have an account? <span className="underline font-bold text-[#171A45] hover:text-[#6658F5]">Sign In</span>
+            Already have an account? <span className="underline font-bold text-[#171A45] hover:text-[#171717]">Sign In</span>
           </button>
         </div>
       </div>
