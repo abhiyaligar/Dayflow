@@ -12,6 +12,19 @@ Dayflow includes:
 *   Attendance tracking with daily/weekly logs and check-in/check-out functionality.
 *   Time-off request submission and approval workflow.
 *   Basic payroll and salary structure visibility.
+*   AWS S3-compatible cloud storage for secure document uploads (resumes, medical certificates, and payslips).
+
+### 1.3 Strict UI/UX System Rules
+Dayflow incorporates a premium **Swiss Minimalist design language** focused on legibility and ease of use:
+1.  **No Neon/Glows**: No glowing text, excessive drop-shadows with heavy blurs, neon buttons, or loud gradients.
+2.  **3-Color Palette Constraint**: Maximum of three stable primary colors:
+    *   **Backgrounds**: Clean off-white (`#F8F9FA` or `#FAFAFA`) and pure white (`#FFFFFF`) card containers.
+    *   **Typography**: Stark, high-contrast near-black (`#111111`) for headings, fields, and major text.
+    *   **Borders & Separators**: Slate steel gray (`#E2E8F0` / `#718096`) for divisions.
+3.  **Flat Status Badges**: All statuses use flat borders and light, pastel backgrounds:
+    *   **Present (Checked-In)**: Forest Green (`#2F855A` text, `#F0FDF4` background, `#DCFCE7` border).
+    *   **On Leave (Approved)**: Steel Blue (`#2B6CB0` text, `#EBF8FF` background, `#BEE3F8` border).
+    *   **Absent/Neutral**: Muted Red (`#C53030` text, `#FFF5F5` background, `#FED7D7` border) or Slate Gray (`#718096` text, `#F8F9FA` background, `#E2E8F0` border).
 
 ---
 
@@ -49,10 +62,10 @@ The system has two primary roles:
 *   Consolidated directory of employee cards.
 *   **Employee Cards & Status Indicators**:
     *   Each card displays the employee's profile picture and basic details.
-    *   At the top-right corner of each card, a status indicator shows the employee's current attendance or work status:
-        *   🟢 **Green dot**: Present (Employee is checked-in and present in the office).
-        *   ✈️ **Airplane icon**: On Leave (Employee has an approved leave request for the current day).
-        *   🟡 **Yellow dot**: Absent (Employee has not checked-in and has not applied for time-off for the current day).
+    *   At the top-right corner of each card, a status indicator shows the employee's current attendance or work status using the standard flat badges:
+        *   🟢 **Present**: Employee is checked-in and present in the office.
+        *   ✈️ **On Leave**: Employee has an approved leave request for the current day.
+        *   🟡 **Absent**: Employee has not checked-in and has not applied for time-off for the current day.
 
 ### 3.3 Employee Profile Management
 *   **View Profile**:

@@ -4,11 +4,17 @@ Dayflow is a modern, custom-built Human Resource Management System (HRMS) design
 
 ---
 
-## 🚀 Tech Stack
+## 🚀 Tech Stack & Design Language
 
-*   **Frontend**: React (with TypeScript & TSX) styled with Tailwind CSS (Stable v3).
+*   **Design Paradigm**: Premium, flat **Swiss Minimalist Layout**.
+    *   *Off-White Canvas*: `#F8F9FA` standard background, clean `#FFFFFF` card blocks.
+    *   *High-Contrast Text*: Stark near-black `#111111` headings and labels.
+    *   *Steel Borders*: Elegant fine outlines `#E2E8F0` with zero glows or neons.
+    *   *Stable Accents*: Forest green (`#2F855A` / Present), Steel blue (`#2B6CB0` / On Leave), and Muted red (`#C53030` / Absent).
+*   **Frontend**: React SPA (TypeScript & TSX) styled with Tailwind CSS (v3).
 *   **Backend**: FastAPI (Python 3.10+) utilizing SQLAlchemy.
-*   **Database**: PostgreSQL with schema management via **Alembic**.
+*   **Database**: PostgreSQL with schema management and migrations via **Alembic**.
+*   **Storage Integration**: Integrated with Supabase S3 bucket wrapper for secure employee resume, medical certificate, and payslip uploads with correct CORS policies.
 *   **Authentication**: Custom JWT authentication and authorization.
 
 ---
@@ -18,80 +24,25 @@ Dayflow is a modern, custom-built Human Resource Management System (HRMS) design
 ```text
 dayflow/
 ├── backend/                    # FastAPI Backend & Database Migrations
-│   ├── alembic/                # Database migration scripts and configuration
-│   │   ├── versions/           # Versioned schema migration files
-│   │   ├── env.py              # Alembic environment and connection setup
-│   │   └── script.py.mako      # Template for generating new migrations
-│   ├── app/                    # Main FastAPI Application
-│   │   ├── api/                # API Endpoints & Route Definitions
-│   │   │   ├── v1/             # Version 1 API routers
-│   │   │   │   ├── attendance.py  # Check-in, check-out, and break logging
-│   │   │   │   ├── auth.py        # Login, logout, and password management
-│   │   │   │   ├── employees.py   # Employee profiles, onboarding, and details
-│   │   │   │   ├── leaves.py      # Leave requests, applications, and status updates
-│   │   │   │   └── payroll.py     # Payroll calculation pipelines & payslips
-│   │   │   └── deps.py         # FastAPI dependency injections (DB session, security)
-│   │   ├── core/               # App Configuration & Utilities
-│   │   │   ├── config.py       # Pydantic environment configurations & DB url parser
-│   │   │   ├── security.py     # Password hashing (bcrypt) and JWT auth token helpers
-│   │   │   └── storage.py      # AWS S3 wrapper for document management (onboarding files)
-│   │   ├── db/                 # Database utilities
-│   │   │   └── seed.py         # DB seeding script for default master roles and admin
-│   │   ├── models/             # SQLAlchemy ORM Data Models
-│   │   │   ├── attendance.py   # Attendance schema model
-│   │   │   ├── document.py     # Onboarding document schema model
-│   │   │   ├── employee.py     # Detailed profile schema model
-│   │   │   ├── leave.py        # Leave request schema model
-│   │   │   ├── salary.py       # Salary component structure schema model
-│   │   │   └── user.py         # Login user schema model
-│   │   ├── schemas/            # Pydantic Schemas (Request/Response validation)
-│   │   │   ├── attendance.py   # Attendance payload schemas
-│   │   │   ├── auth.py         # Login & credentials validation schemas
-│   │   │   ├── document.py     # Document payload schemas
-│   │   │   ├── employee.py     # Onboarding and profile payload schemas
-│   │   │   ├── leave.py        # Leave request payload schemas
-│   │   │   └── salary.py       # Salary structure components & calculations schemas
-│   │   ├── database.py         # Database engine setup and local session generator
-│   │   └── main.py             # FastAPI App Entrypoint (Middleware, routers, CORS)
-│   ├── tests/                  # Backend Pytest Test Suite
-│   │   ├── conftest.py         # Isolated database configuration & test fixtures
-│   │   └── test_endpoints.py   # Integration tests for endpoints
-│   ├── alembic.ini             # Alembic migration script setup
-│   ├── pytest.ini              # Pytest configuration definitions
-│   ├── requirements.txt        # Python pip package dependencies
-│   └── runtime.txt             # Deployment target runtime (Python version)
 ├── frontend/                   # React + TypeScript + Tailwind CSS Frontend
-│   ├── public/                 # Static assets directory
-│   ├── src/                    # Source React application
-│   │   ├── assets/             # SVG and image assets
-│   │   ├── App.css             # Tailwind UI components and custom animations
-│   │   ├── App.tsx             # Core app router, state handling, & dashboards
-│   │   ├── index.css           # Global CSS and Tailwind imports
-│   │   └── main.tsx            # Vite root entrypoint rendering the virtual DOM
-│   ├── package.json            # Node project configuration & dependencies
-│   ├── postcss.config.js       # PostCSS plugins configuration (Autoprefixer)
-│   ├── tailwind.config.js      # Tailwind CSS utilities configuration
-│   └── vite.config.ts          # Vite builder configurations
 ├── docs/                       # Technical Project Documentation
-│   ├── architecture.md         # High-level architecture and backend workflows
+│   ├── architecture.md         # High-level architecture, S3 integrations and backend workflows
 │   ├── database_architecture.md# PostgreSQL relational schema and indexes architecture
 │   ├── api_reference.md        # Endpoint documentation & role access matrix
 │   └── prd.md                  # Product Requirements & Feature workflows
-├── README.md                   # Root repository documentation (this file)
-└── Dayflow - Human Resource Management System.pdf # System specification guide document
+└── README.md                   # Root repository documentation (this file)
 ```
 
 ---
 
 ## 📖 Project Documentation
 
-Detailed plans and architectures are stored within the [`docs/`](file:///C:/Users/91974/desktop/dayflow/docs) directory:
+Detailed plans and architectures are stored within the [`docs/`](./docs) directory:
 
-1.  **[Product Requirements Document (PRD)](file:///C:/Users/91974/desktop/dayflow/docs/prd.md)**: Product details, workflows, user stories, and features.
-2.  **[System Architecture](file:///C:/Users/91974/desktop/dayflow/docs/architecture.md)**: Folder structures, execution paths, modules, and API guidelines.
-3.  **[Database Architecture](file:///C:/Users/91974/desktop/dayflow/docs/database_architecture.md)**: PostgreSQL schemas, relationships, constraints, indexes, and Alembic setup.
-4.  **[API Reference](file:///C:/Users/91974/desktop/dayflow/docs/api_reference.md)**: Details on endpoints, parameters, requests, responses, and authorization tiers.
-
+1.  **[Product Requirements Document (PRD)](./docs/prd.md)**: Product details, workflows, user stories, and features.
+2.  **[System Architecture](./docs/architecture.md)**: Folder structures, execution paths, modules, S3 integration, and API guidelines.
+3.  **[Database Architecture](./docs/database_architecture.md)**: PostgreSQL schemas, relationships, constraints, indexes, and Alembic setup.
+4.  **[API Reference](./docs/api_reference.md)**: Details on endpoints, parameters, requests, responses, and authorization tiers.
 
 ---
 
@@ -124,6 +75,10 @@ Detailed plans and architectures are stored within the [`docs/`](file:///C:/User
    DATABASE_URL=postgresql+asyncpg://<username>:<password>@<host>:<port>/<dbname>
    SECRET_KEY=your-jwt-signing-secret
    ACCESS_TOKEN_EXPIRE_MINUTES=60
+   AWS_S3_ENDPOINT_URL=https://<your-supabase-id>.storage.supabase.co/storage/v1/s3
+   AWS_ACCESS_KEY_ID=your-s3-access-key-id
+   AWS_SECRET_ACCESS_KEY=your-s3-secret-key
+   AWS_BUCKET_NAME=your-bucket-name
    ```
 5. Apply database migrations:
    ```bash
@@ -138,7 +93,6 @@ Detailed plans and architectures are stored within the [`docs/`](file:///C:/User
    ```bash
    uvicorn app.main:app --reload
    ```
-   *Documentation will be accessible at `http://127.0.0.1:8000/docs`.*
 
 ### 3. Frontend Setup
 1. Navigate to the frontend folder:

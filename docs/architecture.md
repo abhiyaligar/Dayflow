@@ -11,6 +11,7 @@ Dayflow uses a client-server architecture with a clear separation of concerns be
 *   **Frontend**: A Single Page Application (SPA) built with React, TypeScript, and Tailwind CSS. It communicates with the backend via a RESTful API.
 *   **Backend**: A REST API application built with FastAPI (Python 3.10+), using SQLAlchemy for Object-Relational Mapping (ORM) and Alembic for relational database migrations.
 *   **Database**: PostgreSQL is used as the relational database.
+*   **Object Storage**: AWS S3 compatible object storage (integrated via Supabase storage API S3 endpoints) handles document uploads (such as certificates, resumes, and text payslips).
 
 ---
 
@@ -25,6 +26,7 @@ The backend follows a modular layer architecture to ensure maintainability, scal
 *   **Database Migrations**: Alembic
 *   **Authentication**: Custom JWT-based authentication (OAuth2 Password Bearer flow)
 *   **Database**: PostgreSQL
+*   **File Storage**: Boto3 client pointing to Supabase S3.
 
 ### 2.2 Core Backend Workflows & Logic
 
@@ -64,19 +66,27 @@ The backend follows a modular layer architecture to ensure maintainability, scal
    *   `Payable Days = Total Working Days in Month - Unpaid Leaves - Missing Attendance Days`.
    *   Calculates salary deductions based on missing days and applies it to the final payout calculations.
 
+#### 2.2.4 Object Storage Integration & CORS
+1. **Service Class**: `app/core/storage.py` encapsulates file operations utilizing `boto3.client("s3")`.
+2. **Supabase AWS S3 integration**: Documents are safely backed up in a secure bucket on Supabase S3 storage.
+3. **CORS Handling**: Backend endpoints are configured with strict FastAPI CORS origin configurations to safely allow communication between `http://localhost:5173` and the backend `http://localhost:8000` while preventing fetch block exceptions.
+
 ---
 
 ## 3. Frontend Architecture (React, TSX, Tailwind CSS)
 
-### 3.1 Components & UI Flow
-*   **Status Indicators**:
-    *   Employee cards query the daily attendance state from the backend.
-    *   If present -> displays a Green dot.
-    *   If approved leave exists -> displays an Airplane icon.
-    *   If no check-in and no approved leave exists -> displays a Yellow dot.
-*   **Salary Configuration Panel**:
-    *   Responsive form under the Admin tab. Editing the "Wage" input triggers state hooks to instantly recalculate and display the read-only component breakdowns (Basic, HRA, Standard, LTA, Fixed Allowance, PF, and PT) before saving.
-*   **Attendance Page**:
-    *   Employees see a calendar view of the current ongoing month by default showing day-wise check-in/out times, total hours worked, and break durations.
-*   **Admin Views**:
-    *   Real-time dashboard showing present employees for the current day.
+### 3.1 Design System & Aesthetic Structure
+Dayflow implements a strict, elegant **Swiss Minimalist aesthetic** to maximize legibility and user-friendliness:
+*   **Palette limitation**: Strictly restricted to White, Dark Near-Black, and Slate Steel borders.
+*   **Flat Components**: Absence of neon, heavy drop shadows, glowing effects, and gradients.
+*   **Indicators**:
+    *   🟢 **Present Status Badge**: `#2F855A` (Forest Green text) on `#F0FDF4` bg.
+    *   ✈️ **On Leave Status Badge**: `#2B6CB0` (Steel Blue text) on `#EBF8FF` bg.
+    *   🟡 **Absent Status Badge**: `#C53030` (Muted Red text) on `#FFF5F5` bg.
+*   **Forms & Modals**: Clean labels, border outlines (`border-[#E2E8F0]`), and flat input backgrounds (`bg-[#F8F9FA]`).
+
+### 3.2 Key Components
+*   **TopBar / Sidebar**: Integrated with minimal breadcrumbs, a simplified workspace check-in panel, and responsive layouts.
+*   **Dashboard**: Shows attendance trends and summaries using basic, dynamic inline SVG charts.
+*   **Time Off Module**: Leaves request tables and modal request flows styled with flat badge status lists.
+*   **My Profile**: Tab-based user workspace incorporating direct file upload features to S3.
