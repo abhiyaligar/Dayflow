@@ -1,13 +1,14 @@
 import secrets
 import string
 import uuid
-from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import get_current_user, get_current_hr_user, get_current_admin_user, get_current_hr_or_admin_user
 from app.core import security, storage
+from app.core.email import send_onboarding_email
 from app.database import get_db
 from app.models.user import User
 from app.models.employee import Employee
@@ -60,6 +61,7 @@ async def generate_login_id(
 @router.post("/onboard", response_model=EmployeeOnboardResponse, status_code=status.HTTP_201_CREATED)
 async def onboard_employee(
     payload: EmployeeOnboard,
+    background_tasks: BackgroundTasks,
     current_user: User = Depends(get_current_hr_or_admin_user),
     db: AsyncSession = Depends(get_db)
 ):
@@ -114,6 +116,14 @@ async def onboard_employee(
     )
     db.add(new_employee)
     await db.commit()
+
+    background_tasks.add_task(
+        send_onboarding_email,
+        email=payload.email,
+        login_id=login_id,
+        temp_password=temp_password,
+        first_name=payload.first_name,
+    )
 
     return {
         "id": new_employee.id,

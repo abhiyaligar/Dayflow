@@ -39,5 +39,15 @@ class Settings(BaseSettings):
     AWS_REGION: str = "us-east-1"
     AWS_S3_BUCKET_NAME: str | None = None
 
+    # SMTP Email Settings
+    SMTP_HOST: str | None = None
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: str | None = None
+    SMTP_PASSWORD: str | None = None
+    SMTP_FROM_EMAIL: str | None = None
+    SMTP_FROM_NAME: str = "Dayflow HR"
+    SMTP_TLS: bool = True
+    SMTP_SSL: bool = False
+
 
 settings = Settings()
