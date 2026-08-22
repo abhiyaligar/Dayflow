@@ -17,14 +17,68 @@ Dayflow is a modern, custom-built Human Resource Management System (HRMS) design
 
 ```text
 dayflow/
-├── backend/            # FastAPI Backend & Database Migrations
-├── frontend/           # React + TypeScript + Tailwind CSS Frontend
-├── docs/               # Technical Documentation
-│   ├── architecture.md
-│   ├── database_architecture.md
-│   ├── api_reference.md
-│   └── prd.md
-└── README.md           # Root repository guide (this file)
+├── backend/                    # FastAPI Backend & Database Migrations
+│   ├── alembic/                # Database migration scripts and configuration
+│   │   ├── versions/           # Versioned schema migration files
+│   │   ├── env.py              # Alembic environment and connection setup
+│   │   └── script.py.mako      # Template for generating new migrations
+│   ├── app/                    # Main FastAPI Application
+│   │   ├── api/                # API Endpoints & Route Definitions
+│   │   │   ├── v1/             # Version 1 API routers
+│   │   │   │   ├── attendance.py  # Check-in, check-out, and break logging
+│   │   │   │   ├── auth.py        # Login, logout, and password management
+│   │   │   │   ├── employees.py   # Employee profiles, onboarding, and details
+│   │   │   │   ├── leaves.py      # Leave requests, applications, and status updates
+│   │   │   │   └── payroll.py     # Payroll calculation pipelines & payslips
+│   │   │   └── deps.py         # FastAPI dependency injections (DB session, security)
+│   │   ├── core/               # App Configuration & Utilities
+│   │   │   ├── config.py       # Pydantic environment configurations & DB url parser
+│   │   │   ├── security.py     # Password hashing (bcrypt) and JWT auth token helpers
+│   │   │   └── storage.py      # AWS S3 wrapper for document management (onboarding files)
+│   │   ├── db/                 # Database utilities
+│   │   │   └── seed.py         # DB seeding script for default master roles and admin
+│   │   ├── models/             # SQLAlchemy ORM Data Models
+│   │   │   ├── attendance.py   # Attendance schema model
+│   │   │   ├── document.py     # Onboarding document schema model
+│   │   │   ├── employee.py     # Detailed profile schema model
+│   │   │   ├── leave.py        # Leave request schema model
+│   │   │   ├── salary.py       # Salary component structure schema model
+│   │   │   └── user.py         # Login user schema model
+│   │   ├── schemas/            # Pydantic Schemas (Request/Response validation)
+│   │   │   ├── attendance.py   # Attendance payload schemas
+│   │   │   ├── auth.py         # Login & credentials validation schemas
+│   │   │   ├── document.py     # Document payload schemas
+│   │   │   ├── employee.py     # Onboarding and profile payload schemas
+│   │   │   ├── leave.py        # Leave request payload schemas
+│   │   │   └── salary.py       # Salary structure components & calculations schemas
+│   │   ├── database.py         # Database engine setup and local session generator
+│   │   └── main.py             # FastAPI App Entrypoint (Middleware, routers, CORS)
+│   ├── tests/                  # Backend Pytest Test Suite
+│   │   ├── conftest.py         # Isolated database configuration & test fixtures
+│   │   └── test_endpoints.py   # Integration tests for endpoints
+│   ├── alembic.ini             # Alembic migration script setup
+│   ├── pytest.ini              # Pytest configuration definitions
+│   ├── requirements.txt        # Python pip package dependencies
+│   └── runtime.txt             # Deployment target runtime (Python version)
+├── frontend/                   # React + TypeScript + Tailwind CSS Frontend
+│   ├── public/                 # Static assets directory
+│   ├── src/                    # Source React application
+│   │   ├── assets/             # SVG and image assets
+│   │   ├── App.css             # Tailwind UI components and custom animations
+│   │   ├── App.tsx             # Core app router, state handling, & dashboards
+│   │   ├── index.css           # Global CSS and Tailwind imports
+│   │   └── main.tsx            # Vite root entrypoint rendering the virtual DOM
+│   ├── package.json            # Node project configuration & dependencies
+│   ├── postcss.config.js       # PostCSS plugins configuration (Autoprefixer)
+│   ├── tailwind.config.js      # Tailwind CSS utilities configuration
+│   └── vite.config.ts          # Vite builder configurations
+├── docs/                       # Technical Project Documentation
+│   ├── architecture.md         # High-level architecture and backend workflows
+│   ├── database_architecture.md# PostgreSQL relational schema and indexes architecture
+│   ├── api_reference.md        # Endpoint documentation & role access matrix
+│   └── prd.md                  # Product Requirements & Feature workflows
+├── README.md                   # Root repository documentation (this file)
+└── Dayflow - Human Resource Management System.pdf # System specification guide document
 ```
 
 ---
