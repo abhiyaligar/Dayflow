@@ -167,3 +167,77 @@ async def test_payroll_calculation(client: AsyncClient, seeded_users):
     payslip_data = payslip_res.json()
     assert payslip_data["base_wage"] == 12000.00
     assert "net_pay" in payslip_data
+
+
+@pytest.mark.asyncio
+async def test_signup_flow(client: AsyncClient, seeded_users):
+    # 1. Login as HR to onboard a new employee
+    login_res = await client.post(
+        "/api/v1/auth/login",
+        data={"username": "hr@dayflow.com", "password": "AdminPassword123"},
+    )
+    token = login_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # Onboard Alice Wood
+    onboard_payload = {
+        "first_name": "Alice",
+        "last_name": "Wood",
+        "email": "alice@dayflow.com",
+        "joining_year": 2026,
+        "designation": "QA Analyst",
+        "department": "Engineering",
+        "joining_date": str(date.today()),
+        "role": "Employee"
+    }
+    onboard_res = await client.post(
+        "/api/v1/employees/onboard",
+        json=onboard_payload,
+        headers=headers
+    )
+    assert onboard_res.status_code == 201
+    emp_id = onboard_res.json()["login_id"]
+
+    # 2. Try to signup with an invalid/weak password (violates length constraint)
+    weak_payload_1 = {
+        "employee_id": emp_id,
+        "email": "alice@dayflow.com",
+        "password": "short",
+        "role": "Employee"
+    }
+    res_weak_1 = await client.post("/api/v1/auth/signup", json=weak_payload_1)
+    assert res_weak_1.status_code == 422
+
+    # Try to signup with a weak password (violates uppercase/number/special constraints)
+    weak_payload_2 = {
+        "employee_id": emp_id,
+        "email": "alice@dayflow.com",
+        "password": "weakpasswordnoextra",
+        "role": "Employee"
+    }
+    res_weak_2 = await client.post("/api/v1/auth/signup", json=weak_payload_2)
+    assert res_weak_2.status_code == 422
+
+    # 3. Signup with correct strong password
+    strong_payload = {
+        "employee_id": emp_id,
+        "email": "alice@dayflow.com",
+        "password": "AlicePassword123!",
+        "role": "Employee"
+    }
+    res_strong = await client.post("/api/v1/auth/signup", json=strong_payload)
+    assert res_strong.status_code == 201
+    assert "Registration successful" in res_strong.json()["message"]
+
+    # 4. Try signing up again (should fail)
+    res_retry = await client.post("/api/v1/auth/signup", json=strong_payload)
+    assert res_retry.status_code == 400
+    assert "already registered" in res_retry.json()["detail"]
+
+    # 5. Verify the newly signed-up user can log in with their password
+    login_alice = await client.post(
+        "/api/v1/auth/login",
+        json={"username": "alice@dayflow.com", "password": "AlicePassword123!"}
+    )
+    assert login_alice.status_code == 200
+    assert login_alice.json()["role"] == "Employee"

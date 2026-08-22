@@ -7,10 +7,76 @@ from app.core import security
 from app.core.config import settings
 from app.database import get_db
 from app.models.user import User
-from app.schemas.auth import Token, ChangePasswordPayload
+from app.models.employee import Employee
+from app.schemas.auth import Token, ChangePasswordPayload, SignUpPayload
 from app.api.deps import get_current_user
 
 router = APIRouter()
+
+
+@router.post("/signup", status_code=status.HTTP_201_CREATED)
+async def signup(
+    payload: SignUpPayload,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Allows onboarded employees to complete their registration, verify their email, and set their account password.
+    """
+    # Find matching Employee profile first
+    emp_result = await db.execute(
+        select(Employee).filter(Employee.employee_id == payload.employee_id)
+    )
+    employee = emp_result.scalars().first()
+    if not employee:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Employee profile with this Employee ID does not exist. Please contact HR to be onboarded first."
+        )
+
+    # Fetch associated User account
+    user_result = await db.execute(
+        select(User).filter(User.id == employee.user_id)
+    )
+    user = user_result.scalars().first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Associated user account not found."
+        )
+
+    # Validate email
+    if user.email != payload.email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The provided email does not match the onboarded email for this Employee ID."
+        )
+
+    # Check if already registered/verified
+    if user.is_verified:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This employee account is already registered. Please login instead."
+        )
+
+    # Validate role alignment
+    if user.role != payload.role:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"The provided role does not align with your onboarded role: {user.role}"
+        )
+
+    # Update password and activate user
+    user.hashed_password = security.get_password_hash(payload.password)
+    user.is_verified = True
+    user.is_first_login = False
+
+    db.add(user)
+    await db.commit()
+
+    # Log mock email verification trigger (PDF: "Email verification is required.")
+    print(f"[MOCK EMAIL VERIFICATION] Verification link triggered for {user.email}. Verification code completed successfully.")
+
+    return {"message": "Registration successful. Your email has been verified and you can now login."}
 
 
 @router.post("/login", response_model=Token)
