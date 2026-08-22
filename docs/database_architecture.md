@@ -19,6 +19,7 @@ erDiagram
     employees ||--o{ attendance : "logs"
     employees ||--o{ leave_requests : "requests"
     employees ||--|| salary_structures : "has_salary"
+    employees ||--o{ documents : "uploads"
 
     users {
         UUID id PK
@@ -85,6 +86,14 @@ erDiagram
         NUMERIC pf_rate "Default: 0.12 (12% of basic)"
         NUMERIC professional_tax "Default: 200.00"
         TIMESTAMP updated_at
+    }
+
+    documents {
+        UUID id PK
+        UUID employee_id FK
+        VARCHAR name
+        VARCHAR file_url
+        TIMESTAMP uploaded_at
     }
 ```
 
@@ -159,6 +168,14 @@ Configures monthly salary breakdown parameters.
 *   `pf_rate`: `NUMERIC(5, 4)` (Not Null, default: `0.1200`) - 12% PF rate.
 *   `professional_tax`: `NUMERIC(12, 2)` (Not Null, default: `200.00`)
 *   `updated_at`: `TIMESTAMP` (Default: `CURRENT_TIMESTAMP` on update)
+
+### 3.6 `documents` Table
+Stores uploaded documents linked to employees.
+*   `id`: `UUID` (Primary Key, default: `uuid_generate_v4()`)
+*   `employee_id`: `UUID` (Foreign Key -> `employees.id`, Not Null, Cascade Delete, Indexed)
+*   `name`: `VARCHAR(255)` (Not Null) - Original filename of the document (e.g., `contract.pdf`).
+*   `file_url`: `VARCHAR(1000)` (Not Null) - The storage link pointing to the local static uploads or S3 bucket.
+*   `uploaded_at`: `TIMESTAMP` (Default: `CURRENT_TIMESTAMP`, Not Null)
 
 ---
 

@@ -182,3 +182,56 @@ Sets the base wage and triggers auto-component compilation.
       "performance_bonus": 5000.00
     }
     ```
+
+---
+
+## 6. Document Management (`/employees/{employee_id}/documents`)
+
+### 6.1 Upload Document
+Allows employees (for themselves) or HR to upload a new document (e.g., contract, certificate) via multipart form file fields.
+*   **Method**: `POST`
+*   **URL**: `/employees/{employee_id}/documents`
+*   **Authentication Required**: Yes
+*   **Content-Type**: `multipart/form-data`
+*   **Payload**: Form-data with key `file` containing the document file.
+*   **Response (201 Created)**:
+    ```json
+    {
+      "id": "e43b17be-512c-4976-963d-4c3dbb9f1d02",
+      "employee_id": "c19b16be-512c-4976-963d-4c3dbb9f1d05",
+      "name": "contract.pdf",
+      "file_url": "/static/uploads/7a0d88ec-0694-4161-b52d-e6f350b33a9b.pdf",
+      "uploaded_at": "2026-08-22T12:00:00"
+    }
+    ```
+
+### 6.2 List Documents
+Lists all uploaded documents for a specific employee.
+*   **Method**: `GET`
+*   **URL**: `/employees/{employee_id}/documents`
+*   **Authentication Required**: Yes (Employee for themselves, or HR/Admin for anyone)
+*   **Response (200 OK)**:
+    ```json
+    [
+      {
+        "id": "e43b17be-512c-4976-963d-4c3dbb9f1d02",
+        "employee_id": "c19b16be-512c-4976-963d-4c3dbb9f1d05",
+        "name": "contract.pdf",
+        "file_url": "/static/uploads/7a0d88ec-0694-4161-b52d-e6f350b33a9b.pdf",
+        "uploaded_at": "2026-08-22T12:00:00"
+      }
+    ]
+    ```
+
+### 6.3 Delete Document
+Deletes an uploaded file (detaches from DB and cleans storage).
+*   **Method**: `DELETE`
+*   **URL**: `/employees/{employee_id}/documents/{document_id}`
+*   **Authentication Required**: Yes (Employee for themselves, or HR/Admin for anyone)
+*   **Response (200 OK)**:
+    ```json
+    {
+      "message": "Document deleted successfully."
+    }
+    ```
+
