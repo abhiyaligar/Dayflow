@@ -70,7 +70,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="md:hidden fixed bottom-4 right-4 z-50">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="w-12 h-12 bg-[#5243EF] text-white rounded-full flex items-center justify-center shadow-lg focus:outline-none"
+          className="w-12 h-12 bg-[#111111] text-white rounded-full flex items-center justify-center shadow-lg focus:outline-none"
         >
           {mobileOpen ? (
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -86,7 +86,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Desktop Sidebar Container */}
       <aside className={`
-        fixed inset-y-0 left-0 z-40 w-64 bg-[#5243EF] text-white/90 p-5 flex flex-col justify-between transition-transform duration-300 md:sticky md:translate-x-0
+        fixed inset-y-0 left-0 z-40 w-64 bg-[#111111] text-white/90 p-5 flex flex-col justify-between transition-transform duration-300 md:sticky md:translate-x-0
         ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Top: Logo & Navigation */}
@@ -96,7 +96,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {localStorage.getItem('df_company_logo') ? (
               <img src={localStorage.getItem('df_company_logo')!} alt="Logo" className="w-9 h-9 object-cover rounded-xl shadow-sm bg-white" />
             ) : (
-              <div className="w-9 h-9 bg-white text-[#5243EF] rounded-xl flex items-center justify-center font-bold text-xl tracking-wider shadow-sm">
+              <div className="w-9 h-9 bg-white text-[#111111] rounded-xl flex items-center justify-center font-bold text-xl tracking-wider shadow-sm">
                 df
               </div>
             )}

@@ -67,7 +67,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         <div className="relative">
           <button
             onClick={() => setSystrayOpen(!systrayOpen)}
-            className="flex items-center space-x-2 bg-[#F5F6FC] border border-[#E2E6F2] hover:border-[#6658F5]/30 px-3.5 py-1.8 rounded-xl text-xs text-[#171A45] font-semibold transition-all"
+            className="flex items-center space-x-2 bg-[#F5F6FC] border border-[#E2E6F2] hover:border-[#171717]/30 px-3.5 py-1.8 rounded-xl text-xs text-[#171A45] font-semibold transition-all"
           >
             <span className={`w-2 h-2 rounded-full ${getStatusColor().split(' ')[0]} animate-pulse`}></span>
             <span>{getStatusText()}</span>
@@ -130,7 +130,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             className={`flex items-center space-x-1.5 px-3 py-1.8 rounded-xl border text-xs font-bold transition-all shadow-xs ${
               employeeViewActive
                 ? 'bg-[#E9A93A]/10 border-[#E9A93A]/30 text-[#E9A93A] hover:bg-[#E9A93A]/25'
-                : 'bg-[#6658F5]/10 border-[#6658F5]/20 text-[#6658F5] hover:bg-[#6658F5]/15'
+                : 'bg-[#171717]/10 border-[#171717]/20 text-[#171717] hover:bg-[#171717]/15'
             }`}
             title="Toggle Employee Sandbox View Mode"
           >
@@ -143,9 +143,9 @@ export const TopBar: React.FC<TopBarProps> = ({
         )}
 
         {/* User Role Badge (Non-changeable, fetched from DB) */}
-        <div className="flex items-center bg-[#6658F5]/10 border border-[#6658F5]/20 px-3.5 py-1.8 rounded-xl select-none">
-          <span className="text-[10px] uppercase font-extrabold text-[#6658F5] mr-1.5">Role:</span>
-          <span className="text-xs text-[#6658F5] font-extrabold">{currentRole}</span>
+        <div className="flex items-center bg-[#171717]/10 border border-[#171717]/20 px-3.5 py-1.8 rounded-xl select-none">
+          <span className="text-[10px] uppercase font-extrabold text-[#171717] mr-1.5">Role:</span>
+          <span className="text-xs text-[#171717] font-extrabold">{currentRole}</span>
         </div>
 
         {/* Calendar / Notifications indicators */}
