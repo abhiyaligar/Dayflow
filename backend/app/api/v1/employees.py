@@ -1,15 +1,18 @@
 import secrets
 import string
-from fastapi import APIRouter, Depends, HTTPException, status
+import uuid
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import get_current_user, get_current_hr_user
-from app.core import security
+from app.core import security, storage
 from app.database import get_db
 from app.models.user import User
 from app.models.employee import Employee
+from app.models.document import Document
+from app.schemas.document import DocumentOut
 from app.schemas.employee import (
     EmployeeOnboard,
     EmployeeOnboardResponse,
@@ -242,3 +245,132 @@ async def update_profile(
         joining_date=employee.joining_date,
         role=employee.user.role
     )
+
+
+@router.post("/{employee_id}/documents", response_model=DocumentOut, status_code=status.HTTP_201_CREATED)
+async def upload_document(
+    employee_id: str,
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    # Restriction: non-HR employees can only upload for themselves
+    if current_user.role != "HR" and current_user.login_id != employee_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to upload documents for other employees."
+        )
+
+    # Verify employee exists
+    result = await db.execute(
+        select(Employee).filter(Employee.employee_id == employee_id)
+    )
+    employee = result.scalars().first()
+    if not employee:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Employee profile not found"
+        )
+
+    # Save physical file (using our storage engine)
+    file_url = await storage.save_file(file)
+
+    # Save metadata in DB
+    new_doc = Document(
+        employee_id=employee.id,
+        name=file.filename or "unnamed_document",
+        file_url=file_url
+    )
+    db.add(new_doc)
+    await db.commit()
+    await db.refresh(new_doc)
+
+    return new_doc
+
+
+@router.get("/{employee_id}/documents", response_model=list[DocumentOut])
+async def list_documents(
+    employee_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    # Restriction: non-HR employees can only list their own documents
+    if current_user.role != "HR" and current_user.login_id != employee_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to view other employee documents."
+        )
+
+    # Verify employee exists
+    result = await db.execute(
+        select(Employee).filter(Employee.employee_id == employee_id)
+    )
+    employee = result.scalars().first()
+    if not employee:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Employee profile not found"
+        )
+
+    # Fetch documents for this employee
+    doc_result = await db.execute(
+        select(Document).filter(Document.employee_id == employee.id)
+    )
+    documents = doc_result.scalars().all()
+    return documents
+
+
+@router.delete("/{employee_id}/documents/{document_id}", status_code=status.HTTP_200_OK)
+async def delete_document(
+    employee_id: str,
+    document_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    # Restriction: non-HR employees can only delete their own documents
+    if current_user.role != "HR" and current_user.login_id != employee_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to delete other employee documents."
+        )
+
+    # Verify employee exists
+    result = await db.execute(
+        select(Employee).filter(Employee.employee_id == employee_id)
+    )
+    employee = result.scalars().first()
+    if not employee:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Employee profile not found"
+        )
+
+    # Convert document_id to UUID
+    try:
+        doc_uuid = uuid.UUID(document_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid document ID format"
+        )
+
+    # Find the document
+    doc_result = await db.execute(
+        select(Document).filter(Document.id == doc_uuid, Document.employee_id == employee.id)
+    )
+    document = doc_result.scalars().first()
+    if not document:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Document not found"
+        )
+
+    # Delete the physical file via storage engine
+    await storage.delete_file(document.file_url)
+
+    # Remove DB entry
+    await db.delete(document)
+    await db.commit()
+
+    return {"message": "Document deleted successfully."}
+

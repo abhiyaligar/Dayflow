@@ -1,3 +1,5 @@
+import os
+from unittest.mock import MagicMock, patch
 import pytest
 from httpx import AsyncClient
 from datetime import date, timedelta
@@ -241,3 +243,178 @@ async def test_signup_flow(client: AsyncClient, seeded_users):
     )
     assert login_alice.status_code == 200
     assert login_alice.json()["role"] == "Employee"
+
+
+@pytest.mark.asyncio
+async def test_document_management_flow(client: AsyncClient, seeded_users):
+    # 1. Login as HR
+    hr_login = await client.post(
+        "/api/v1/auth/login",
+        data={"username": "hr@dayflow.com", "password": "AdminPassword123"},
+    )
+    hr_token = hr_login.json()["access_token"]
+    hr_headers = {"Authorization": f"Bearer {hr_token}"}
+
+    # 2. Login as Employee (John Doe - JODO2026001)
+    emp_login = await client.post(
+        "/api/v1/auth/login",
+        json={"username": "JODO2026001", "password": "EmpPassword123"},
+    )
+    emp_token = emp_login.json()["access_token"]
+    emp_headers = {"Authorization": f"Bearer {emp_token}"}
+
+    # 3. HR uploads a document for a non-existent employee -> Should be 404
+    non_existent_files = {"file": ("contract.pdf", b"pdf-content", "application/pdf")}
+    res_non_existent = await client.post(
+        "/api/v1/employees/NONEXISTENT/documents",
+        headers=hr_headers,
+        files=non_existent_files
+    )
+    assert res_non_existent.status_code == 404
+    assert "Employee profile not found" in res_non_existent.json()["detail"]
+
+    # 4. HR uploads a document for JODO2026001 -> Should be 201
+    hr_files = {"file": ("contract.pdf", b"contract-pdf-content", "application/pdf")}
+    res_upload_hr = await client.post(
+        "/api/v1/employees/JODO2026001/documents",
+        headers=hr_headers,
+        files=hr_files
+    )
+    assert res_upload_hr.status_code == 201
+    doc_hr = res_upload_hr.json()
+    assert doc_hr["name"] == "contract.pdf"
+    assert doc_hr["file_url"].startswith("/static/uploads/")
+
+    # Derive local file path of contract.pdf
+    local_filename_hr = doc_hr["file_url"].split("/")[-1]
+    local_filepath_hr = os.path.join("static", "uploads", local_filename_hr)
+    assert os.path.exists(local_filepath_hr)
+
+    # 5. Employee uploads a document for themselves (JODO2026001) -> Should be 201
+    emp_files = {"file": ("certificate.pdf", b"certificate-pdf-content", "application/pdf")}
+    res_upload_emp = await client.post(
+        "/api/v1/employees/JODO2026001/documents",
+        headers=emp_headers,
+        files=emp_files
+    )
+    assert res_upload_emp.status_code == 201
+    doc_emp = res_upload_emp.json()
+    assert doc_emp["name"] == "certificate.pdf"
+    assert doc_emp["file_url"].startswith("/static/uploads/")
+
+    local_filename_emp = doc_emp["file_url"].split("/")[-1]
+    local_filepath_emp = os.path.join("static", "uploads", local_filename_emp)
+    assert os.path.exists(local_filepath_emp)
+
+    # 6. Employee tries to upload to another employee id (JASM2026001) -> Should be 403 Forbidden
+    res_unauth_upload = await client.post(
+        "/api/v1/employees/JASM2026001/documents",
+        headers=emp_headers,
+        files=emp_files
+    )
+    assert res_unauth_upload.status_code == 403
+
+    # 7. Employee lists their own documents -> Should return both documents (contract.pdf, certificate.pdf)
+    res_list = await client.get(
+        "/api/v1/employees/JODO2026001/documents",
+        headers=emp_headers
+    )
+    assert res_list.status_code == 200
+    docs = res_list.json()
+    assert len(docs) == 2
+    filenames = [d["name"] for d in docs]
+    assert "contract.pdf" in filenames
+    assert "certificate.pdf" in filenames
+
+    # 8. Employee deletes contract.pdf (doc_hr["id"]) -> Should be 200 OK
+    res_delete = await client.delete(
+        f"/api/v1/employees/JODO2026001/documents/{doc_hr['id']}",
+        headers=emp_headers
+    )
+    assert res_delete.status_code == 200
+    assert "deleted successfully" in res_delete.json()["message"]
+
+    # Verify physical file deletion of contract.pdf
+    assert not os.path.exists(local_filepath_hr)
+    # Ensure certificate.pdf still exists physically
+    assert os.path.exists(local_filepath_emp)
+
+    # 9. Employee lists their documents again -> Should only contain certificate.pdf
+    res_list_after = await client.get(
+        "/api/v1/employees/JODO2026001/documents",
+        headers=emp_headers
+    )
+    assert res_list_after.status_code == 200
+    docs_after = res_list_after.json()
+    assert len(docs_after) == 1
+    assert docs_after[0]["name"] == "certificate.pdf"
+
+    # 10. Delete invalid format UUID -> Should be 400 Bad Request
+    res_delete_invalid = await client.delete(
+        "/api/v1/employees/JODO2026001/documents/not-a-uuid",
+        headers=emp_headers
+    )
+    assert res_delete_invalid.status_code == 400
+
+    # 11. Delete non-existent UUID -> Should be 404 Not Found
+    non_existent_uuid = "00000000-0000-0000-0000-000000000000"
+    res_delete_notfound = await client.delete(
+        f"/api/v1/employees/JODO2026001/documents/{non_existent_uuid}",
+        headers=emp_headers
+    )
+    assert res_delete_notfound.status_code == 404
+
+    # Cleanup leftover local test files
+    if os.path.exists(local_filepath_emp):
+        os.remove(local_filepath_emp)
+
+
+@pytest.mark.asyncio
+async def test_document_management_s3_upload(client: AsyncClient, seeded_users):
+    # 1. Login as HR
+    hr_login = await client.post(
+        "/api/v1/auth/login",
+        data={"username": "hr@dayflow.com", "password": "AdminPassword123"},
+    )
+    hr_token = hr_login.json()["access_token"]
+    hr_headers = {"Authorization": f"Bearer {hr_token}"}
+
+    # 2. Temporarily set AWS settings to simulate live S3 configuration
+    from app.core.config import settings
+    with patch.object(settings, "AWS_ACCESS_KEY_ID", "mock_key"), \
+         patch.object(settings, "AWS_SECRET_ACCESS_KEY", "mock_secret"), \
+         patch.object(settings, "AWS_REGION", "us-east-1"), \
+         patch.object(settings, "AWS_S3_BUCKET_NAME", "mock_bucket"):
+
+        # 3. Mock boto3 client
+        mock_s3 = MagicMock()
+        with patch("boto3.client", return_value=mock_s3) as mock_boto:
+            hr_files = {"file": ("contract.pdf", b"contract-pdf-content", "application/pdf")}
+            res = await client.post(
+                "/api/v1/employees/JODO2026001/documents",
+                headers=hr_headers,
+                files=hr_files
+            )
+            assert res.status_code == 201
+            data = res.json()
+            assert "mock_bucket.s3.us-east-1.amazonaws.com" in data["file_url"]
+
+            # Verify boto3 was called correctly
+            mock_boto.assert_called_once_with(
+                "s3",
+                aws_access_key_id="mock_key",
+                aws_secret_access_key="mock_secret",
+                region_name="us-east-1"
+            )
+            mock_s3.put_object.assert_called_once()
+
+            # Now test deleting it from mock S3
+            doc_id = data["id"]
+            res_delete = await client.delete(
+                f"/api/v1/employees/JODO2026001/documents/{doc_id}",
+                headers=hr_headers
+            )
+            assert res_delete.status_code == 200
+            mock_s3.delete_object.assert_called_once()
+
+

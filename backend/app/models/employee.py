@@ -70,3 +70,8 @@ class Employee(Base):
         "User",
         back_populates="employee"
     )
+    documents: Mapped[list["Document"]] = relationship(
+        "Document",
+        back_populates="employee",
+        cascade="all, delete-orphan"
+    )

@@ -22,5 +22,11 @@ class Settings(BaseSettings):
     INITIAL_ADMIN_PASSWORD: str = "SecurePassword123!"
     INITIAL_ADMIN_ID: str = "DF-2026-0001"
 
+    # AWS S3 Settings for Document Management
+    AWS_ACCESS_KEY_ID: str | None = None
+    AWS_SECRET_ACCESS_KEY: str | None = None
+    AWS_REGION: str = "us-east-1"
+    AWS_S3_BUCKET_NAME: str | None = None
+
 
 settings = Settings()

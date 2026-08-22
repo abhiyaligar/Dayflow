@@ -8,8 +8,14 @@ from sqlalchemy.pool import StaticPool
 from app.main import app
 from app.database import Base, get_db
 from app.core import security
+from app.core.config import settings
 from app.models.user import User
 from app.models.employee import Employee
+
+# Ensure offline test isolation by disabling live AWS S3 settings during tests
+settings.AWS_ACCESS_KEY_ID = None
+settings.AWS_SECRET_ACCESS_KEY = None
+settings.AWS_S3_BUCKET_NAME = None
 
 # Create in-memory SQLite async engine
 DATABASE_URL = "sqlite+aiosqlite:///:memory:"
@@ -40,6 +46,7 @@ from sqlalchemy import delete
 from app.models.attendance import Attendance
 from app.models.leave import LeaveRequest
 from app.models.salary import SalaryStructure
+from app.models.document import Document
 
 
 @pytest.fixture(autouse=True)
@@ -50,6 +57,7 @@ async def clear_db(db: AsyncSession):
     await db.execute(delete(Attendance))
     await db.execute(delete(LeaveRequest))
     await db.execute(delete(SalaryStructure))
+    await db.execute(delete(Document))
     await db.commit()
 
 
