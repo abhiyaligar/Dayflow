@@ -104,30 +104,30 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center bg-[#0e0f12] px-4 py-12">
-      <div className="w-full max-w-lg bg-[#16181d] border border-[#242730] p-8 rounded-xl shadow-xl">
+    <div className="flex-1 flex items-center justify-center bg-[#F5F6FC] px-4 py-12">
+      <div className="w-full max-w-lg bg-white border border-[#E2E6F2] p-8 rounded-[20px] shadow-premium animate-fade-in">
         
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="w-14 h-14 rounded bg-purple-600 flex items-center justify-center font-bold text-white text-2xl tracking-wider mx-auto mb-2 shadow-md">
+          <div className="w-14 h-14 rounded-2xl bg-[#6658F5] flex items-center justify-center font-bold text-white text-2xl tracking-wider mx-auto mb-2 shadow-md shadow-[#6658F5]/10">
             DF
           </div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Sign Up Page</h2>
-          <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-semibold">Register Your Organization</p>
+          <h2 className="text-2xl font-extrabold text-[#171A45] tracking-tight">Sign Up Page</h2>
+          <p className="text-xs text-[#70738D] mt-1.5 uppercase tracking-widest font-bold">Register Your Organization</p>
         </div>
 
         {/* Feedback Banners */}
         {error && (
-          <div className="mb-4 bg-rose-900/20 border border-rose-800 text-rose-300 px-4 py-2.5 rounded text-sm font-medium">
+          <div className="mb-4 bg-[#E95D73]/10 border border-[#E95D73]/20 text-[#E95D73] px-4 py-2.5 rounded-xl text-xs font-semibold">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="mb-4 bg-emerald-900/20 border border-emerald-800 text-emerald-300 px-4 py-2.5 rounded text-sm font-medium space-y-1">
+          <div className="mb-4 bg-[#43B77A]/10 border border-[#43B77A]/20 text-[#43B77A] px-4 py-2.5 rounded-xl text-xs font-semibold space-y-1">
             <p>Account created successfully!</p>
-            <p className="text-xs">Your Login ID is: <strong className="font-mono bg-emerald-950 px-1.5 py-0.5 rounded border border-emerald-800 text-emerald-400">{registeredId}</strong></p>
-            <p className="text-[10px] text-emerald-400/70 pt-1">Redirecting to Sign In...</p>
+            <p className="text-[11px]">Your Login ID is: <strong className="font-mono bg-emerald-100/50 px-1.5 py-0.5 rounded border border-[#43B77A]/30 text-[#43B77A]">{registeredId}</strong></p>
+            <p className="text-[10px] text-[#43B77A]/80 pt-1">Redirecting to Sign In...</p>
           </div>
         )}
 
@@ -135,18 +135,18 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           
           {/* Logo Upload Widget */}
-          <div className="bg-[#0e0f12] border border-dashed border-[#242730] hover:border-purple-500 rounded-lg p-4 transition-all">
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 text-center">
+          <div className="bg-[#F5F6FC] border border-dashed border-[#E2E6F2] hover:border-[#6658F5] rounded-xl p-4 transition-all">
+            <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-2 text-center">
               Company Logo Upload
             </label>
             <div className="flex flex-col items-center justify-center space-y-2">
-              <svg className="w-8 h-8 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-8 h-8 text-[#9A9DB5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <span className="text-xs text-slate-400 text-center">
+              <span className="text-xs text-[#70738D] text-center">
                 {logoFile ? `Selected: ${logoFile.name}` : 'PNG, JPG or SVG up to 2MB'}
               </span>
-              <label className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded text-xs font-semibold cursor-pointer transition-colors shadow-sm">
+              <label className="bg-[#EEEAFE] hover:bg-[#6658F5]/10 text-[#6658F5] border border-[#6658F5]/20 px-3.5 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition-colors shadow-sm">
                 Choose File
                 <input
                   type="file"
@@ -160,7 +160,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1" htmlFor="companyName">
+              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="companyName">
                 Company Name
               </label>
               <input
@@ -169,12 +169,12 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 placeholder="e.g. Odoo India"
-                className="w-full bg-[#0e0f12] border border-[#242730] rounded-md px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-purple-500"
+                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1" htmlFor="fullName">
+              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="fullName">
                 Full Name
               </label>
               <input
@@ -183,14 +183,14 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Harry Officer"
-                className="w-full bg-[#0e0f12] border border-[#242730] rounded-md px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-purple-500"
+                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1" htmlFor="email">
+              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="email">
                 Email Address
               </label>
               <input
@@ -199,12 +199,12 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="e.g. admin@dayflow.com"
-                className="w-full bg-[#0e0f12] border border-[#242730] rounded-md px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-purple-500"
+                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1" htmlFor="phone">
+              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="phone">
                 Phone Number
               </label>
               <input
@@ -213,14 +213,14 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="e.g. +91 98765 43210"
-                className="w-full bg-[#0e0f12] border border-[#242730] rounded-md px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-purple-500"
+                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1" htmlFor="password">
+              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="password">
                 Password
               </label>
               <div className="relative">
@@ -230,12 +230,12 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-[#0e0f12] border border-[#242730] rounded-md pl-3 pr-9 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-purple-500"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl pl-3.5 pr-9 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 px-2 flex items-center text-slate-500 hover:text-slate-300"
+                  className="absolute inset-y-0 right-0 px-2.5 flex items-center text-[#70738D] hover:text-[#171A45]"
                 >
                   {showPassword ? (
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -252,7 +252,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1" htmlFor="confirmPassword">
+              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="confirmPassword">
                 Confirm Password
               </label>
               <div className="relative">
@@ -262,12 +262,12 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-[#0e0f12] border border-[#242730] rounded-md pl-3 pr-9 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-purple-500"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl pl-3.5 pr-9 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-0 px-2 flex items-center text-slate-500 hover:text-slate-300"
+                  className="absolute inset-y-0 right-0 px-2.5 flex items-center text-[#70738D] hover:text-[#171A45]"
                 >
                   {showConfirmPassword ? (
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -286,7 +286,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
 
           <button
             type="submit"
-            className="w-full bg-purple-600 hover:bg-purple-500 active:bg-purple-700 text-white text-sm font-bold uppercase tracking-wider py-3 rounded-md transition-colors shadow-md mt-4"
+            className="w-full bg-[#6658F5] hover:bg-[#5748E8] active:bg-[#5243EF] text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md shadow-[#6658F5]/10 mt-4"
           >
             Sign Up
           </button>
@@ -296,9 +296,9 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
         <div className="text-center mt-5">
           <button
             onClick={() => onNavigate('SIGN_IN')}
-            className="text-xs text-slate-400 hover:text-purple-400 font-medium transition-colors focus:outline-none"
+            className="text-xs text-[#70738D] hover:text-[#6658F5] font-semibold transition-colors focus:outline-none"
           >
-            Already have an account? <span className="underline font-semibold text-slate-300 hover:text-purple-400">Sign In</span>
+            Already have an account? <span className="underline font-bold text-[#171A45] hover:text-[#6658F5]">Sign In</span>
           </button>
         </div>
       </div>

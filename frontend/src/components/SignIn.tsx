@@ -49,21 +49,21 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess, empl
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center bg-[#0e0f12] px-4 py-12">
-      <div className="w-full max-w-md bg-[#16181d] border border-[#242730] p-8 rounded-xl shadow-xl">
+    <div className="flex-1 flex items-center justify-center bg-[#F5F6FC] px-4 py-12">
+      <div className="w-full max-w-md bg-white border border-[#E2E6F2] p-8 rounded-[20px] shadow-premium animate-fade-in">
         
         {/* Company Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded bg-purple-600 flex items-center justify-center font-bold text-white text-3xl tracking-wider mx-auto mb-3 shadow-md">
+          <div className="w-14 h-14 rounded-2xl bg-[#6658F5] flex items-center justify-center font-bold text-white text-2xl tracking-wider mx-auto mb-3.5 shadow-md shadow-[#6658F5]/10">
             DF
           </div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Sign in Page</h2>
-          <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-semibold">Human Resource Management System</p>
+          <h2 className="text-2xl font-extrabold text-[#171A45] tracking-tight">Sign in Page</h2>
+          <p className="text-xs text-[#70738D] mt-1.5 uppercase tracking-widest font-bold">Human Resource Management System</p>
         </div>
 
         {/* Validation Errors */}
         {error && (
-          <div className="mb-4 bg-rose-900/20 border border-rose-800 text-rose-300 px-4 py-2.5 rounded text-sm font-medium">
+          <div className="mb-4 bg-[#E95D73]/10 border border-[#E95D73]/20 text-[#E95D73] px-4 py-2.5 rounded-xl text-xs font-semibold">
             {error}
           </div>
         )}
@@ -71,7 +71,7 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess, empl
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5" htmlFor="loginId">
+            <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="loginId">
               Login ID / Email
             </label>
             <input
@@ -80,13 +80,13 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess, empl
               value={loginId}
               onChange={(e) => setLoginId(e.target.value)}
               placeholder="e.g. JADO2026001 or email"
-              className="w-full bg-[#0e0f12] border border-[#242730] rounded-md px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-3 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
             />
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-1.5">
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-400" htmlFor="password">
+              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D]" htmlFor="password">
                 Password
               </label>
             </div>
@@ -97,12 +97,12 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess, empl
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-[#0e0f12] border border-[#242730] rounded-md pl-4 pr-10 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl pl-4 pr-10 py-3 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 px-3 flex items-center text-slate-500 hover:text-slate-300"
+                className="absolute inset-y-0 right-0 px-3 flex items-center text-[#70738D] hover:text-[#171A45]"
               >
                 {showPassword ? (
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -120,7 +120,7 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess, empl
 
           <button
             type="submit"
-            className="w-full bg-purple-600 hover:bg-purple-500 active:bg-purple-700 text-white text-sm font-bold uppercase tracking-wider py-3 rounded-md transition-colors shadow-md mt-2"
+            className="w-full bg-[#6658F5] hover:bg-[#5748E8] active:bg-[#5243EF] text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md shadow-[#6658F5]/10 mt-2"
           >
             SIGN IN
           </button>
@@ -130,9 +130,9 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess, empl
         <div className="text-center mt-6">
           <button
             onClick={() => onNavigate('SIGN_UP')}
-            className="text-xs text-slate-400 hover:text-purple-400 font-medium transition-colors focus:outline-none"
+            className="text-xs text-[#70738D] hover:text-[#6658F5] font-semibold transition-colors focus:outline-none"
           >
-            Don't have an Account? <span className="underline font-semibold text-slate-300 hover:text-purple-400">Sign Up</span>
+            Don't have an Account? <span className="underline font-bold text-[#171A45] hover:text-[#6658F5]">Sign Up</span>
           </button>
         </div>
       </div>
