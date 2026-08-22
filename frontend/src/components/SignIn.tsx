@@ -60,44 +60,52 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess }) =>
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center bg-[#F5F6FC] px-4 py-12">
-      <div className="w-full max-w-md bg-white border border-[#E2E6F2] p-8 rounded-[20px] shadow-premium animate-fade-in">
+    <div className="flex-1 flex items-center justify-center bg-[#F8F9FA] px-4 py-16">
+      <div className="w-full max-w-md bg-white border border-[#E2E8F0] p-10 rounded-2xl shadow-sm animate-fade-in">
         
         {/* Company Header */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-[#171717] flex items-center justify-center font-bold text-white text-2xl tracking-wider mx-auto mb-3.5 shadow-md shadow-[#171717]/10">
+          <div className="w-12 h-12 rounded-xl bg-[#111111] flex items-center justify-center font-bold text-white text-xl tracking-tight mx-auto mb-4">
             DF
           </div>
-          <h2 className="text-2xl font-extrabold text-[#171A45] tracking-tight">Sign in Page</h2>
-          <p className="text-xs text-[#70738D] mt-1.5 uppercase tracking-widest font-bold">Human Resource Management System</p>
+          <h2 className="text-xl font-bold text-[#111111] tracking-tight">Sign in to Dayflow</h2>
+          <p className="text-xs text-[#718096] mt-1">Human Resource Management System</p>
         </div>
 
         {/* Validation Errors */}
         {error && (
-          <div className="mb-4 bg-[#E95D73]/10 border border-[#E95D73]/20 text-[#E95D73] px-4 py-2.5 rounded-xl text-xs font-semibold">
-            {error}
+          <div className="mb-6 bg-[#FFF5F5] border border-[#FED7D7] text-[#C53030] px-4 py-3 rounded-xl text-xs font-medium flex items-start space-x-2">
+            <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>{error}</span>
           </div>
         )}
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="loginId">
-              Login ID / Email
+            <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1.5" htmlFor="loginId">
+              Employee ID or Email
             </label>
-            <input
-              id="loginId"
-              type="text"
-              value={loginId}
-              onChange={(e) => setLoginId(e.target.value)}
-              placeholder="e.g. JADO2026001 or email"
-              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-3 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
-            />
+            <div className="relative">
+              <input
+                id="loginId"
+                type="text"
+                value={loginId}
+                onChange={(e) => setLoginId(e.target.value)}
+                placeholder="e.g., JADO2026001"
+                className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl pl-10 pr-4 py-3 text-sm text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
+              />
+              <svg className="w-4.5 h-4.5 text-[#A0AEC0] absolute left-3.5 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-1.5">
-              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D]" htmlFor="password">
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568]" htmlFor="password">
                 Password
               </label>
             </div>
@@ -108,21 +116,24 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess }) =>
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl pl-4 pr-10 py-3 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
+                className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl pl-10 pr-10 py-3 text-sm text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
               />
+              <svg className="w-4.5 h-4.5 text-[#A0AEC0] absolute left-3.5 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 px-3 flex items-center text-[#70738D] hover:text-[#171A45]"
+                className="absolute inset-y-0 right-0 px-3 flex items-center text-[#718096] hover:text-[#111111]"
               >
                 {showPassword ? (
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                  <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943-9.543-7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                   </svg>
                 ) : (
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
                 )}
               </button>
@@ -131,19 +142,19 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess }) =>
 
           <button
             type="submit"
-            className="w-full bg-[#171717] hover:bg-[#262626] active:bg-[#111111] text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md shadow-[#171717]/10 mt-2"
+            className="w-full bg-[#111111] hover:bg-[#222222] text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-sm active:scale-[0.99] mt-2"
           >
             SIGN IN
           </button>
         </form>
 
         {/* Footer Navigation Link */}
-        <div className="text-center mt-6">
+        <div className="text-center mt-6 border-t border-[#E2E8F0] pt-6">
           <button
             onClick={() => onNavigate('SIGN_UP')}
-            className="text-xs text-[#70738D] hover:text-[#171717] font-semibold transition-colors focus:outline-none"
+            className="text-xs text-[#718096] hover:text-[#111111] font-medium transition-colors focus:outline-none"
           >
-            Don't have an Account? <span className="underline font-bold text-[#171A45] hover:text-[#171717]">Sign Up</span>
+            Don't have an account? <span className="underline font-bold text-[#111111]">Sign Up</span>
           </button>
         </div>
       </div>

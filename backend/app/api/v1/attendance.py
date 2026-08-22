@@ -232,3 +232,49 @@ async def get_today_present_employees(
         )
 
     return output
+
+
+@router.get("/{employee_id}/logs", response_model=list[AttendanceOut])
+async def get_employee_attendance_logs(
+    employee_id: str,
+    current_user: User = Depends(get_current_hr_or_admin_user),
+    db: AsyncSession = Depends(get_db)
+):
+    import uuid
+    employee_uuid = None
+    try:
+        employee_uuid = uuid.UUID(employee_id)
+    except ValueError:
+        pass
+
+    if employee_uuid:
+        query = select(Employee).filter((Employee.id == employee_uuid) | (Employee.employee_id == employee_id))
+    else:
+        query = select(Employee).filter(Employee.employee_id == employee_id)
+
+    result = await db.execute(query)
+    employee = result.scalars().first()
+    if not employee:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Employee profile not found."
+        )
+
+    att_result = await db.execute(
+        select(Attendance)
+        .filter(Attendance.employee_id == employee.id)
+        .order_by(Attendance.date.asc())
+    )
+    logs = att_result.scalars().all()
+
+    return [
+        AttendanceOut(
+            date=log.date,
+            check_in=log.check_in,
+            check_out=log.check_out,
+            breaks=log.breaks or [],
+            status=log.status,
+            total_hours=calculate_working_hours(log.check_in, log.check_out, log.breaks or [])
+        )
+        for log in logs
+    ]

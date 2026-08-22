@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Employee, UserRole } from '../types';
-import { employeesApi, payrollApi } from '../api';
+import { employeesApi, payrollApi, attendanceApi } from '../api';
 import { calculateSalaryInfo } from '../utils/salary';
 
 interface EmployeeDetailModalProps {
@@ -14,13 +14,20 @@ export const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({
   currentRole,
   onClose,
 }) => {
-  const [activeTab, setActiveTab] = useState<'resume' | 'private' | 'salary' | 'documents'>('resume');
+  const [activeTab, setActiveTab] = useState<'resume' | 'private' | 'salary' | 'documents' | 'calendar'>('resume');
 
   // Documents Management States
   const [documents, setDocuments] = useState<any[]>([]);
   const [docLoading, setDocLoading] = useState(false);
   const [docError, setDocError] = useState('');
   const [uploadingDoc, setUploadingDoc] = useState(false);
+
+  // Attendance Logs Management States
+  const [logs, setLogs] = useState<any[]>([]);
+  const [logsLoading, setLogsLoading] = useState(false);
+  const [logsError, setLogsError] = useState('');
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
   const loadDocuments = async () => {
     setDocLoading(true);
@@ -35,8 +42,22 @@ export const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({
     }
   };
 
+  const loadLogs = async () => {
+    setLogsLoading(true);
+    setLogsError('');
+    try {
+      const data = await attendanceApi.getEmployeeLogs(employee.loginId);
+      setLogs(data);
+    } catch (err: any) {
+      setLogsError(err.message || 'Failed to load attendance logs.');
+    } finally {
+      setLogsLoading(false);
+    }
+  };
+
   useEffect(() => {
     loadDocuments();
+    loadLogs();
   }, [employee.loginId]);
 
   const handleUploadDoc = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -276,7 +297,7 @@ Generated dynamically by Dayflow Admin/HR.
                 Salary Info
               </button>
             )}
-            <button
+             <button
               onClick={() => setActiveTab('documents')}
               className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
                 activeTab === 'documents'
@@ -285,6 +306,16 @@ Generated dynamically by Dayflow Admin/HR.
               }`}
             >
               Documents
+            </button>
+            <button
+              onClick={() => setActiveTab('calendar')}
+              className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
+                activeTab === 'calendar'
+                  ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
+                  : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
+              }`}
+            >
+              Attendance Calendar
             </button>
           </div>
 
@@ -776,6 +807,268 @@ Generated dynamically by Dayflow Admin/HR.
                     ))}
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* Attendance Calendar Tab */}
+            {activeTab === 'calendar' && (
+              <div className="space-y-6 animate-fade-in">
+                <div className="bg-white border border-[#E2E6F2] p-5 rounded-[20px] shadow-sm">
+                  
+                  {/* Calendar Navigation & Month Selector */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E6F2] pb-4 mb-5">
+                    <div>
+                      <h3 className="text-sm font-bold text-[#171A45] uppercase tracking-wider">Attendance Calendar</h3>
+                      <p className="text-[11px] text-[#70738D] font-medium mt-0.5">Track employee presence, absence, and partial status.</p>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => {
+                          if (currentMonth === 0) {
+                            setCurrentMonth(11);
+                            setCurrentYear(prev => prev - 1);
+                          } else {
+                            setCurrentMonth(prev => prev - 1);
+                          }
+                        }}
+                        className="p-1.5 bg-[#F5F6FC] border border-[#E2E6F2] rounded-lg text-[#171A45] hover:bg-[#E2E6F2] transition-colors cursor-pointer"
+                        title="Previous Month"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                      
+                      <span className="text-xs font-bold text-[#171A45] bg-[#F5F6FC] px-4 py-2 border border-[#E2E6F2] rounded-xl font-mono">
+                        {new Date(currentYear, currentMonth).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                      </span>
+
+                      <button
+                        onClick={() => {
+                          if (currentMonth === 11) {
+                            setCurrentMonth(0);
+                            setCurrentYear(prev => prev + 1);
+                          } else {
+                            setCurrentMonth(prev => prev + 1);
+                          }
+                        }}
+                        className="p-1.5 bg-[#F5F6FC] border border-[#E2E6F2] rounded-lg text-[#171A45] hover:bg-[#E2E6F2] transition-colors cursor-pointer"
+                        title="Next Month"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Calendar Analytics Stats for the selected Month */}
+                  {(() => {
+                    // Precompute month-specific attendance count indicators
+                    let fullyPresentCount = 0;
+                    let partiallyAbsentCount = 0;
+                    let totalAbsentCount = 0;
+                    let onLeaveCount = 0;
+                    const daysInSelMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+                    for (let d = 1; d <= daysInSelMonth; d++) {
+                      const dayOfWeek = new Date(currentYear, currentMonth, d).getDay();
+                      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                      const cellDateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                      const cellLog = logs.find(l => l.date === cellDateStr);
+
+                      if (cellLog) {
+                        if (cellLog.status === 'Present') {
+                          if ((cellLog.total_hours || 0) >= 8.0) {
+                            fullyPresentCount++;
+                          } else {
+                            partiallyAbsentCount++;
+                          }
+                        } else if (cellLog.status === 'Leave') {
+                          onLeaveCount++;
+                        } else if (cellLog.status === 'Absent') {
+                          totalAbsentCount++;
+                        }
+                      } else {
+                        // Default past date logic
+                        const cellDateObj = new Date(currentYear, currentMonth, d);
+                        const todayObj = new Date();
+                        todayObj.setHours(0,0,0,0);
+                        if (cellDateObj < todayObj && !isWeekend) {
+                          totalAbsentCount++;
+                        }
+                      }
+                    }
+
+                    return (
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                        <div className="bg-[#E3F9EC] border border-[#2F9E5F]/10 p-4 rounded-2xl flex flex-col justify-between">
+                          <span className="text-[10px] uppercase tracking-wider text-[#2F9E5F] font-extrabold">Fully Present</span>
+                          <span className="text-xl font-extrabold text-[#171A45] mt-1">{fullyPresentCount} Days</span>
+                        </div>
+                        <div className="bg-[#FFF4E5] border border-[#E2A229]/10 p-4 rounded-2xl flex flex-col justify-between">
+                          <span className="text-[10px] uppercase tracking-wider text-[#E2A229] font-extrabold">Under-hours / Partial</span>
+                          <span className="text-xl font-extrabold text-[#171A45] mt-1">{partiallyAbsentCount} Days</span>
+                        </div>
+                        <div className="bg-[#FFF0F0] border border-[#EB5757]/10 p-4 rounded-2xl flex flex-col justify-between">
+                          <span className="text-[10px] uppercase tracking-wider text-[#EB5757] font-extrabold">Absent</span>
+                          <span className="text-xl font-extrabold text-[#171A45] mt-1">{totalAbsentCount} Days</span>
+                        </div>
+                        <div className="bg-[#EEF2FC] border border-[#4D69FA]/10 p-4 rounded-2xl flex flex-col justify-between">
+                          <span className="text-[10px] uppercase tracking-wider text-[#4D69FA] font-extrabold">Leaves</span>
+                          <span className="text-xl font-extrabold text-[#171A45] mt-1">{onLeaveCount} Days</span>
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Calendar Render Grid */}
+                  {logsError && (
+                    <div className="bg-[#E95D73]/10 border border-[#E95D73]/20 text-[#E95D73] px-4 py-2.5 rounded-xl text-xs font-semibold mb-4 text-center">
+                      {logsError}
+                    </div>
+                  )}
+
+                  {logsLoading ? (
+                    <div className="text-center py-12 text-xs text-[#70738D] font-bold">Loading calendar logs...</div>
+                  ) : (
+                    <div>
+                      {/* Weekday headers */}
+                      <div className="grid grid-cols-7 gap-1.5 text-center text-[10px] font-extrabold text-[#9A9DB5] uppercase tracking-widest mb-2 border-b border-[#E2E6F2] pb-1.5">
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                        <div>Sun</div>
+                      </div>
+
+                      {/* Day cells grid */}
+                      <div className="grid grid-cols-7 gap-1.5">
+                        {(() => {
+                          const daysInSelMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+                          let startDay = new Date(currentYear, currentMonth, 1).getDay();
+                          // Adjust sunday (0) to end (6), and others to 0-indexed
+                          startDay = startDay === 0 ? 6 : startDay - 1;
+
+                          const cells = [];
+
+                          // Empty placeholders for days preceding the 1st of the month
+                          for (let i = 0; i < startDay; i++) {
+                            cells.push(
+                              <div key={`empty-${i}`} className="bg-[#F5F6FC]/40 border border-transparent rounded-xl h-20 sm:h-24"></div>
+                            );
+                          }
+
+                          // Cells for actual days in the month
+                          for (let d = 1; d <= daysInSelMonth; d++) {
+                            const cellDateObj = new Date(currentYear, currentMonth, d);
+                            const todayObj = new Date();
+                            todayObj.setHours(0,0,0,0);
+                            const isToday = cellDateObj.getTime() === todayObj.getTime();
+                            const isFuture = cellDateObj > todayObj;
+                            const dayOfWeek = cellDateObj.getDay();
+                            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+                            const cellDateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                            const cellLog = logs.find(l => l.date === cellDateStr);
+
+                            let cellBg = "bg-white border-[#E2E6F2]";
+                            let statusBadge = null;
+
+                            if (cellLog) {
+                              if (cellLog.status === 'Present') {
+                                if ((cellLog.total_hours || 0) >= 8.0) {
+                                  cellBg = "bg-[#E3F9EC]/30 border-[#2F9E5F]/30 hover:bg-[#E3F9EC]/50 text-[#2F9E5F]";
+                                  statusBadge = (
+                                    <span className="text-[8px] bg-[#E3F9EC] text-[#2F9E5F] font-extrabold px-1.5 py-0.5 rounded-md border border-[#2F9E5F]/10 tracking-wide font-mono block text-center truncate">
+                                      {cellLog.total_hours?.toFixed(1)} Hrs
+                                    </span>
+                                  );
+                                } else {
+                                  // Under-hours / Partial
+                                  cellBg = "bg-[#FFF4E5]/40 border-[#E2A229]/30 hover:bg-[#FFF4E5]/60 text-[#E2A229]";
+                                  statusBadge = (
+                                    <span className="text-[8px] bg-[#FFF4E5] text-[#E2A229] font-extrabold px-1.5 py-0.5 rounded-md border border-[#E2A229]/10 tracking-wide font-mono block text-center truncate">
+                                      {cellLog.total_hours?.toFixed(1)} Hrs
+                                    </span>
+                                  );
+                                }
+                              } else if (cellLog.status === 'Leave') {
+                                cellBg = "bg-[#EEF2FC]/50 border-[#4D69FA]/30 hover:bg-[#EEF2FC]/70 text-[#4D69FA]";
+                                statusBadge = (
+                                  <span className="text-[8px] bg-[#EEF2FC] text-[#4D69FA] font-extrabold px-1.5 py-0.5 rounded-md border border-[#4D69FA]/10 tracking-wide block text-center truncate">
+                                    ON LEAVE
+                                  </span>
+                                );
+                              } else if (cellLog.status === 'Absent') {
+                                cellBg = "bg-[#FFF0F0]/50 border-[#EB5757]/30 hover:bg-[#FFF0F0]/70 text-[#EB5757]";
+                                statusBadge = (
+                                  <span className="text-[8px] bg-[#FFF0F0] text-[#EB5757] font-extrabold px-1.5 py-0.5 rounded-md border border-[#EB5757]/10 tracking-wide block text-center truncate">
+                                    ABSENT
+                                  </span>
+                                );
+                              }
+                            } else {
+                              if (isFuture) {
+                                cellBg = "bg-[#F5F6FC]/30 border-[#E2E6F2]/30 text-[#9A9DB5]";
+                              } else if (isWeekend) {
+                                cellBg = "bg-[#F5F6FC] border-[#E2E6F2]/50 text-[#70738D]";
+                                statusBadge = (
+                                  <span className="text-[8px] text-[#9A9DB5] font-extrabold block text-center tracking-wider font-mono">
+                                    WEEKEND
+                                  </span>
+                                );
+                              } else {
+                                // Default past date is absent if no log
+                                cellBg = "bg-[#FFF0F0]/30 border-[#EB5757]/15 hover:bg-[#FFF0F0]/50 text-[#EB5757]";
+                                statusBadge = (
+                                  <span className="text-[8px] bg-[#FFF0F0] text-[#EB5757] font-extrabold px-1.5 py-0.5 rounded-md border border-[#EB5757]/10 tracking-wide block text-center truncate">
+                                    ABSENT
+                                  </span>
+                                );
+                              }
+                            }
+
+                            cells.push(
+                              <div
+                                key={d}
+                                className={`border rounded-xl p-2 h-20 sm:h-24 flex flex-col justify-between transition-all group ${cellBg} ${isToday ? 'ring-2 ring-[#171A45] ring-offset-1' : ''}`}
+                              >
+                                <div className="flex justify-between items-start">
+                                  <span className={`text-[10px] font-extrabold font-mono ${isToday ? 'bg-[#171A45] text-white w-4.5 h-4.5 flex items-center justify-center rounded-full' : ''}`}>
+                                    {d}
+                                  </span>
+                                  {isToday && (
+                                    <span className="text-[8px] bg-[#171A45] text-white font-extrabold px-1 rounded-sm uppercase scale-90">TODAY</span>
+                                  )}
+                                </div>
+
+                                <div className="space-y-1">
+                                  {cellLog && cellLog.check_in && (
+                                    <div className="hidden sm:block text-[8px] font-semibold text-[#70738D] font-mono leading-none truncate">
+                                      IN: {new Date(cellLog.check_in).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+                                    </div>
+                                  )}
+                                  {cellLog && cellLog.check_out && (
+                                    <div className="hidden sm:block text-[8px] font-semibold text-[#70738D] font-mono leading-none truncate">
+                                      OUT: {new Date(cellLog.check_out).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+                                    </div>
+                                  )}
+                                  {statusBadge}
+                                </div>
+                              </div>
+                            );
+                          }
+
+                          return cells;
+                        })()}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>

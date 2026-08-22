@@ -149,7 +149,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               onClick={onLogout}
               title="Log Out"
-              className="w-8 h-8 rounded-lg bg-white/10 hover:bg-[#E95D73] hover:text-white text-white/80 flex items-center justify-center transition-all shadow-sm shrink-0"
+              className="w-8 h-8 rounded-lg bg-white/10 hover:bg-[#C53030] hover:text-white text-white/80 flex items-center justify-center transition-all shadow-sm shrink-0"
             >
               <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

@@ -205,6 +205,14 @@ export const attendanceApi = {
     });
     return handleResponse(response);
   },
+
+  async getEmployeeLogs(employeeId: string) {
+    const response = await fetch(`${API_URL}/attendance/${employeeId}/logs`, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+    return handleResponse(response);
+  },
 };
 
 export const leavesApi = {

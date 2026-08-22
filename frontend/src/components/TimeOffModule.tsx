@@ -103,25 +103,25 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
     }
   });
 
-  const getStatusStyle = (status: 'Pending' | 'Approved' | 'Rejected') => {
+  const getStatusBadgeClass = (status: 'Pending' | 'Approved' | 'Rejected') => {
     switch (status) {
       case 'Approved':
-        return 'bg-[#43B77A]/10 text-[#43B77A] border border-[#43B77A]/20';
+        return 'text-[#2F855A] bg-[#F0FDF4] border-[#DCFCE7]';
       case 'Rejected':
-        return 'bg-[#E95D73]/10 text-[#E95D73] border border-[#E95D73]/20';
+        return 'text-[#C53030] bg-[#FFF5F5] border-[#FED7D7]';
       case 'Pending':
       default:
-        return 'bg-[#E9A93A]/10 text-[#E9A93A] border border-[#E9A93A]/20';
+        return 'text-[#B7791F] bg-[#FEFCBF] border-[#FEEBC8]';
     }
   };
 
   return (
-    <div className="flex-1 bg-[#F5F6FC] px-8 py-6">
+    <div className="flex-1 bg-[#F8F9FA] px-8 py-8 space-y-6 overflow-y-auto max-h-[calc(100vh-64px)]">
       {/* Header */}
-      <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E2E6F2] pb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E2E8F0] pb-4">
         <div>
-          <h2 className="text-lg font-bold text-[#171A45] tracking-tight">Time Off & Leaves</h2>
-          <p className="text-xs text-[#70738D] mt-0.5 font-semibold">
+          <h2 className="text-lg font-bold text-[#111111] tracking-tight">Time Off & Leaves</h2>
+          <p className="text-xs text-[#718096] mt-0.5 font-semibold uppercase tracking-wider">
             {isAdminOrHR ? 'Employee Leave Approvals Workspace' : 'My Personal Time-Off Board'}
           </p>
         </div>
@@ -130,12 +130,12 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
         <div className="flex items-center space-x-3">
           {/* Admin Navigation Tabs */}
           {isAdminOrHR && (
-            <div className="flex bg-[#EEF0FA] border border-[#E2E6F2] p-1 rounded-xl shadow-inner">
+            <div className="flex bg-[#F8F9FA] border border-[#E2E8F0] p-1 rounded-xl shadow-inner">
               <button
                 type="button"
                 onClick={() => setActiveTab('timeoff')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeTab === 'timeoff' ? 'bg-[#171717] text-white shadow-sm' : 'text-[#70738D] hover:text-[#171A45]'
+                  activeTab === 'timeoff' ? 'bg-[#111111] text-white shadow-sm' : 'text-[#718096] hover:text-[#111111]'
                 }`}
               >
                 Time Off
@@ -144,7 +144,7 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
                 type="button"
                 onClick={() => setActiveTab('allocation')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeTab === 'allocation' ? 'bg-[#171717] text-white shadow-sm' : 'text-[#70738D] hover:text-[#171A45]'
+                  activeTab === 'allocation' ? 'bg-[#111111] text-white shadow-sm' : 'text-[#718096] hover:text-[#111111]'
                 }`}
               >
                 Allocation
@@ -156,12 +156,12 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
           {!isAdminOrHR && (
             <button
               onClick={() => setShowRequestModal(true)}
-              className="bg-[#171717] hover:bg-[#262626] text-white font-bold text-xs tracking-wider px-4 py-2.8 rounded-xl flex items-center justify-center space-x-1.5 transition-all shadow-md shadow-[#171717]/10"
+              className="bg-[#111111] hover:bg-[#222222] text-white font-bold text-xs tracking-wider px-4 py-2.5 rounded-xl flex items-center justify-center space-x-1.5 transition-all shadow-sm"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              <span>NEW</span>
+              <span>APPLY LEAVE</span>
             </button>
           )}
         </div>
@@ -172,47 +172,43 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
         
         {/* Balances widgets */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-xl">
-          <div className="bg-white border border-[#E2E6F2] p-5 rounded-[20px] flex items-center justify-between shadow-premium hover:shadow-premium-hover transition-all">
+          <div className="bg-white border border-[#E2E8F0] p-5 rounded-xl flex items-center justify-between shadow-sm">
             <div>
-              <span className="text-[#70738D] text-xs font-bold uppercase tracking-wider block">Paid Time Off</span>
-              <span className="text-2xl font-extrabold text-[#171A45] mt-1 block">24 Days Available</span>
+              <span className="text-[#718096] text-[10px] font-bold uppercase tracking-wider block">Paid Time Off</span>
+              <span className="text-xl font-bold text-[#111111] mt-1 block">24 Days Available</span>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-gray-100 border border-[#171717]/20 flex items-center justify-center text-[#171717] text-lg">
-              🏖️
-            </div>
+            <span className="text-[10px] font-bold px-2 py-0.5 bg-[#F8F9FA] text-[#718096] border border-[#E2E8F0] rounded">ANNUAL</span>
           </div>
           
-          <div className="bg-white border border-[#E2E6F2] p-5 rounded-[20px] flex items-center justify-between shadow-premium hover:shadow-premium-hover transition-all">
+          <div className="bg-white border border-[#E2E8F0] p-5 rounded-xl flex items-center justify-between shadow-sm">
             <div>
-              <span className="text-[#70738D] text-xs font-bold uppercase tracking-wider block">Sick Leave</span>
-              <span className="text-2xl font-extrabold text-[#171A45] mt-1 block">07 Days Available</span>
+              <span className="text-[#718096] text-[10px] font-bold uppercase tracking-wider block">Sick Leave</span>
+              <span className="text-xl font-bold text-[#111111] mt-1 block">07 Days Available</span>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-rose-50 border border-[#E95D73]/20 flex items-center justify-center text-[#E95D73] text-lg">
-              🤒
-            </div>
+            <span className="text-[10px] font-bold px-2 py-0.5 bg-[#FFF5F5] text-[#C53030] border border-[#FED7D7] rounded">MEDICAL</span>
           </div>
         </div>
 
         {/* Filters and Table */}
-        <div className="space-y-4">
+        <div className="space-y-4 animate-slide-up">
           <div className="relative max-w-md">
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={isAdminOrHR ? "Search requests by employee name..." : "Search my requests..."}
-              className="w-full bg-white border border-[#E2E6F2] rounded-xl pl-10 pr-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
+              placeholder={isAdminOrHR ? "Search requests by employee..." : "Search my requests..."}
+              className="w-full bg-white border border-[#E2E8F0] rounded-xl pl-10 pr-4 py-2.5 text-xs text-[#111111] placeholder-[#A0AEC0] focus:outline-none focus:border-[#111111] transition-all"
             />
-            <svg className="absolute left-3.5 top-3 w-4 h-4 text-[#70738D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="absolute left-3.5 top-3.5 w-4 h-4 text-[#A0AEC0]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
 
-          <div className="bg-white border border-[#E2E6F2] rounded-[20px] overflow-hidden shadow-premium">
+          <div className="bg-white border border-[#E2E8F0] rounded-xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-[#F5F6FC] text-[#70738D] border-b border-[#E2E6F2] uppercase font-bold tracking-wider">
+                  <tr className="bg-[#F8F9FA] text-[#4A5568] border-b border-[#E2E8F0] uppercase font-bold tracking-wider text-[10px]">
                     <th className="p-4">Employee</th>
                     <th className="p-4">Start Date</th>
                     <th className="p-4">End Date</th>
@@ -222,35 +218,35 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
                     {isAdminOrHR && <th className="p-4 text-center">Actions</th>}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E2E6F2] text-[#171A45]">
+                <tbody className="divide-y divide-[#E2E8F0] text-[#111111]">
                   {filteredRequests.map((req) => (
-                    <tr key={req.id} className="hover:bg-[#F5F6FC]/50 transition-colors">
-                      <td className="p-4 font-bold text-[#171A45] flex items-center space-x-3">
-                        <span className="w-7 h-7 bg-[#171717]/10 text-[#171717] rounded-lg flex items-center justify-center font-bold text-xs">
+                    <tr key={req.id} className="hover:bg-[#F8F9FA] transition-colors">
+                      <td className="p-4 font-bold flex items-center space-x-2.5">
+                        <span className="w-7 h-7 bg-[#F8F9FA] text-[#111111] border border-[#E2E8F0] rounded-full flex items-center justify-center font-bold text-[10px]">
                           {req.employeeName.substring(0, 2).toUpperCase()}
                         </span>
                         <div>
                           <span>{req.employeeName}</span>
                           {req.remarks && (
-                            <p className="text-[10px] text-[#70738D] font-normal mt-0.5 max-w-[200px] truncate" title={req.remarks}>
+                            <p className="text-[10px] text-[#718096] font-normal mt-0.5 max-w-[200px] truncate" title={req.remarks}>
                               "{req.remarks}"
                             </p>
                           )}
                         </div>
                       </td>
-                      <td className="p-4 font-mono font-bold text-[#171A45]">{req.startDate}</td>
-                      <td className="p-4 font-mono font-bold text-[#171A45]">{req.endDate}</td>
+                      <td className="p-4 font-mono text-[#111111]">{req.startDate}</td>
+                      <td className="p-4 font-mono text-[#111111]">{req.endDate}</td>
                       <td className="p-4 font-mono text-center font-bold">{req.durationDays}</td>
                       <td className="p-4">
-                        <span className="text-[#171A45] font-bold">{req.leaveType}</span>
+                        <span className="text-[#111111] font-semibold">{req.leaveType}</span>
                         {req.attachmentName && (
-                          <span className="block text-[10px] text-[#171717] font-semibold underline truncate max-w-[120px]" title={req.attachmentName}>
+                          <span className="block text-[10px] text-[#718096] font-semibold underline truncate max-w-[120px]" title={req.attachmentName}>
                             📎 {req.attachmentName}
                           </span>
                         )}
                       </td>
                       <td className="p-4">
-                        <span className={`inline-flex items-center px-2.5 py-1.2 rounded-lg text-[10px] uppercase font-extrabold tracking-wider ${getStatusStyle(req.status)}`}>
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded border text-[9px] uppercase font-bold tracking-wider ${getStatusBadgeClass(req.status)}`}>
                           {req.status}
                         </span>
                       </td>
@@ -260,19 +256,19 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
                             <div className="flex items-center justify-center space-x-2">
                               <button
                                 onClick={() => onReviewLeave(req.id, 'Approved')}
-                                className="bg-[#43B77A]/15 hover:bg-[#43B77A] text-[#43B77A] hover:text-white border border-[#43B77A]/20 rounded-lg px-2.5 py-1 text-[10px] font-bold transition-all shadow-sm"
+                                className="bg-white border border-[#E2E8F0] hover:border-[#111111] text-[#111111] rounded-lg px-2.5 py-1 text-xs font-semibold transition-all shadow-sm"
                               >
                                 Approve
                               </button>
                               <button
                                 onClick={() => onReviewLeave(req.id, 'Rejected')}
-                                className="bg-[#E95D73]/15 hover:bg-[#E95D73] text-[#E95D73] hover:text-white border border-[#E95D73]/20 rounded-lg px-2.5 py-1 text-[10px] font-bold transition-all shadow-sm"
+                                className="bg-white border border-[#E2E8F0] hover:border-red-500 hover:text-red-500 text-[#718096] rounded-lg px-2.5 py-1 text-xs font-semibold transition-all shadow-sm"
                               >
                                 Reject
                               </button>
                             </div>
                           ) : (
-                            <span className="text-[#9A9DB5] italic text-[10px] font-semibold">Reviewed</span>
+                            <span className="text-[#A0AEC0] italic text-[10px] font-semibold">Reviewed</span>
                           )}
                         </td>
                       )}
@@ -280,7 +276,7 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
                   ))}
                   {filteredRequests.length === 0 && (
                     <tr>
-                      <td colSpan={isAdminOrHR ? 7 : 6} className="p-8 text-center text-[#9A9DB5] font-bold">
+                      <td colSpan={isAdminOrHR ? 7 : 6} className="p-8 text-center text-[#A0AEC0] font-bold bg-white">
                         No leave requests logged.
                       </td>
                     </tr>
@@ -296,22 +292,22 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
       {/* New Request Modal */}
       {showRequestModal && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-[#E2E6F2] rounded-[24px] max-w-md w-full p-6 relative shadow-premium animate-scale-in">
+          <div className="bg-white border border-[#E2E8F0] rounded-2xl max-w-md w-full p-6 relative shadow-sm animate-scale-in">
             
             {/* Close */}
             <button
               onClick={() => setShowRequestModal(false)}
-              className="absolute top-4 right-4 text-[#70738D] hover:text-[#171A45] p-1.5 hover:bg-[#F5F6FC] rounded-lg transition-colors"
+              className="absolute top-4 right-4 text-[#718096] hover:text-[#111111] p-1.5 hover:bg-[#F8F9FA] rounded-lg transition-colors"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 
-            <h3 className="text-base font-extrabold text-[#171A45] mb-4">Time off Request</h3>
+            <h3 className="text-sm font-bold text-[#111111] uppercase tracking-wider mb-4 border-b border-[#E2E8F0] pb-2">Apply for Time Off</h3>
 
             {error && (
-              <div className="mb-4 bg-[#E95D73]/10 border border-[#E95D73]/20 text-[#E95D73] px-3 py-2 rounded-xl text-xs font-semibold">
+              <div className="mb-4 bg-[#FFF5F5] border border-[#FED7D7] text-[#C53030] px-3 py-2 rounded-xl text-xs font-semibold">
                 {error}
               </div>
             )}
@@ -320,23 +316,23 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
               
               {/* Employee display */}
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">Employee</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">Employee</label>
                 <input
                   type="text"
                   disabled
                   value={currentUser?.name || ''}
-                  className="w-full bg-[#F5F6FC]/60 border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#70738D] focus:outline-none"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#718096] focus:outline-none"
                 />
               </div>
 
               {/* Type dropdown */}
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1" htmlFor="leaveType">Time off Type</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1" htmlFor="leaveType">Time off Type</label>
                 <select
                   id="leaveType"
                   value={leaveType}
                   onChange={(e) => setLeaveType(e.target.value as 'Paid' | 'Sick' | 'Unpaid')}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2.5 text-sm text-[#171A45] focus:outline-none focus:border-[#171717] transition-all"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-3 py-2 text-xs text-[#111111] focus:outline-none focus:border-[#111111] transition-all"
                 >
                   <option value="Paid">Paid Time off</option>
                   <option value="Sick">Sick Leave</option>
@@ -347,62 +343,62 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
               {/* Date ranges */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1" htmlFor="startDate">Start Date</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1" htmlFor="startDate">Start Date</label>
                   <input
                     id="startDate"
                     type="date"
                     required
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+                    className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1" htmlFor="endDate">End Date</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1" htmlFor="endDate">End Date</label>
                   <input
                     id="endDate"
                     type="date"
                     required
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+                    className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
                   />
                 </div>
               </div>
 
               {/* Estimated Allocation displays */}
-              <div className="flex justify-between items-center text-xs bg-[#F5F6FC] px-4 py-2.5 rounded-xl border border-[#E2E6F2]">
-                <span className="text-[#70738D] font-extrabold uppercase tracking-wider">Estimated Allocation:</span>
-                <span className="text-[#171717] font-mono font-bold text-sm">
+              <div className="flex justify-between items-center text-xs bg-[#F8F9FA] px-4 py-2.5 rounded-xl border border-[#E2E8F0]">
+                <span className="text-[#718096] font-bold uppercase tracking-wider text-[10px]">Estimated Duration:</span>
+                <span className="text-[#111111] font-mono font-bold text-sm">
                   {durationDays} Days
                 </span>
               </div>
 
               {/* Remarks */}
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1" htmlFor="remarks">Remarks / Reason</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1" htmlFor="remarks">Remarks / Reason</label>
                 <input
                   id="remarks"
                   type="text"
                   value={remarks}
                   onChange={(e) => setRemarks(e.target.value)}
-                  placeholder="e.g. Family trip, dental surgery..."
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+                  placeholder="e.g. Family vacation, medical appointment..."
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
                 />
               </div>
 
               {/* File upload ONLY visible if Sick Leave */}
               {leaveType === 'Sick' && (
-                <div className="bg-[#F5F6FC] border border-[#E2E6F2] p-3.5 rounded-xl space-y-2">
-                  <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D]">
-                    Upload Sick Leave Certificate
+                <div className="bg-[#F8F9FA] border border-[#E2E8F0] p-3.5 rounded-xl space-y-2">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#718096]">
+                    Medical Certificate Attachment
                   </label>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-[#70738D] truncate max-w-[200px]">
-                      {attachment ? attachment.name : 'No certificate selected'}
+                    <span className="text-xs text-[#718096] truncate max-w-[200px]">
+                      {attachment ? attachment.name : 'No file selected'}
                     </span>
-                    <label className="bg-[#EAEAEA] hover:bg-[#171717]/10 text-[#171717] border border-[#171717]/20 px-3.5 py-1.8 rounded-xl text-xs font-bold cursor-pointer transition-all shadow-sm">
-                      Attach File
+                    <label className="bg-white hover:bg-[#F8F9FA] border border-[#E2E8F0] text-[#111111] px-3.5 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition-all shadow-sm">
+                      Attach Certificate
                       <input
                         type="file"
                         accept=".pdf,.png,.jpg,.jpeg"
@@ -411,24 +407,24 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
                       />
                     </label>
                   </div>
-                  <p className="text-[9px] text-[#9A9DB5] font-semibold">(PDF, JPG up to 5MB required)</p>
+                  <p className="text-[9px] text-[#A0AEC0] font-semibold">(PDF, PNG, JPG up to 5MB required)</p>
                 </div>
               )}
 
               {/* Submit actions */}
-              <div className="flex justify-end space-x-3 pt-4 border-t border-[#E2E6F2]">
+              <div className="flex justify-end space-x-3 pt-4 border-t border-[#E2E8F0]">
                 <button
                   type="button"
                   onClick={() => setShowRequestModal(false)}
-                  className="bg-[#F5F6FC] hover:bg-[#EEF0FA] text-[#70738D] hover:text-[#171A45] font-bold px-4 py-2.5 rounded-xl text-xs transition-colors"
+                  className="bg-[#F8F9FA] hover:bg-[#E2E8F0] border border-[#E2E8F0] text-[#718096] font-semibold px-4 py-2.5 rounded-xl text-xs transition-colors"
                 >
                   Discard
                 </button>
                 <button
                   type="submit"
-                  className="bg-[#171717] hover:bg-[#262626] text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-all shadow-md shadow-[#171717]/10"
+                  className="bg-[#111111] hover:bg-[#222222] text-white font-semibold px-5 py-2.5 rounded-xl text-xs transition-all shadow-sm"
                 >
-                  Submit
+                  Submit Request
                 </button>
               </div>
 

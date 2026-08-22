@@ -214,37 +214,38 @@ export const MyProfile: React.FC<MyProfileProps> = ({
   };
 
   return (
-    <div className="flex-1 bg-[#F5F6FC] px-8 py-6 max-w-5xl mx-auto w-full">
+    <div className="flex-1 bg-[#F8F9FA] px-8 py-8 w-full overflow-y-auto max-h-[calc(100vh-64px)] animate-fade-in space-y-6">
+      
       {/* Header Info Banner */}
-      <div className="bg-white border border-[#E2E6F2] p-6 rounded-[24px] flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 relative shadow-premium">
+      <div className="bg-white border border-[#E2E8F0] p-6 rounded-xl flex flex-col md:flex-row items-center md:items-start gap-6 shadow-sm">
         <img
           src={avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'}
           alt={employee.name}
-          className="w-24 h-24 rounded-full border border-[#E2E6F2] object-cover shadow-sm"
+          className="w-20 h-20 rounded-full border border-[#E2E8F0] object-cover"
         />
         <div className="flex-1 text-center md:text-left">
-          <h2 className="text-2xl font-extrabold text-[#171A45] tracking-tight">{employee.name}</h2>
-          <p className="text-[#171717] font-bold text-sm">{employee.jobPosition}</p>
-          <span className="inline-block font-mono text-xs text-[#70738D] font-bold bg-[#F5F6FC] px-2.5 py-0.5 rounded-lg border border-[#E2E6F2] mt-1.5">
+          <h2 className="text-lg font-bold text-[#111111] tracking-tight">{employee.name}</h2>
+          <p className="text-[#718096] text-xs font-semibold mt-0.5">{employee.jobPosition}</p>
+          <span className="inline-block font-mono text-[10px] text-[#4A5568] font-bold bg-[#F8F9FA] px-2.5 py-0.5 rounded border border-[#E2E8F0] mt-2">
             {employee.loginId}
           </span>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5 text-xs">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 text-xs">
             <div>
-              <span className="text-[#9A9DB5] font-extrabold uppercase tracking-wider block mb-0.5">Department</span>
-              <span className="text-[#171A45] font-semibold">{employee.department}</span>
+              <span className="text-[#A0AEC0] font-bold uppercase tracking-wider text-[9px] block mb-0.5">Department</span>
+              <span className="text-[#111111] font-semibold">{employee.department}</span>
             </div>
             <div>
-              <span className="text-[#9A9DB5] font-extrabold uppercase tracking-wider block mb-0.5">Manager</span>
-              <span className="text-[#171A45] font-semibold">{employee.manager}</span>
+              <span className="text-[#A0AEC0] font-bold uppercase tracking-wider text-[9px] block mb-0.5">Manager</span>
+              <span className="text-[#111111] font-semibold">{employee.manager}</span>
             </div>
             <div>
-              <span className="text-[#9A9DB5] font-extrabold uppercase tracking-wider block mb-0.5">Company</span>
-              <span className="text-[#171A45] font-semibold">{employee.company}</span>
+              <span className="text-[#A0AEC0] font-bold uppercase tracking-wider text-[9px] block mb-0.5">Company</span>
+              <span className="text-[#111111] font-semibold">{employee.company}</span>
             </div>
             <div>
-              <span className="text-[#9A9DB5] font-extrabold uppercase tracking-wider block mb-0.5">Joined Date</span>
-              <span className="text-[#171A45] font-semibold">{employee.privateInfo?.dateOfJoining}</span>
+              <span className="text-[#A0AEC0] font-bold uppercase tracking-wider text-[9px] block mb-0.5">Joined Date</span>
+              <span className="text-[#111111] font-semibold">{employee.privateInfo?.dateOfJoining}</span>
             </div>
           </div>
         </div>
@@ -253,10 +254,10 @@ export const MyProfile: React.FC<MyProfileProps> = ({
       {/* Feedback Alerts */}
       {feedback.message && (
         <div
-          className={`mb-6 px-4 py-3 rounded-xl text-xs font-bold border ${
+          className={`px-4 py-3 rounded-xl text-xs font-bold border ${
             feedback.type === 'success'
-              ? 'bg-[#43B77A]/10 border-[#43B77A]/20 text-[#43B77A]'
-              : 'bg-[#E95D73]/10 border-[#E95D73]/20 text-[#E95D73]'
+              ? 'bg-[#F0FDF4] border-[#DCFCE7] text-[#2F855A]'
+              : 'bg-[#FFF5F5] border-[#FED7D7] text-[#C53030]'
           }`}
         >
           {feedback.message}
@@ -264,64 +265,27 @@ export const MyProfile: React.FC<MyProfileProps> = ({
       )}
 
       {/* Tabs navigation */}
-      <div className="flex border-b border-[#E2E6F2] mb-8">
-        <button
-          type="button"
-          onClick={() => setActiveTab('resume')}
-          className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
-            activeTab === 'resume'
-              ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
-              : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
-          }`}
-        >
-          Resume
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab('private')}
-          className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
-            activeTab === 'private'
-              ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
-              : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
-          }`}
-        >
-          Private Info
-        </button>
-        {showSalaryTab && (
-          <button
-            type="button"
-            onClick={() => setActiveTab('salary')}
-            className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
-              activeTab === 'salary'
-                ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
-                : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
-            }`}
-          >
-            Salary Info
-          </button>
-        )}
-        <button
-          type="button"
-          onClick={() => setActiveTab('security')}
-          className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
-            activeTab === 'security'
-              ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
-              : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
-          }`}
-        >
-          Security
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab('documents')}
-          className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
-            activeTab === 'documents'
-              ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
-              : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
-          }`}
-        >
-          Documents
-        </button>
+      <div className="flex border-b border-[#E2E8F0] space-x-1">
+        {(['resume', 'private', 'salary', 'security', 'documents'] as const).map((tab) => {
+          if (tab === 'salary' && !showSalaryTab) return null;
+          return (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => {
+                setActiveTab(tab);
+                setFeedback({ type: '', message: '' });
+              }}
+              className={`px-4 py-2.5 text-[10px] uppercase tracking-wider font-bold border-b-2 transition-all ${
+                activeTab === tab
+                  ? 'border-[#111111] text-[#111111]'
+                  : 'border-transparent text-[#718096] hover:text-[#111111]'
+              }`}
+            >
+              {tab === 'private' ? 'Private Info' : tab === 'salary' ? 'Salary Info' : tab}
+            </button>
+          );
+        })}
       </div>
 
       {/* Form Container */}
@@ -329,55 +293,55 @@ export const MyProfile: React.FC<MyProfileProps> = ({
         
         {/* Tab 1: Resume Profile Info */}
         {activeTab === 'resume' && (
-          <div className="bg-white border border-[#E2E6F2] p-6 rounded-[24px] space-y-5 shadow-premium">
+          <div className="bg-white border border-[#E2E8F0] p-6 rounded-xl space-y-5 shadow-sm">
             <div>
-              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5">Avatar URL (Profile Picture)</label>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1.5">Avatar URL (Profile Picture)</label>
               <input
                 type="text"
                 value={avatarUrl}
                 onChange={(e) => setAvatarUrl(e.target.value)}
-                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+                className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
               />
             </div>
             
             <div>
-              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5">About / Bio</label>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1.5">About / Bio</label>
               <textarea
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
                 rows={4}
-                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all resize-none"
+                className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all resize-none"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5">Skills (comma separated)</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1.5">Skills (comma separated)</label>
                 <input
                   type="text"
                   value={skills}
                   onChange={(e) => setSkills(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
                 />
               </div>
               
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5">Certifications (comma separated)</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1.5">Certifications (comma separated)</label>
                 <input
                   type="text"
                   value={certifications}
                   onChange={(e) => setCertifications(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5">Interests (comma separated)</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1.5">Interests (comma separated)</label>
                 <input
                   type="text"
                   value={interests}
                   onChange={(e) => setInterests(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
                 />
               </div>
             </div>
@@ -386,62 +350,62 @@ export const MyProfile: React.FC<MyProfileProps> = ({
 
         {/* Tab 2: Private Info (Bank details + personal items) */}
         {activeTab === 'private' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Personal Column */}
-            <div className="bg-white border border-[#E2E6F2] p-6 rounded-[24px] space-y-4 shadow-premium">
-              <h3 className="text-xs font-extrabold text-[#171A45] uppercase tracking-wider border-b border-[#E2E6F2] pb-2">Personal Parameters</h3>
+            <div className="bg-white border border-[#E2E8F0] p-6 rounded-xl space-y-4 shadow-sm">
+              <h3 className="text-xs font-bold text-[#111111] uppercase tracking-wider border-b border-[#E2E8F0] pb-2">Personal Details</h3>
               
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">Date of Birth</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">Date of Birth</label>
                 <input
                   type="date"
                   disabled={isReadOnly}
                   value={dob}
                   onChange={(e) => setDob(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] focus:bg-white focus:outline-none focus:border-[#111111] transition-all disabled:opacity-50"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">Residing Address</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">Residing Address</label>
                 <input
                   type="text"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">Nationality</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">Nationality</label>
                 <input
                   type="text"
                   disabled={isReadOnly}
                   value={nationality}
                   onChange={(e) => setNationality(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all disabled:opacity-50"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">Personal Email</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">Personal Email</label>
                 <input
                   type="email"
                   disabled={isReadOnly}
                   value={personalEmail}
                   onChange={(e) => setPersonalEmail(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all disabled:opacity-50"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">Gender</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">Gender</label>
                   <select
                     disabled={isReadOnly}
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
+                    className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-3 py-2 text-xs text-[#111111] focus:bg-white focus:outline-none focus:border-[#111111] transition-all disabled:opacity-50"
                   >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -450,12 +414,12 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                 </div>
                 
                 <div>
-                  <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">Marital Status</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">Marital Status</label>
                   <select
                     disabled={isReadOnly}
                     value={maritalStatus}
                     onChange={(e) => setMaritalStatus(e.target.value)}
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
+                    className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-3 py-2 text-xs text-[#111111] focus:bg-white focus:outline-none focus:border-[#111111] transition-all disabled:opacity-50"
                   >
                     <option value="Single">Single</option>
                     <option value="Married">Married</option>
@@ -465,92 +429,92 @@ export const MyProfile: React.FC<MyProfileProps> = ({
               </div>
               
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">Phone Number (Editable)</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">Phone Number (Editable)</label>
                 <input
                   type="text"
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">Location (Editable)</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">Location (Editable)</label>
                 <input
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
                 />
               </div>
             </div>
 
             {/* Banking Column */}
-            <div className="bg-white border border-[#E2E6F2] p-6 rounded-[24px] space-y-4 shadow-premium">
-              <h3 className="text-xs font-extrabold text-[#171A45] uppercase tracking-wider border-b border-[#E2E6F2] pb-2">Banking Coordinates</h3>
+            <div className="bg-white border border-[#E2E8F0] p-6 rounded-xl space-y-4 shadow-sm">
+              <h3 className="text-xs font-bold text-[#111111] uppercase tracking-wider border-b border-[#E2E8F0] pb-2">Banking Coordinates</h3>
               
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">Bank Name</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">Bank Name</label>
                 <input
                   type="text"
                   disabled={isReadOnly}
                   value={bankName}
                   onChange={(e) => setBankName(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all disabled:opacity-50"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">Account Number</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">Account Number</label>
                 <input
                   type="text"
                   disabled={isReadOnly}
                   value={accountNumber}
                   onChange={(e) => setAccountNumber(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all disabled:opacity-50"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">IFSC Code</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">IFSC Code</label>
                 <input
                   type="text"
                   disabled={isReadOnly}
                   value={ifscCode}
                   onChange={(e) => setIfscCode(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all disabled:opacity-50"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">PAN No</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">PAN No</label>
                 <input
                   type="text"
                   disabled={isReadOnly}
                   value={panNo}
                   onChange={(e) => setPanNo(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all disabled:opacity-50"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">UAN No</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">UAN No</label>
                 <input
                   type="text"
                   disabled={isReadOnly}
                   value={uanNo}
                   onChange={(e) => setUanNo(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all disabled:opacity-50"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1">Employee Code</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1">Employee Code</label>
                 <input
                   type="text"
                   disabled
                   value={employee.privateInfo?.bankDetails?.empCode || 'EMP001'}
-                  className="w-full bg-[#F5F6FC]/60 border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#70738D] focus:outline-none"
+                  className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2 text-xs text-[#718096] focus:outline-none"
                 />
               </div>
             </div>
@@ -562,27 +526,27 @@ export const MyProfile: React.FC<MyProfileProps> = ({
           <div className="space-y-6 animate-slide-up">
             
             {/* Editing settings */}
-            <div className="bg-white border border-[#E2E6F2] p-6 rounded-[24px] shadow-premium">
-              <h3 className="text-xs font-extrabold text-[#171A45] uppercase tracking-wider mb-4 border-b border-[#E2E6F2] pb-2">
+            <div className="bg-white border border-[#E2E8F0] p-6 rounded-xl shadow-sm">
+              <h3 className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-4 border-b border-[#E2E8F0] pb-2">
                 Configure Salary Settings
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5">Define Monthly Wage (Gross ₹)</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1.5">Define Monthly Wage (Gross ₹)</label>
                   <input
                     type="number"
                     value={monthWage}
                     onChange={(e) => setMonthWage(Number(e.target.value))}
-                    className="w-full bg-[#F5F6FC] border border-[#171717]/30 focus:border-[#171717] focus:ring-1 focus:ring-[#171717] rounded-xl px-4 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none font-bold transition-all"
+                    className="w-full bg-[#F8F9FA] border border-[#E2E8F0] focus:border-[#111111] rounded-xl px-4 py-2.5 text-xs text-[#111111] focus:bg-white focus:outline-none font-bold transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5">Define Fixed Performance Bonus (₹)</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1.5">Define Fixed Performance Bonus (₹)</label>
                   <input
                     type="number"
                     value={bonus}
                     onChange={(e) => setBonus(Number(e.target.value))}
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] focus:border-[#171717] focus:ring-1 focus:ring-[#171717] rounded-xl px-4 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none font-bold transition-all"
+                    className="w-full bg-[#F8F9FA] border border-[#E2E8F0] focus:border-[#111111] rounded-xl px-4 py-2.5 text-xs text-[#111111] focus:bg-white focus:outline-none font-bold transition-all"
                   />
                 </div>
               </div>
@@ -591,84 +555,84 @@ export const MyProfile: React.FC<MyProfileProps> = ({
             {/* Calculations review */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Earnings panel */}
-              <div className="bg-white border border-[#E2E6F2] p-5 rounded-[24px] space-y-4 shadow-premium">
-                <h4 className="text-xs font-extrabold text-[#171A45] uppercase tracking-wider border-b border-[#E2E6F2] pb-2">
+              <div className="bg-white border border-[#E2E8F0] p-5 rounded-xl space-y-4 shadow-sm">
+                <h4 className="text-xs font-bold text-[#111111] uppercase tracking-wider border-b border-[#E2E8F0] pb-2">
                   Earnings Breakdown (Auto-Calculated)
                 </h4>
                 <div className="space-y-3.5">
                   <div className="flex justify-between items-center text-xs">
                     <div>
-                      <span className="text-[#171A45] font-bold block">Basic Salary</span>
-                      <span className="text-[#70738D] text-[10px] font-semibold">50% of monthly wage</span>
+                      <span className="text-[#111111] font-bold block">Basic Salary</span>
+                      <span className="text-[#718096] text-[10px] font-medium">50% of monthly wage</span>
                     </div>
-                    <span className="text-[#43B77A] font-extrabold">{formatCurrency(liveSalaryInfo.components.basic.amount)}</span>
+                    <span className="text-[#2F855A] font-bold">{formatCurrency(liveSalaryInfo.components.basic.amount)}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <div>
-                      <span className="text-[#171A45] font-bold block">House Rent Allowance (HRA)</span>
-                      <span className="text-[#70738D] text-[10px] font-semibold">50% of Basic Salary (25% of wage)</span>
+                      <span className="text-[#111111] font-bold block">House Rent Allowance (HRA)</span>
+                      <span className="text-[#718096] text-[10px] font-medium">50% of Basic Salary (25% of wage)</span>
                     </div>
-                    <span className="text-[#43B77A] font-extrabold">{formatCurrency(liveSalaryInfo.components.hra.amount)}</span>
+                    <span className="text-[#2F855A] font-bold">{formatCurrency(liveSalaryInfo.components.hra.amount)}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <div>
-                      <span className="text-[#171A45] font-bold block">Standard Allowance</span>
-                      <span className="text-[#70738D] text-[10px] font-semibold">8.33% of monthly wage</span>
+                      <span className="text-[#111111] font-bold block">Standard Allowance</span>
+                      <span className="text-[#718096] text-[10px] font-medium">8.33% of monthly wage</span>
                     </div>
-                    <span className="text-[#43B77A] font-extrabold">{formatCurrency(liveSalaryInfo.components.standard.amount)}</span>
+                    <span className="text-[#2F855A] font-bold">{formatCurrency(liveSalaryInfo.components.standard.amount)}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <div>
-                      <span className="text-[#171A45] font-bold block">Performance Bonus</span>
-                      <span className="text-[#70738D] text-[10px] font-semibold">Fixed amount allocated</span>
+                      <span className="text-[#111111] font-bold block">Performance Bonus</span>
+                      <span className="text-[#718096] text-[10px] font-medium">Fixed amount allocated</span>
                     </div>
-                    <span className="text-[#43B77A] font-extrabold">{formatCurrency(liveSalaryInfo.components.performanceBonus.amount)}</span>
+                    <span className="text-[#2F855A] font-bold">{formatCurrency(liveSalaryInfo.components.performanceBonus.amount)}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <div>
-                      <span className="text-[#171A45] font-bold block">Leave Travel Allowance (LTA)</span>
-                      <span className="text-[#70738D] text-[10px] font-semibold">8.33% of monthly wage</span>
+                      <span className="text-[#111111] font-bold block">Leave Travel Allowance (LTA)</span>
+                      <span className="text-[#718096] text-[10px] font-medium">8.33% of monthly wage</span>
                     </div>
-                    <span className="text-[#43B77A] font-extrabold">{formatCurrency(liveSalaryInfo.components.lta.amount)}</span>
+                    <span className="text-[#2F855A] font-bold">{formatCurrency(liveSalaryInfo.components.lta.amount)}</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs border-t border-[#E2E6F2] pt-3.5">
+                  <div className="flex justify-between items-center text-xs border-t border-[#E2E8F0] pt-3.5">
                     <div>
-                      <span className="text-[#171A45] font-bold block">Fixed Allowance (Remainder)</span>
-                      <span className="text-[#70738D] text-[10px] font-semibold">Wage - sum(all other components)</span>
+                      <span className="text-[#111111] font-bold block">Fixed Allowance (Remainder)</span>
+                      <span className="text-[#718096] text-[10px] font-medium">Wage - sum(all other components)</span>
                     </div>
-                    <span className="text-[#43B77A] font-extrabold">{formatCurrency(liveSalaryInfo.components.fixedAllowance.amount)}</span>
+                    <span className="text-[#2F855A] font-bold">{formatCurrency(liveSalaryInfo.components.fixedAllowance.amount)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Deductions panel */}
-              <div className="bg-white border border-[#E2E6F2] p-5 rounded-[24px] space-y-4 shadow-premium">
-                <h4 className="text-xs font-extrabold text-[#171A45] uppercase tracking-wider border-b border-[#E2E6F2] pb-2">
+              <div className="bg-white border border-[#E2E8F0] p-5 rounded-xl space-y-4 shadow-sm">
+                <h4 className="text-xs font-bold text-[#111111] uppercase tracking-wider border-b border-[#E2E8F0] pb-2">
                   Deductions & Company Cost
                 </h4>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center text-xs">
                     <div>
-                      <span className="text-[#171A45] font-bold block">Employee PF</span>
-                      <span className="text-[#70738D] text-[10px] font-semibold">12% of Basic Salary</span>
+                      <span className="text-[#111111] font-bold block">Employee PF</span>
+                      <span className="text-[#718096] text-[10px] font-medium">12% of Basic Salary</span>
                     </div>
-                    <span className="text-[#E95D73] font-bold">{formatCurrency(liveSalaryInfo.deductions.employeePF.amount)}</span>
+                    <span className="text-[#C53030] font-bold">{formatCurrency(liveSalaryInfo.deductions.employeePF.amount)}</span>
                   </div>
                   
                   <div className="flex justify-between items-center text-xs">
                     <div>
-                      <span className="text-[#171A45] font-bold block">Employer PF</span>
-                      <span className="text-[#70738D] text-[10px] font-semibold">12% of Basic (Paid by Employer)</span>
+                      <span className="text-[#111111] font-bold block">Employer PF</span>
+                      <span className="text-[#718096] text-[10px] font-medium">12% of Basic (Paid by Employer)</span>
                     </div>
-                    <span className="text-[#70738D] font-bold">{formatCurrency(liveSalaryInfo.deductions.employerPF.amount)}</span>
+                    <span className="text-[#718096] font-bold">{formatCurrency(liveSalaryInfo.deductions.employerPF.amount)}</span>
                   </div>
 
-                  <div className="flex justify-between items-center text-xs border-t border-[#E2E6F2] pt-4">
+                  <div className="flex justify-between items-center text-xs border-t border-[#E2E8F0] pt-4">
                     <div>
-                      <span className="text-[#171A45] font-bold block">Professional Tax (PT)</span>
-                      <span className="text-[#70738D] text-[10px] font-semibold">Fixed PT Deduction</span>
+                      <span className="text-[#111111] font-bold block">Professional Tax (PT)</span>
+                      <span className="text-[#718096] text-[10px] font-medium">Fixed PT Deduction</span>
                     </div>
-                    <span className="text-[#E95D73] font-bold">{formatCurrency(liveSalaryInfo.deductions.professionalTax.amount)}</span>
+                    <span className="text-[#C53030] font-bold">{formatCurrency(liveSalaryInfo.deductions.professionalTax.amount)}</span>
                   </div>
                 </div>
               </div>
@@ -678,10 +642,10 @@ export const MyProfile: React.FC<MyProfileProps> = ({
 
         {/* Buttons Row (Only rendered for Resume / Private Info / Salary tabs) */}
         {activeTab !== 'security' && activeTab !== 'documents' && (
-          <div className="flex justify-end pt-4 border-t border-[#E2E6F2]">
+          <div className="flex justify-end pt-4 border-t border-[#E2E8F0]">
             <button
               type="submit"
-              className="bg-[#171717] hover:bg-[#262626] text-white font-bold text-xs tracking-wider px-6 py-3 rounded-xl transition-all shadow-md shadow-[#171717]/10"
+              className="bg-[#111111] hover:bg-[#222222] text-white font-bold text-xs tracking-wider px-6 py-2.5 rounded-xl transition-all shadow-sm"
             >
               Save Profile
             </button>
@@ -691,24 +655,24 @@ export const MyProfile: React.FC<MyProfileProps> = ({
 
       {/* Tab 5: Documents list & upload (Independent) */}
       {activeTab === 'documents' && (
-        <div className="bg-white border border-[#E2E6F2] p-6 rounded-[24px] space-y-6 shadow-premium max-w-4xl mx-auto mt-6">
-          <h3 className="text-sm font-bold text-[#171A45] uppercase tracking-wider border-b border-[#E2E6F2] pb-2">Employee Documents</h3>
+        <div className="bg-white border border-[#E2E8F0] p-6 rounded-xl space-y-6 shadow-sm mt-6 w-full">
+          <h3 className="text-xs font-bold text-[#111111] uppercase tracking-wider border-b border-[#E2E8F0] pb-2">Employee Documents</h3>
           
           {docError && (
-            <div className="bg-[#E95D73]/10 border border-[#E95D73]/20 text-[#E95D73] px-4 py-2.5 rounded-xl text-xs font-semibold">
+            <div className="bg-[#FFF5F5] border border-[#FED7D7] text-[#C53030] px-4 py-2.5 rounded-xl text-xs font-semibold">
               {docError}
             </div>
           )}
 
           {/* Document Uploader Area */}
-          <div className="border-2 border-dashed border-[#E2E6F2] hover:border-[#171717]/30 p-6 rounded-2xl flex flex-col items-center justify-center transition-all bg-[#F5F6FC]">
-            <svg className="w-8 h-8 text-[#9A9DB5] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="border-2 border-dashed border-[#E2E8F0] hover:border-[#111111]/30 p-6 rounded-xl flex flex-col items-center justify-center transition-all bg-[#F8F9FA]">
+            <svg className="w-8 h-8 text-[#A0AEC0] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
-            <p className="text-xs font-bold text-[#171A45] mb-1">Upload New Document</p>
-            <p className="text-[10px] text-[#70738D] mb-4">PDF, PNG, JPG, or DOCX (Max 10MB)</p>
+            <p className="text-xs font-bold text-[#111111] mb-1">Upload New Document</p>
+            <p className="text-[10px] text-[#718096] mb-4">PDF, PNG, JPG, or DOCX (Max 10MB)</p>
             
-            <label className="relative cursor-pointer bg-[#171717] hover:bg-[#111111] text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow-sm">
+            <label className="relative cursor-pointer bg-[#111111] hover:bg-[#222222] text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow-sm">
               <span>{uploadingDoc ? 'Uploading...' : 'Select File'}</span>
               <input
                 type="file"
@@ -721,26 +685,26 @@ export const MyProfile: React.FC<MyProfileProps> = ({
 
           {/* Documents List */}
           {docLoading ? (
-            <div className="text-center py-6 text-xs text-[#70738D] font-bold">Loading employee documents...</div>
+            <div className="text-center py-6 text-xs text-[#718096] font-bold">Loading employee documents...</div>
           ) : documents.length === 0 ? (
-            <div className="text-center py-8 border border-[#E2E6F2] rounded-xl text-xs text-[#70738D] bg-white">
+            <div className="text-center py-8 border border-[#E2E8F0] rounded-xl text-xs text-[#718096] bg-white">
               No documents uploaded yet.
             </div>
           ) : (
             <div className="space-y-3">
               {documents.map((doc) => (
-                <div key={doc.id} className="flex items-center justify-between p-3.5 bg-white border border-[#E2E6F2] hover:border-[#171717]/20 rounded-xl transition-all shadow-xs">
+                <div key={doc.id} className="flex items-center justify-between p-3.5 bg-white border border-[#E2E8F0] hover:border-[#111111]/20 rounded-xl transition-all shadow-xs">
                   <div className="flex items-center space-x-3 min-w-0">
-                    <div className="w-9 h-9 rounded-lg bg-[#171717]/10 flex items-center justify-center text-[#171717] flex-shrink-0">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="w-8 h-8 rounded-lg bg-[#F8F9FA] border border-[#E2E8F0] flex items-center justify-center text-[#111111] flex-shrink-0">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs font-bold text-[#171A45] truncate" title={doc.name}>
+                      <p className="text-xs font-bold text-[#111111] truncate" title={doc.name}>
                         {doc.name}
                       </p>
-                      <p className="text-[9px] text-[#9A9DB5] font-semibold uppercase mt-0.5">
+                      <p className="text-[9px] text-[#A0AEC0] font-semibold uppercase mt-0.5">
                         Uploaded on {new Date(doc.uploaded_at).toLocaleDateString()}
                       </p>
                     </div>
@@ -750,7 +714,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                       href={doc.file_url}
                       target="_blank"
                       rel="noreferrer"
-                      className="p-1.5 hover:bg-[#F5F6FC] rounded-lg text-[#70738D] hover:text-[#171717] transition-colors"
+                      className="p-1.5 hover:bg-[#F8F9FA] rounded-lg text-[#718096] hover:text-[#111111] transition-colors"
                       title="Download Document"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -760,7 +724,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                     <button
                       type="button"
                       onClick={() => handleDeleteDoc(doc.id)}
-                      className="p-1.5 hover:bg-[#E95D73]/10 rounded-lg text-[#70738D] hover:text-[#E95D73] transition-colors"
+                      className="p-1.5 hover:bg-red-50 rounded-lg text-[#718096] hover:text-red-500 transition-colors"
                       title="Delete Document"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -777,48 +741,48 @@ export const MyProfile: React.FC<MyProfileProps> = ({
 
       {/* Tab 4: Security Password Change (Independent Form) */}
       {activeTab === 'security' && (
-        <form onSubmit={handlePasswordChange} className="bg-white border border-[#E2E6F2] p-6 rounded-[24px] max-w-lg space-y-4 mx-auto shadow-premium animate-slide-up mt-6">
-          <h3 className="text-xs font-extrabold text-[#171A45] uppercase tracking-wider mb-4 border-b border-[#E2E6F2] pb-2">
+        <form onSubmit={handlePasswordChange} className="bg-white border border-[#E2E8F0] p-6 rounded-xl max-w-xl space-y-4 shadow-sm animate-slide-up mt-6">
+          <h3 className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-4 border-b border-[#E2E8F0] pb-2">
             Change Password
           </h3>
           
           <div>
-            <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1" htmlFor="oldPassword">Old Password</label>
+            <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1" htmlFor="oldPassword">Old Password</label>
             <input
               id="oldPassword"
               type="password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
-              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+              className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1" htmlFor="newPassword">New Password</label>
+            <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1" htmlFor="newPassword">New Password</label>
             <input
               id="newPassword"
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+              className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1" htmlFor="confirmNewPassword">Confirm New Password</label>
+            <label className="block text-[10px] font-bold uppercase tracking-wider text-[#4A5568] mb-1" htmlFor="confirmNewPassword">Confirm New Password</label>
             <input
               id="confirmNewPassword"
               type="password"
               value={confirmNewPassword}
               onChange={(e) => setConfirmNewPassword(e.target.value)}
-              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
+              className="w-full bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-xs text-[#111111] placeholder-[#A0AEC0] focus:bg-white focus:outline-none focus:border-[#111111] transition-all"
             />
           </div>
 
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="bg-[#171717] hover:bg-[#262626] text-white font-bold text-xs tracking-wider px-6 py-2.5 rounded-xl transition-all shadow-md shadow-[#171717]/10"
+              className="bg-[#111111] hover:bg-[#222222] text-white font-bold text-xs tracking-wider px-6 py-2.5 rounded-xl transition-all shadow-sm"
             >
               Update Password
             </button>
