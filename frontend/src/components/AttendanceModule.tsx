@@ -99,7 +99,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search present employees by name..."
-              className="w-full bg-white border border-[#E2E6F2] rounded-xl pl-10 pr-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+              className="w-full bg-white border border-[#E2E6F2] rounded-xl pl-10 pr-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
             />
             <svg
               className="absolute left-3.5 top-3 w-4 h-4 text-[#70738D]"
@@ -134,7 +134,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                   {adminRecords.map((rec) => (
                     <tr key={rec.id} className="hover:bg-[#F5F6FC]/50 transition-colors">
                       <td className="p-4 font-bold text-[#171A45] flex items-center space-x-3">
-                        <span className="w-7 h-7 bg-[#6658F5]/10 text-[#6658F5] rounded-lg flex items-center justify-center font-bold text-xs">
+                        <span className="w-7 h-7 bg-[#171717]/10 text-[#171717] rounded-lg flex items-center justify-center font-bold text-xs">
                           {rec.employeeName.substring(0, 2).toUpperCase()}
                         </span>
                         <span>{rec.employeeName}</span>
@@ -184,9 +184,9 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
             <div className="bg-white border border-[#E2E6F2] p-5 rounded-[20px] flex items-center justify-between shadow-premium hover:shadow-premium-hover transition-all">
               <div>
                 <span className="text-[#70738D] text-xs font-bold uppercase tracking-wider block">Leaves Count</span>
-                <span className="text-3xl font-extrabold text-[#6658F5] mt-1 block">{daysOnLeave} Days</span>
+                <span className="text-3xl font-extrabold text-[#171717] mt-1 block">{daysOnLeave} Days</span>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-purple-50 border border-[#6658F5]/20 flex items-center justify-center text-[#6658F5] text-lg">
+              <div className="w-10 h-10 rounded-xl bg-gray-100 border border-[#171717]/20 flex items-center justify-center text-[#171717] text-lg">
                 ✈️
               </div>
             </div>
