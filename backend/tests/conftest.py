@@ -130,6 +130,29 @@ async def seeded_users(db: AsyncSession):
         department="Engineering"
     )
     db.add(emp_employee)
+
+    # Seed Admin User
+    admin_pwd = security.get_password_hash("AdminPassword123")
+    admin_user = User(
+        login_id="DF-2026-9999",
+        email="admin@dayflow.com",
+        hashed_password=admin_pwd,
+        role="Admin",
+        is_verified=True,
+        is_first_login=False
+    )
+    db.add(admin_user)
+    await db.flush()
+
+    admin_employee = Employee(
+        user_id=admin_user.id,
+        employee_id="DF-2026-9999",
+        first_name="Super",
+        last_name="Admin",
+        designation="Super Admin",
+        department="Administration"
+    )
+    db.add(admin_employee)
     
     await db.commit()
 
@@ -138,4 +161,6 @@ async def seeded_users(db: AsyncSession):
         "emp_user": emp_user,
         "hr_employee": hr_employee,
         "emp_employee": emp_employee,
+        "admin_user": admin_user,
+        "admin_employee": admin_employee,
     }

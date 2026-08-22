@@ -30,15 +30,14 @@ async def test_login_success(client: AsyncClient, seeded_users):
 
 @pytest.mark.asyncio
 async def test_onboard_employee(client: AsyncClient, seeded_users):
-    # Login as HR
-    login_res = await client.post(
+    # Try onboarding as HR - should fail with 403 Forbidden
+    hr_login_res = await client.post(
         "/api/v1/auth/login",
         data={"username": "hr@dayflow.com", "password": "AdminPassword123"},
     )
-    token = login_res.json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
+    hr_token = hr_login_res.json()["access_token"]
+    hr_headers = {"Authorization": f"Bearer {hr_token}"}
 
-    # Onboard Jane Smith
     payload = {
         "first_name": "Jane",
         "last_name": "Smith",
@@ -49,6 +48,33 @@ async def test_onboard_employee(client: AsyncClient, seeded_users):
         "joining_date": str(date.today()),
         "role": "Employee"
     }
+    hr_response = await client.post(
+        "/api/v1/employees/onboard",
+        json=payload,
+        headers=hr_headers
+    )
+    assert hr_response.status_code == 403
+
+    # Login as Admin - should succeed
+    login_res = await client.post(
+        "/api/v1/auth/login",
+        data={"username": "admin@dayflow.com", "password": "AdminPassword123"},
+    )
+    token = login_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # Try onboarding another Admin - should fail with 400 Bad Request
+    admin_payload = payload.copy()
+    admin_payload["role"] = "Admin"
+    admin_response = await client.post(
+        "/api/v1/employees/onboard",
+        json=admin_payload,
+        headers=headers
+    )
+    assert admin_response.status_code == 400
+    assert "Admin accounts cannot be created via the API" in admin_response.json()["detail"]
+
+    # Onboard Jane Smith as Employee
     response = await client.post(
         "/api/v1/employees/onboard",
         json=payload,
@@ -58,6 +84,7 @@ async def test_onboard_employee(client: AsyncClient, seeded_users):
     data = response.json()
     assert data["login_id"] == "JASM2026001"  # first sequential ID for JASM in 2026
     assert "temporary_password" in data
+
 
 
 @pytest.mark.asyncio
@@ -173,10 +200,10 @@ async def test_payroll_calculation(client: AsyncClient, seeded_users):
 
 @pytest.mark.asyncio
 async def test_signup_flow(client: AsyncClient, seeded_users):
-    # 1. Login as HR to onboard a new employee
+    # 1. Login as Admin to onboard a new employee
     login_res = await client.post(
         "/api/v1/auth/login",
-        data={"username": "hr@dayflow.com", "password": "AdminPassword123"},
+        data={"username": "admin@dayflow.com", "password": "AdminPassword123"},
     )
     token = login_res.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
