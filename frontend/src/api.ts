@@ -270,7 +270,7 @@ export const mapBackendProfileToEmployee = (profile: any): Employee => {
     name: `${profile.first_name} ${profile.last_name}`,
     email: profile.email,
     mobile: profile.phone || '',
-    company: 'Odoo India',
+    company: localStorage.getItem('df_company_name') || 'Odoo India',
     department: profile.department || 'General',
     manager: 'Jane Doe',
     location: 'Gandhinagar, Gujarat',

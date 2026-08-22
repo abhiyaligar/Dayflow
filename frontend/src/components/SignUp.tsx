@@ -12,6 +12,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState<'Employee' | 'HR'>('Employee');
   const [companyLogo, setCompanyLogo] = useState<string | null>(null);
+  const [companyName, setCompanyName] = useState('');
   
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -36,8 +37,8 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
     setSuccess(false);
 
     // Form validations
-    if (!employeeId.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
-      setError('Please fill in all fields.');
+    if (!employeeId.trim() || !email.trim() || !password.trim() || !confirmPassword.trim() || !companyName.trim()) {
+      setError('Please fill in all fields (including Company Name).');
       return;
     }
 
@@ -60,9 +61,11 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
         role: role,
       });
 
+      // Save company logo and company name locally to map multi-company environments dynamically
       if (companyLogo) {
         localStorage.setItem('df_company_logo', companyLogo);
       }
+      localStorage.setItem('df_company_name', companyName.trim());
 
       setSuccess(true);
       
@@ -127,6 +130,20 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
                 className="text-xs text-[#70738D] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#6658F5]/10 file:text-[#6658F5] hover:file:bg-[#6658F5]/20 cursor-pointer"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="companyName">
+              Registered Company Name
+            </label>
+            <input
+              id="companyName"
+              type="text"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              placeholder="e.g. Acme Corporation"
+              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

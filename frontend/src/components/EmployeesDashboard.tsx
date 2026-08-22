@@ -72,7 +72,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
         name: `${firstName.trim()} ${lastName.trim()}`,
         email: email.trim(),
         mobile: mobile.trim(),
-        company: 'Odoo India',
+        company: localStorage.getItem('df_company_name') || 'Odoo India',
         department: department,
         manager: 'Jane Doe',
         location: 'Gandhinagar, Gujarat',
