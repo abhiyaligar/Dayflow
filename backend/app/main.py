@@ -1,10 +1,26 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.api.v1 import auth
+from app.database import SessionLocal
+from app.db.seed import seed_initial_admin
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup actions
+    async with SessionLocal() as db:
+        await seed_initial_admin(db)
+    yield
+    # Shutdown actions (if any)
+
 
 app = FastAPI(
     title="Dayflow HRMS API",
     description="Backend API services for Dayflow Human Resource Management System",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # Set up CORS middleware
@@ -16,6 +32,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Register routers
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
+
+
 @app.get("/")
 async def root():
     return {
@@ -23,6 +43,7 @@ async def root():
         "docs_url": "/docs",
         "status": "healthy"
     }
+
 
 @app.get("/health")
 async def health_check():
