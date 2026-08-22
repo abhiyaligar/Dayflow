@@ -51,11 +51,15 @@ Allows users to update their password.
 
 ## 2. Employee Directory (`/employees`)
 
-### 2.1 Onboard Employee (Admin/HR Only)
+### 2.1 Onboard Employee
 Creates a new user and employee profile, generating the username and temporary password.
 *   **Method**: `POST`
 *   **URL**: `/employees/onboard`
 *   **Authentication Required**: Yes (HR/Admin only)
+*   **Role-Based Access Control**:
+    *   **Admin**: Authorized to onboard any user with roles `Employee`, `HR`, or `Admin`.
+    *   **HR**: Authorized to onboard users **only** with the `Employee` role. If they try to onboard an `HR` or `Admin` role, the server rejects it with a `403 Forbidden` response.
+    *   **Employee**: Unauthorized (`403 Forbidden`).
 *   **Payload**:
     ```json
     {
