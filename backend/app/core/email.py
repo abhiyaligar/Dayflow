@@ -145,10 +145,6 @@ def send_onboarding_email(email: str, login_id: str, temp_password: str, first_n
                     <span class="value">{login_id}</span>
                 </div>
                 <div class="credential-row">
-                    <span class="label">Company Email:</span>
-                    <span class="value">{email}</span>
-                </div>
-                <div class="credential-row">
                     <span class="label">Temporary Password:</span>
                     <span class="value">{temp_password}</span>
                 </div>
