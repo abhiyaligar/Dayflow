@@ -103,6 +103,12 @@ async def onboard_employee(
     )
     db.add(new_user)
     await db.flush()
+    # Fetch HR's own company name to assign to the onboarded employee
+    hr_emp_result = await db.execute(
+        select(Employee).filter(Employee.user_id == current_user.id)
+    )
+    hr_employee = hr_emp_result.scalars().first()
+    hr_company_name = hr_employee.company_name if hr_employee else "Odoo India"
 
     # Create Employee
     new_employee = Employee(
@@ -112,7 +118,8 @@ async def onboard_employee(
         last_name=payload.last_name,
         designation=payload.designation,
         department=payload.department,
-        joining_date=payload.joining_date
+        joining_date=payload.joining_date,
+        company_name=payload.company_name or hr_company_name
     )
     db.add(new_employee)
     await db.commit()
@@ -195,6 +202,7 @@ async def get_profile(
         profile_picture_url=employee.profile_picture_url,
         designation=employee.designation,
         department=employee.department,
+        company_name=employee.company_name,
         joining_date=employee.joining_date,
         role=employee.user.role
     )
@@ -265,6 +273,7 @@ async def update_profile(
         profile_picture_url=employee.profile_picture_url,
         designation=employee.designation,
         department=employee.department,
+        company_name=employee.company_name,
         joining_date=employee.joining_date,
         role=employee.user.role
     )

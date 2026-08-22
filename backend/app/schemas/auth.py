@@ -28,6 +28,7 @@ class SignUpPayload(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=8)
     role: str
+    company_name: str | None = None
 
     @field_validator("password")
     @classmethod

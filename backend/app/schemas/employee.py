@@ -12,6 +12,7 @@ class EmployeeOnboard(BaseModel):
     department: str
     joining_date: date
     role: str = "Employee"  # "Employee" or "HR"
+    company_name: str | None = None
 
 
 class EmployeeOnboardResponse(BaseModel):
@@ -44,6 +45,7 @@ class EmployeeProfileOut(BaseModel):
     profile_picture_url: str | None = None
     designation: str | None = None
     department: str | None = None
+    company_name: str | None = None
     joining_date: date | None = None
     role: str
 

@@ -54,6 +54,11 @@ class Employee(Base):
         String(100),
         nullable=True
     )
+    company_name: Mapped[str | None] = mapped_column(
+        String(255),
+        nullable=True,
+        default="Odoo India"
+    )
     joining_date: Mapped[date | None] = mapped_column(
         Date,
         nullable=True

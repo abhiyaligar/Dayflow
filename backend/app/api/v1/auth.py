@@ -70,6 +70,10 @@ async def signup(
     user.is_verified = True
     user.is_first_login = False
 
+    if payload.company_name:
+        employee.company_name = payload.company_name
+        db.add(employee)
+
     db.add(user)
     await db.commit()
 
