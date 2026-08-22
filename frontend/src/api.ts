@@ -238,6 +238,22 @@ export const leavesApi = {
     });
     return handleResponse(response);
   },
+
+  async getMyLeaves() {
+    const response = await fetch(`${API_URL}/leaves/me`, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  async getAllLeaves() {
+    const response = await fetch(`${API_URL}/leaves/all`, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+    return handleResponse(response);
+  },
 };
 
 export const payrollApi = {

@@ -149,3 +149,69 @@ async def review_leave_request(
         admin_comments=leave.admin_comments,
         requested_at=leave.requested_at
     )
+
+
+@router.get("/me", response_model=list[LeaveRequestOut])
+async def get_my_leave_requests(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    result = await db.execute(
+        select(Employee).filter(Employee.user_id == current_user.id)
+    )
+    employee = result.scalars().first()
+    if not employee:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Employee profile not found."
+        )
+
+    leave_result = await db.execute(
+        select(LeaveRequest)
+        .filter(LeaveRequest.employee_id == employee.id)
+        .order_by(LeaveRequest.requested_at.desc())
+    )
+    leaves = leave_result.scalars().all()
+
+    return [
+        LeaveRequestOut(
+            id=l.id,
+            employee_id=employee.employee_id,
+            leave_type=l.leave_type,
+            start_date=l.start_date,
+            end_date=l.end_date,
+            remarks=l.remarks,
+            status=l.status,
+            admin_comments=l.admin_comments,
+            requested_at=l.requested_at
+        )
+        for l in leaves
+    ]
+
+
+@router.get("/all", response_model=list[LeaveRequestOut])
+async def get_all_leave_requests(
+    current_user: User = Depends(get_current_hr_or_admin_user),
+    db: AsyncSession = Depends(get_db)
+):
+    leave_result = await db.execute(
+        select(LeaveRequest)
+        .options(selectinload(LeaveRequest.employee))
+        .order_by(LeaveRequest.requested_at.desc())
+    )
+    leaves = leave_result.scalars().all()
+
+    return [
+        LeaveRequestOut(
+            id=l.id,
+            employee_id=l.employee.employee_id,
+            leave_type=l.leave_type,
+            start_date=l.start_date,
+            end_date=l.end_date,
+            remarks=l.remarks,
+            status=l.status,
+            admin_comments=l.admin_comments,
+            requested_at=l.requested_at
+        )
+        for l in leaves
+    ]
