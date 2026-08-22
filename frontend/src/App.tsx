@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Navbar } from './components/Navbar';
 import { SignIn } from './components/SignIn';
 import { SignUp } from './components/SignUp';
 import { EmployeesDashboard } from './components/EmployeesDashboard';
@@ -7,6 +6,9 @@ import { EmployeeDetailModal } from './components/EmployeeDetailModal';
 import { MyProfile } from './components/MyProfile';
 import { AttendanceModule } from './components/AttendanceModule';
 import { TimeOffModule } from './components/TimeOffModule';
+import { Sidebar } from './components/Sidebar';
+import { TopBar } from './components/TopBar';
+import { Dashboard } from './components/Dashboard';
 
 import type { Employee, AttendanceRecord, LeaveRequest, UserRole } from './types';
 import { mockEmployees, mockAttendanceRecords, mockLeaveRequests } from './mockData';
@@ -97,7 +99,7 @@ export const App: React.FC = () => {
       setCheckInState({ checkedIn: false, checkInTime: null });
     }
 
-    setCurrentView('EMPLOYEES');
+    setCurrentView('DASHBOARD');
   };
 
   const handleLogout = () => {
@@ -230,71 +232,102 @@ export const App: React.FC = () => {
     }
   };
 
+  const isAuthView = currentView === 'SIGN_IN' || currentView === 'SIGN_UP';
+
+  if (isAuthView) {
+    return (
+      <div className="min-h-screen bg-[#F5F6FC] flex flex-col font-sans select-none overflow-y-auto">
+        <main className="flex-1 flex flex-col justify-center items-center py-12 px-4">
+          {currentView === 'SIGN_IN' && (
+            <SignIn
+              onNavigate={setCurrentView}
+              onLoginSuccess={handleLoginSuccess}
+              employees={employees}
+            />
+          )}
+
+          {currentView === 'SIGN_UP' && (
+            <SignUp onNavigate={setCurrentView} onRegister={handleOnboardEmployee} />
+          )}
+        </main>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#0e0f12] flex flex-col font-sans select-none">
-      {/* Persistent Header */}
-      <Navbar
+    <div className="flex h-screen bg-[#F5F6FC] font-sans select-none overflow-hidden">
+      {/* Sidebar Panel */}
+      <Sidebar
         currentView={currentView}
         onNavigate={setCurrentView}
-        currentRole={currentRole}
-        onChangeRole={handleRoleChange}
-        currentUser={currentUser}
+        currentUser={currentUser!}
         onLogout={handleLogout}
-        checkInState={checkInState}
-        onCheckIn={handleCheckIn}
-        onCheckOut={handleCheckOut}
       />
 
-      {/* Main View Router */}
-      <main className="flex-1 flex flex-col">
-        {currentView === 'SIGN_IN' && (
-          <SignIn
-            onNavigate={setCurrentView}
-            onLoginSuccess={handleLoginSuccess}
-            employees={employees}
-          />
-        )}
+      {/* Main Container region */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Top Header systrays */}
+        <TopBar
+          currentView={currentView}
+          currentRole={currentRole}
+          onChangeRole={handleRoleChange}
+          currentUser={currentUser!}
+          checkInState={checkInState}
+          onCheckIn={handleCheckIn}
+          onCheckOut={handleCheckOut}
+        />
 
-        {currentView === 'SIGN_UP' && (
-          <SignUp onNavigate={setCurrentView} onRegister={handleOnboardEmployee} />
-        )}
+        {/* Scrollable routing viewport */}
+        <main className="flex-1 overflow-y-auto flex flex-col">
+          {currentView === 'DASHBOARD' && currentUser && (
+            <Dashboard
+              employees={employees}
+              attendanceRecords={attendanceRecords}
+              leaveRequests={leaveRequests}
+              currentUser={currentUser}
+              currentRole={currentRole}
+              onNavigate={setCurrentView}
+              onReviewLeave={handleReviewLeave}
+            />
+          )}
 
-        {currentView === 'EMPLOYEES' && currentUser && (
-          <EmployeesDashboard
-            employees={employees}
-            currentRole={currentRole}
-            onOnboard={handleOnboardEmployee}
-            onSelectEmployee={setSelectedEmployee}
-          />
-        )}
+          {currentView === 'EMPLOYEES' && currentUser && (
+            <EmployeesDashboard
+              employees={employees}
+              currentRole={currentRole}
+              onOnboard={handleOnboardEmployee}
+              onSelectEmployee={setSelectedEmployee}
+            />
+          )}
 
-        {currentView === 'MY_PROFILE' && currentUser && (
-          <MyProfile
-            key={`${currentUser.id}-${currentRole}`}
-            employee={currentUser}
-            currentRole={currentRole}
-            onSaveProfile={handleSaveProfile}
-          />
-        )}
+          {currentView === 'MY_PROFILE' && currentUser && (
+            <MyProfile
+              key={`${currentUser.id}-${currentRole}`}
+              employee={currentUser}
+              currentRole={currentRole}
+              onSaveProfile={handleSaveProfile}
+            />
+          )}
 
-        {currentView === 'ATTENDANCE' && currentUser && (
-          <AttendanceModule
-            attendanceRecords={attendanceRecords}
-            currentRole={currentRole}
-            currentUser={currentUser}
-          />
-        )}
+          {currentView === 'ATTENDANCE' && currentUser && (
+            <AttendanceModule
+              attendanceRecords={attendanceRecords}
+              currentRole={currentRole}
+              currentUser={currentUser}
+            />
+          )}
 
-        {currentView === 'TIME_OFF' && currentUser && (
-          <TimeOffModule
-            leaveRequests={leaveRequests}
-            currentRole={currentRole}
-            currentUser={currentUser}
-            onApplyLeave={handleApplyLeave}
-            onReviewLeave={handleReviewLeave}
-          />
-        )}
-      </main>
+          {currentView === 'TIME_OFF' && currentUser && (
+            <TimeOffModule
+              leaveRequests={leaveRequests}
+              currentRole={currentRole}
+              currentUser={currentUser}
+              onApplyLeave={handleApplyLeave}
+              onReviewLeave={handleReviewLeave}
+            />
+          )}
+        </main>
+      </div>
 
       {/* Selected Employee View-Only Modal */}
       {selectedEmployee && (
