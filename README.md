@@ -75,7 +75,12 @@ Detailed plans and architectures are stored within the [`docs/`](file:///C:/User
    ```bash
    alembic upgrade head
    ```
-6. Start the development server:
+6. Run the integration test suite:
+    ```bash
+    # Run tests on an isolated in-memory SQLite database
+    python -m pytest -v
+    ```
+7. Start the development server:
    ```bash
    uvicorn app.main:app --reload
    ```
