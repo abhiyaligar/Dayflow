@@ -125,6 +125,44 @@ export const App: React.FC = () => {
         console.error("Failed to fetch my logs:", e);
       }
 
+      // 4. Fetch leave requests from backend
+      try {
+        let backendLeaves = [];
+        if (currentRole === 'Admin' || currentRole === 'HR Officer') {
+          backendLeaves = await leavesApi.getAllLeaves();
+        } else {
+          backendLeaves = await leavesApi.getMyLeaves();
+        }
+
+        const list = await employeesApi.list();
+        const mappedList = list.map((emp: any) => mapBackendProfileToEmployee(emp));
+
+        const mappedLeaves: LeaveRequest[] = backendLeaves.map((l: any) => {
+          const start = new Date(l.start_date);
+          const end = new Date(l.end_date);
+          const diffTime = Math.abs(end.getTime() - start.getTime());
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+          const empName = mappedList.find((e: any) => e.loginId === l.employee_id)?.name || l.employee_id;
+
+          return {
+            id: String(l.id),
+            employeeId: l.employee_id,
+            employeeName: empName,
+            leaveType: l.leave_type as any,
+            startDate: l.start_date,
+            endDate: l.end_date,
+            durationDays: diffDays,
+            remarks: l.remarks || '',
+            status: l.status as any,
+          };
+        });
+
+        setLeaveRequests(mappedLeaves);
+      } catch (e) {
+        console.error("Failed to fetch leave requests:", e);
+      }
+
     } catch (error) {
       console.error("Error loading backend data:", error);
     }
@@ -231,6 +269,7 @@ export const App: React.FC = () => {
       };
 
       setLeaveRequests((prev) => [mappedLeave, ...prev]);
+      await loadBackendData();
     } catch (e: any) {
       alert(e.message || "Failed to submit leave request");
     }
@@ -246,6 +285,7 @@ export const App: React.FC = () => {
       setLeaveRequests((prev) =>
         prev.map((req) => (req.id === leaveId ? { ...req, status } : req))
       );
+      await loadBackendData();
     } catch (e: any) {
       alert(e.message || "Failed to review leave request");
     }
