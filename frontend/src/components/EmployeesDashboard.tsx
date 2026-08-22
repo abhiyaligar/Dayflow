@@ -156,7 +156,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by Name, Employee ID, designation..."
-            className="w-full bg-white border border-[#E2E6F2] rounded-xl pl-10 pr-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+            className="w-full bg-white border border-[#E2E6F2] rounded-xl pl-10 pr-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-all"
           />
           <svg
             className="absolute left-3.5 top-3 w-4 h-4 text-[#70738D]"
@@ -177,7 +177,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
         {(currentRole === 'Admin' || currentRole === 'HR Officer') && (
           <button
             onClick={() => setShowModal(true)}
-            className="bg-[#6658F5] hover:bg-[#5748E8] text-white font-bold text-xs tracking-wider px-5 py-2.8 rounded-xl flex items-center justify-center space-x-1.5 transition-all shadow-md shadow-[#6658F5]/10"
+            className="bg-[#171717] hover:bg-[#262626] text-white font-bold text-xs tracking-wider px-5 py-2.8 rounded-xl flex items-center justify-center space-x-1.5 transition-all shadow-md shadow-[#171717]/10"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
@@ -210,10 +210,10 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
             </div>
 
             {/* Info */}
-            <h3 className="text-[#171A45] font-extrabold text-base truncate max-w-full group-hover:text-[#6658F5] transition-colors">
+            <h3 className="text-[#171A45] font-extrabold text-base truncate max-w-full group-hover:text-[#171717] transition-colors">
               {emp.name}
             </h3>
-            <p className="text-[#6658F5] text-xs font-semibold mt-0.5">{emp.jobPosition}</p>
+            <p className="text-[#171717] text-xs font-semibold mt-0.5">{emp.jobPosition}</p>
             <p className="text-[#70738D] text-[10px] uppercase font-bold tracking-wider mt-2.5 bg-[#F5F6FC] px-2.5 py-0.8 rounded-lg border border-[#E2E6F2]">
               {emp.loginId}
             </p>
@@ -273,7 +273,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder="John"
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
                   />
                 </div>
                 <div>
@@ -284,7 +284,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     placeholder="Doe"
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
                   />
                 </div>
               </div>
@@ -298,7 +298,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="john.doe@dayflow.com"
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
                   />
                 </div>
                 <div>
@@ -309,7 +309,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value)}
                     placeholder="+91 98765 43210"
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
                   />
                 </div>
               </div>
@@ -320,7 +320,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
                   <select
                     value={joiningYear}
                     onChange={(e) => setJoiningYear(e.target.value)}
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2.5 text-sm text-[#171A45] focus:outline-none focus:border-[#6658F5] transition-all"
+                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2.5 text-sm text-[#171A45] focus:outline-none focus:border-[#171717] transition-all"
                   >
                     <option value="2026">2026</option>
                     <option value="2025">2025</option>
@@ -332,7 +332,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
                   <select
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2.5 text-sm text-[#171A45] focus:outline-none focus:border-[#6658F5] transition-all"
+                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2.5 text-sm text-[#171A45] focus:outline-none focus:border-[#171717] transition-all"
                   >
                     <option value="Engineering">Engineering</option>
                     <option value="Human Resources">Human Resources</option>
@@ -346,7 +346,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
                   <select
                     value={role}
                     onChange={(e) => setRole(e.target.value as UserRole)}
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2.5 text-sm text-[#171A45] focus:outline-none focus:border-[#6658F5] transition-all"
+                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2.5 text-sm text-[#171A45] focus:outline-none focus:border-[#171717] transition-all"
                   >
                     <option value="Employee">Employee</option>
                     <option value="HR Officer">HR Officer</option>
@@ -364,7 +364,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
                     value={designation}
                     onChange={(e) => setDesignation(e.target.value)}
                     placeholder="Software Engineer"
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
                   />
                 </div>
                 <div>
@@ -374,7 +374,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
                     required
                     value={salary}
                     onChange={(e) => setSalary(e.target.value)}
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
                   />
                 </div>
               </div>
@@ -389,7 +389,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="bg-[#6658F5] hover:bg-[#5748E8] text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-all shadow-md shadow-[#6658F5]/10"
+                  className="bg-[#171717] hover:bg-[#262626] text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-all shadow-md shadow-[#171717]/10"
                 >
                   Onboard
                 </button>
@@ -429,7 +429,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
 
             <button
               onClick={() => setShowCredentials(null)}
-              className="bg-[#6658F5] hover:bg-[#5748E8] text-white font-bold px-6 py-2.5 rounded-xl text-xs transition-colors shadow-md shadow-[#6658F5]/10"
+              className="bg-[#171717] hover:bg-[#262626] text-white font-bold px-6 py-2.5 rounded-xl text-xs transition-colors shadow-md shadow-[#171717]/10"
             >
               Done
             </button>

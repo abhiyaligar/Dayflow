@@ -224,7 +224,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
         />
         <div className="flex-1 text-center md:text-left">
           <h2 className="text-2xl font-extrabold text-[#171A45] tracking-tight">{employee.name}</h2>
-          <p className="text-[#6658F5] font-bold text-sm">{employee.jobPosition}</p>
+          <p className="text-[#171717] font-bold text-sm">{employee.jobPosition}</p>
           <span className="inline-block font-mono text-xs text-[#70738D] font-bold bg-[#F5F6FC] px-2.5 py-0.5 rounded-lg border border-[#E2E6F2] mt-1.5">
             {employee.loginId}
           </span>
@@ -270,7 +270,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
           onClick={() => setActiveTab('resume')}
           className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
             activeTab === 'resume'
-              ? 'border-[#6658F5] text-[#6658F5] bg-[#6658F5]/5'
+              ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
               : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
           }`}
         >
@@ -281,7 +281,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
           onClick={() => setActiveTab('private')}
           className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
             activeTab === 'private'
-              ? 'border-[#6658F5] text-[#6658F5] bg-[#6658F5]/5'
+              ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
               : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
           }`}
         >
@@ -293,7 +293,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
             onClick={() => setActiveTab('salary')}
             className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
               activeTab === 'salary'
-                ? 'border-[#6658F5] text-[#6658F5] bg-[#6658F5]/5'
+                ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
                 : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
             }`}
           >
@@ -305,7 +305,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
           onClick={() => setActiveTab('security')}
           className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
             activeTab === 'security'
-              ? 'border-[#6658F5] text-[#6658F5] bg-[#6658F5]/5'
+              ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
               : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
           }`}
         >
@@ -316,7 +316,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
           onClick={() => setActiveTab('documents')}
           className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
             activeTab === 'documents'
-              ? 'border-[#6658F5] text-[#6658F5] bg-[#6658F5]/5'
+              ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
               : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
           }`}
         >
@@ -336,7 +336,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                 type="text"
                 value={avatarUrl}
                 onChange={(e) => setAvatarUrl(e.target.value)}
-                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
               />
             </div>
             
@@ -346,7 +346,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
                 rows={4}
-                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all resize-none"
+                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all resize-none"
               />
             </div>
 
@@ -357,7 +357,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   type="text"
                   value={skills}
                   onChange={(e) => setSkills(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
                 />
               </div>
               
@@ -367,7 +367,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   type="text"
                   value={certifications}
                   onChange={(e) => setCertifications(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
                 />
               </div>
 
@@ -377,7 +377,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   type="text"
                   value={interests}
                   onChange={(e) => setInterests(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
                 />
               </div>
             </div>
@@ -398,7 +398,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   disabled={isReadOnly}
                   value={dob}
                   onChange={(e) => setDob(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
                 />
               </div>
 
@@ -408,7 +408,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   type="text"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
                 />
               </div>
 
@@ -419,7 +419,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   disabled={isReadOnly}
                   value={nationality}
                   onChange={(e) => setNationality(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
                 />
               </div>
 
@@ -430,7 +430,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   disabled={isReadOnly}
                   value={personalEmail}
                   onChange={(e) => setPersonalEmail(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
                 />
               </div>
 
@@ -441,7 +441,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                     disabled={isReadOnly}
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all disabled:opacity-50"
+                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
                   >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -455,7 +455,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                     disabled={isReadOnly}
                     value={maritalStatus}
                     onChange={(e) => setMaritalStatus(e.target.value)}
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all disabled:opacity-50"
+                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3 py-2 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
                   >
                     <option value="Single">Single</option>
                     <option value="Married">Married</option>
@@ -470,7 +470,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   type="text"
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
                 />
               </div>
 
@@ -480,7 +480,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
                 />
               </div>
             </div>
@@ -496,7 +496,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   disabled={isReadOnly}
                   value={bankName}
                   onChange={(e) => setBankName(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
                 />
               </div>
 
@@ -507,7 +507,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   disabled={isReadOnly}
                   value={accountNumber}
                   onChange={(e) => setAccountNumber(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
                 />
               </div>
 
@@ -518,7 +518,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   disabled={isReadOnly}
                   value={ifscCode}
                   onChange={(e) => setIfscCode(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
                 />
               </div>
 
@@ -529,7 +529,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   disabled={isReadOnly}
                   value={panNo}
                   onChange={(e) => setPanNo(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
                 />
               </div>
 
@@ -540,7 +540,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                   disabled={isReadOnly}
                   value={uanNo}
                   onChange={(e) => setUanNo(e.target.value)}
-                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all disabled:opacity-50"
+                  className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all disabled:opacity-50"
                 />
               </div>
 
@@ -573,7 +573,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                     type="number"
                     value={monthWage}
                     onChange={(e) => setMonthWage(Number(e.target.value))}
-                    className="w-full bg-[#F5F6FC] border border-[#6658F5]/30 focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] rounded-xl px-4 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none font-bold transition-all"
+                    className="w-full bg-[#F5F6FC] border border-[#171717]/30 focus:border-[#171717] focus:ring-1 focus:ring-[#171717] rounded-xl px-4 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none font-bold transition-all"
                   />
                 </div>
                 <div>
@@ -582,7 +582,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                     type="number"
                     value={bonus}
                     onChange={(e) => setBonus(Number(e.target.value))}
-                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] rounded-xl px-4 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none font-bold transition-all"
+                    className="w-full bg-[#F5F6FC] border border-[#E2E6F2] focus:border-[#171717] focus:ring-1 focus:ring-[#171717] rounded-xl px-4 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none font-bold transition-all"
                   />
                 </div>
               </div>
@@ -681,7 +681,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
           <div className="flex justify-end pt-4 border-t border-[#E2E6F2]">
             <button
               type="submit"
-              className="bg-[#6658F5] hover:bg-[#5748E8] text-white font-bold text-xs tracking-wider px-6 py-3 rounded-xl transition-all shadow-md shadow-[#6658F5]/10"
+              className="bg-[#171717] hover:bg-[#262626] text-white font-bold text-xs tracking-wider px-6 py-3 rounded-xl transition-all shadow-md shadow-[#171717]/10"
             >
               Save Profile
             </button>
@@ -701,14 +701,14 @@ export const MyProfile: React.FC<MyProfileProps> = ({
           )}
 
           {/* Document Uploader Area */}
-          <div className="border-2 border-dashed border-[#E2E6F2] hover:border-[#6658F5]/30 p-6 rounded-2xl flex flex-col items-center justify-center transition-all bg-[#F5F6FC]">
+          <div className="border-2 border-dashed border-[#E2E6F2] hover:border-[#171717]/30 p-6 rounded-2xl flex flex-col items-center justify-center transition-all bg-[#F5F6FC]">
             <svg className="w-8 h-8 text-[#9A9DB5] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
             <p className="text-xs font-bold text-[#171A45] mb-1">Upload New Document</p>
             <p className="text-[10px] text-[#70738D] mb-4">PDF, PNG, JPG, or DOCX (Max 10MB)</p>
             
-            <label className="relative cursor-pointer bg-[#6658F5] hover:bg-[#5243EF] text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow-sm">
+            <label className="relative cursor-pointer bg-[#171717] hover:bg-[#111111] text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow-sm">
               <span>{uploadingDoc ? 'Uploading...' : 'Select File'}</span>
               <input
                 type="file"
@@ -729,9 +729,9 @@ export const MyProfile: React.FC<MyProfileProps> = ({
           ) : (
             <div className="space-y-3">
               {documents.map((doc) => (
-                <div key={doc.id} className="flex items-center justify-between p-3.5 bg-white border border-[#E2E6F2] hover:border-[#6658F5]/20 rounded-xl transition-all shadow-xs">
+                <div key={doc.id} className="flex items-center justify-between p-3.5 bg-white border border-[#E2E6F2] hover:border-[#171717]/20 rounded-xl transition-all shadow-xs">
                   <div className="flex items-center space-x-3 min-w-0">
-                    <div className="w-9 h-9 rounded-lg bg-[#6658F5]/10 flex items-center justify-center text-[#6658F5] flex-shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-[#171717]/10 flex items-center justify-center text-[#171717] flex-shrink-0">
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
@@ -750,7 +750,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
                       href={doc.file_url}
                       target="_blank"
                       rel="noreferrer"
-                      className="p-1.5 hover:bg-[#F5F6FC] rounded-lg text-[#70738D] hover:text-[#6658F5] transition-colors"
+                      className="p-1.5 hover:bg-[#F5F6FC] rounded-lg text-[#70738D] hover:text-[#171717] transition-colors"
                       title="Download Document"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -789,7 +789,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
               type="password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
-              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
             />
           </div>
 
@@ -800,7 +800,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
             />
           </div>
 
@@ -811,14 +811,14 @@ export const MyProfile: React.FC<MyProfileProps> = ({
               type="password"
               value={confirmNewPassword}
               onChange={(e) => setConfirmNewPassword(e.target.value)}
-              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] transition-all"
+              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#171717] transition-all"
             />
           </div>
 
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="bg-[#6658F5] hover:bg-[#5748E8] text-white font-bold text-xs tracking-wider px-6 py-2.5 rounded-xl transition-all shadow-md shadow-[#6658F5]/10"
+              className="bg-[#171717] hover:bg-[#262626] text-white font-bold text-xs tracking-wider px-6 py-2.5 rounded-xl transition-all shadow-md shadow-[#171717]/10"
             >
               Update Password
             </button>

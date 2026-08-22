@@ -206,7 +206,7 @@ Generated dynamically by Dayflow Admin/HR.
             <div className="flex-1 text-center md:text-left space-y-4">
               <div>
                 <h2 className="text-2xl font-extrabold text-[#171A45] tracking-tight">{employee.name}</h2>
-                <p className="text-[#6658F5] font-semibold text-sm">{employee.jobPosition}</p>
+                <p className="text-[#171717] font-semibold text-sm">{employee.jobPosition}</p>
                 <span className="inline-block font-mono text-xs text-[#70738D] font-bold bg-[#F5F6FC] px-2.5 py-0.5 rounded-lg border border-[#E2E6F2] mt-1.5">
                   {employee.loginId}
                 </span>
@@ -248,7 +248,7 @@ Generated dynamically by Dayflow Admin/HR.
               onClick={() => setActiveTab('resume')}
               className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
                 activeTab === 'resume'
-                  ? 'border-[#6658F5] text-[#6658F5] bg-[#6658F5]/5'
+                  ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
                   : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
               }`}
             >
@@ -258,7 +258,7 @@ Generated dynamically by Dayflow Admin/HR.
               onClick={() => setActiveTab('private')}
               className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
                 activeTab === 'private'
-                  ? 'border-[#6658F5] text-[#6658F5] bg-[#6658F5]/5'
+                  ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
                   : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
               }`}
             >
@@ -269,7 +269,7 @@ Generated dynamically by Dayflow Admin/HR.
                 onClick={() => setActiveTab('salary')}
                 className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
                   activeTab === 'salary'
-                    ? 'border-[#6658F5] text-[#6658F5] bg-[#6658F5]/5'
+                    ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
                     : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
                 }`}
               >
@@ -280,7 +280,7 @@ Generated dynamically by Dayflow Admin/HR.
               onClick={() => setActiveTab('documents')}
               className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
                 activeTab === 'documents'
-                  ? 'border-[#6658F5] text-[#6658F5] bg-[#6658F5]/5'
+                  ? 'border-[#171717] text-[#171717] bg-[#171717]/5'
                   : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
               }`}
             >
@@ -312,7 +312,7 @@ Generated dynamically by Dayflow Admin/HR.
                       {employee.skills.map((skill, i) => (
                         <span
                           key={i}
-                          className="bg-[#EEEAFE] text-[#6658F5] text-xs px-2.5 py-1 rounded-lg border border-[#6658F5]/10 font-bold"
+                          className="bg-[#EAEAEA] text-[#171717] text-xs px-2.5 py-1 rounded-lg border border-[#171717]/10 font-bold"
                         >
                           {skill}
                         </span>
@@ -327,7 +327,7 @@ Generated dynamically by Dayflow Admin/HR.
                     <ul className="space-y-2">
                       {employee.certifications.map((cert, i) => (
                         <li key={i} className="text-[#171A45] text-xs flex items-start space-x-2 font-semibold">
-                          <span className="text-[#6658F5]">🏆</span>
+                          <span className="text-[#171717]">🏆</span>
                           <span>{cert}</span>
                         </li>
                       ))}
@@ -349,7 +349,7 @@ Generated dynamically by Dayflow Admin/HR.
                 {/* CV File Attachment indicator */}
                 <div className="flex items-center justify-between bg-[#F5F6FC]/60 p-4 rounded-[16px] border border-[#E2E6F2]">
                   <div className="flex items-center space-x-3">
-                    <svg className="w-8 h-8 text-[#6658F5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-8 h-8 text-[#171717]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                     <div>
@@ -443,9 +443,9 @@ Generated dynamically by Dayflow Admin/HR.
               <div className="space-y-6 animate-fade-in">
                 
                 {/* Editable Salary Structure Inputs */}
-                <div className="bg-[#6658F5]/5 border border-[#6658F5]/20 p-5 rounded-[24px] space-y-4">
+                <div className="bg-[#171717]/5 border border-[#171717]/20 p-5 rounded-[24px] space-y-4">
                   <div className="flex justify-between items-center border-b border-[#E2E6F2] pb-2.5">
-                    <h4 className="text-xs font-extrabold text-[#6658F5] uppercase tracking-wider">
+                    <h4 className="text-xs font-extrabold text-[#171717] uppercase tracking-wider">
                       Define Salary Structure & Breakdown (HR/Admin)
                     </h4>
                     <span className="text-[10px] text-[#70738D] font-bold">Configure components in real-time</span>
@@ -468,7 +468,7 @@ Generated dynamically by Dayflow Admin/HR.
                         type="number"
                         value={monthWage}
                         onChange={(e) => setMonthWage(Number(e.target.value))}
-                        className="w-full bg-white border border-[#E2E6F2] rounded-xl px-3.5 py-2 text-sm text-[#171A45] font-bold focus:outline-none focus:border-[#6658F5]"
+                        className="w-full bg-white border border-[#E2E6F2] rounded-xl px-3.5 py-2 text-sm text-[#171A45] font-bold focus:outline-none focus:border-[#171717]"
                       />
                     </div>
                     <div>
@@ -483,7 +483,7 @@ Generated dynamically by Dayflow Admin/HR.
                         type="number"
                         value={bonus}
                         onChange={(e) => setBonus(Number(e.target.value))}
-                        className="w-full bg-white border border-[#E2E6F2] rounded-xl px-3.5 py-2 text-sm text-[#171A45] font-bold focus:outline-none focus:border-[#6658F5]"
+                        className="w-full bg-white border border-[#E2E6F2] rounded-xl px-3.5 py-2 text-sm text-[#171A45] font-bold focus:outline-none focus:border-[#171717]"
                       />
                     </div>
                   </div>
@@ -493,7 +493,7 @@ Generated dynamically by Dayflow Admin/HR.
                       type="button"
                       onClick={handleSaveSalary}
                       disabled={savingSalary}
-                      className="bg-[#6658F5] hover:bg-[#5243EF] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm"
+                      className="bg-[#171717] hover:bg-[#111111] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm"
                     >
                       {savingSalary ? 'Saving...' : 'Save Structure & Recalculate'}
                     </button>
@@ -508,11 +508,11 @@ Generated dynamically by Dayflow Admin/HR.
                   </div>
                   <div className="bg-[#F5F6FC] p-4 rounded-[16px] border border-[#E2E6F2] text-center">
                     <span className="text-[#9A9DB5] text-[10px] uppercase font-bold tracking-wider block">Month Wage</span>
-                    <span className="text-[#6658F5] text-base font-extrabold mt-1 block">{formatCurrency(employee.salaryInfo.monthWage)}</span>
+                    <span className="text-[#171717] text-base font-extrabold mt-1 block">{formatCurrency(employee.salaryInfo.monthWage)}</span>
                   </div>
                   <div className="bg-[#F5F6FC] p-4 rounded-[16px] border border-[#E2E6F2] text-center">
                     <span className="text-[#9A9DB5] text-[10px] uppercase font-bold tracking-wider block">Yearly Wage</span>
-                    <span className="text-[#6658F5] text-base font-extrabold mt-1 block">{formatCurrency(employee.salaryInfo.yearlyWage)}</span>
+                    <span className="text-[#171717] text-base font-extrabold mt-1 block">{formatCurrency(employee.salaryInfo.yearlyWage)}</span>
                   </div>
                   <div className="bg-[#F5F6FC] p-4 rounded-[16px] border border-[#E2E6F2] text-center">
                     <span className="text-[#9A9DB5] text-[10px] uppercase font-bold tracking-wider block">Work Days / Week</span>
@@ -582,14 +582,14 @@ Generated dynamically by Dayflow Admin/HR.
                 <div className="bg-[#171A45] text-white p-6 rounded-[24px] space-y-4 shadow-lg">
                   <div className="flex justify-between items-center border-b border-white/10 pb-3">
                     <div>
-                      <h4 className="text-sm font-bold uppercase tracking-wider text-[#6658F5]">Salary Slip Center</h4>
+                      <h4 className="text-sm font-bold uppercase tracking-wider text-[#171717]">Salary Slip Center</h4>
                       <p className="text-[10px] text-white/60">Generate and automatically store employee payslips</p>
                     </div>
                     <button
                       type="button"
                       onClick={handleGeneratePayslip}
                       disabled={payslipLoading}
-                      className="bg-[#6658F5] hover:bg-[#5243EF] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-md"
+                      className="bg-[#171717] hover:bg-[#111111] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-md"
                     >
                       {payslipLoading ? 'Calculating...' : 'Generate Live Payslip'}
                     </button>
@@ -660,7 +660,7 @@ Generated dynamically by Dayflow Admin/HR.
 
                       <div className="flex justify-between items-center bg-[#F5F6FC] p-3 rounded-xl border border-[#E2E6F2]">
                         <span className="text-xs font-extrabold uppercase text-[#171A45]">Net Payable Amount:</span>
-                        <span className="text-base font-black text-[#6658F5]">{formatCurrency(generatedPayslip.net_pay)}</span>
+                        <span className="text-base font-black text-[#171717]">{formatCurrency(generatedPayslip.net_pay)}</span>
                       </div>
 
                       <div className="flex justify-end pt-2">
@@ -688,7 +688,7 @@ Generated dynamically by Dayflow Admin/HR.
                 <div className="flex justify-between items-center border-b border-[#E2E6F2] pb-3.5">
                   <h3 className="text-sm font-bold text-[#171A45] uppercase tracking-wider">Employee Documents</h3>
                   {(currentRole === 'HR Officer' || currentRole === 'Admin') && (
-                    <span className="bg-[#6658F5]/10 border border-[#6658F5]/20 text-[#6658F5] text-[10px] uppercase font-bold px-2.5 py-1 rounded-lg">
+                    <span className="bg-[#171717]/10 border border-[#171717]/20 text-[#171717] text-[10px] uppercase font-bold px-2.5 py-1 rounded-lg">
                       HR Management Access
                     </span>
                   )}
@@ -702,14 +702,14 @@ Generated dynamically by Dayflow Admin/HR.
 
                 {/* Document Uploader Dropzone for HR/Admin */}
                 {(currentRole === 'HR Officer' || currentRole === 'Admin') && (
-                  <div className="border-2 border-dashed border-[#E2E6F2] hover:border-[#6658F5]/30 p-6 rounded-2xl flex flex-col items-center justify-center transition-all bg-[#F5F6FC]">
+                  <div className="border-2 border-dashed border-[#E2E6F2] hover:border-[#171717]/30 p-6 rounded-2xl flex flex-col items-center justify-center transition-all bg-[#F5F6FC]">
                     <svg className="w-8 h-8 text-[#9A9DB5] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
                     <p className="text-xs font-bold text-[#171A45] mb-1">Upload Document for {employee.name}</p>
                     <p className="text-[10px] text-[#70738D] mb-4">PDF, PNG, JPG, or DOCX (Max 10MB)</p>
                     
-                    <label className="relative cursor-pointer bg-[#6658F5] hover:bg-[#5243EF] text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow-sm">
+                    <label className="relative cursor-pointer bg-[#171717] hover:bg-[#111111] text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow-sm">
                       <span>{uploadingDoc ? 'Uploading...' : 'Select File'}</span>
                       <input
                         type="file"
@@ -731,9 +731,9 @@ Generated dynamically by Dayflow Admin/HR.
                 ) : (
                   <div className="space-y-3">
                     {documents.map((doc) => (
-                      <div key={doc.id} className="flex items-center justify-between p-3.5 bg-white border border-[#E2E6F2] hover:border-[#6658F5]/20 rounded-xl transition-all shadow-xs">
+                      <div key={doc.id} className="flex items-center justify-between p-3.5 bg-white border border-[#E2E6F2] hover:border-[#171717]/20 rounded-xl transition-all shadow-xs">
                         <div className="flex items-center space-x-3 min-w-0">
-                          <div className="w-9 h-9 rounded-lg bg-[#6658F5]/10 flex items-center justify-center text-[#6658F5] flex-shrink-0">
+                          <div className="w-9 h-9 rounded-lg bg-[#171717]/10 flex items-center justify-center text-[#171717] flex-shrink-0">
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
@@ -752,7 +752,7 @@ Generated dynamically by Dayflow Admin/HR.
                             href={doc.file_url}
                             target="_blank"
                             rel="noreferrer"
-                            className="p-1.5 hover:bg-[#F5F6FC] rounded-lg text-[#70738D] hover:text-[#6658F5] transition-colors"
+                            className="p-1.5 hover:bg-[#F5F6FC] rounded-lg text-[#70738D] hover:text-[#171717] transition-colors"
                             title="Download Document"
                           >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
