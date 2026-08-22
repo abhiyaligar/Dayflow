@@ -53,36 +53,36 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
   const totalWorkingDays = employeeRecords.length;
 
   return (
-    <div className="flex-1 bg-[#0e0f12] px-6 py-8">
+    <div className="flex-1 bg-[#F5F6FC] px-8 py-6">
       {/* View Header */}
-      <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#242730] pb-4">
+      <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E2E6F2] pb-4">
         <div>
-          <h2 className="text-xl font-bold text-white tracking-tight">Attendance Logs</h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <h2 className="text-lg font-bold text-[#171A45] tracking-tight">Attendance Logs</h2>
+          <p className="text-xs text-[#70738D] mt-0.5 font-semibold">
             {isAdminOrHR ? 'Organization-wide Daily Log View' : 'Personal Monthly Attendance Sheet'}
           </p>
         </div>
 
         {/* Date Selector for Admin */}
         {isAdminOrHR && (
-          <div className="flex items-center space-x-2 bg-[#16181d] border border-[#242730] px-3 py-1.5 rounded-md">
+          <div className="flex items-center space-x-2 bg-white border border-[#E2E6F2] px-3.5 py-1.8 rounded-xl shadow-sm">
             <button
               onClick={handlePrevDate}
-              className="text-slate-500 hover:text-white p-1 hover:bg-slate-800 rounded transition-colors"
+              className="text-[#70738D] hover:text-[#171A45] p-1 hover:bg-[#F5F6FC] rounded-lg transition-colors"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <span className="text-xs font-semibold text-white px-2 min-w-[130px] text-center">
+            <span className="text-xs font-bold text-[#171A45] px-2 min-w-[130px] text-center">
               {formatDateDisplay(selectedDate)}
             </span>
             <button
               onClick={handleNextDate}
-              className="text-slate-500 hover:text-white p-1 hover:bg-slate-800 rounded transition-colors"
+              className="text-[#70738D] hover:text-[#171A45] p-1 hover:bg-[#F5F6FC] rounded-lg transition-colors"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
@@ -91,7 +91,7 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
 
       {isAdminOrHR ? (
         // ==================== ADMIN & HR OFFICER VIEW ====================
-        <div className="space-y-6">
+        <div className="space-y-6 animate-slide-up">
           {/* Search bar */}
           <div className="relative max-w-md">
             <input
@@ -99,10 +99,10 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search present employees by name..."
-              className="w-full bg-[#16181d] border border-[#242730] rounded-md pl-10 pr-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
+              className="w-full bg-white border border-[#E2E6F2] rounded-xl pl-10 pr-4 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
             />
             <svg
-              className="absolute left-3 top-2.5 w-4 h-4 text-slate-500"
+              className="absolute left-3.5 top-3 w-4 h-4 text-[#70738D]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -110,18 +110,18 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={2.5}
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
           </div>
 
           {/* Daily list table */}
-          <div className="bg-[#16181d] border border-[#242730] rounded-xl overflow-hidden shadow-lg">
+          <div className="bg-white border border-[#E2E6F2] rounded-[20px] overflow-hidden shadow-premium">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-[#0e0f12] text-slate-400 border-b border-[#242730] uppercase font-bold tracking-wider">
+                  <tr className="bg-[#F5F6FC] text-[#70738D] border-b border-[#E2E6F2] uppercase font-bold tracking-wider">
                     <th className="p-4">Employee</th>
                     <th className="p-4 text-center">Check In</th>
                     <th className="p-4 text-center">Check Out</th>
@@ -130,33 +130,33 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                     <th className="p-4 text-center">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#242730] text-slate-300">
+                <tbody className="divide-y divide-[#E2E6F2] text-[#171A45]">
                   {adminRecords.map((rec) => (
-                    <tr key={rec.id} className="hover:bg-slate-800/30 transition-colors">
-                      <td className="p-4 font-bold text-white flex items-center space-x-3">
-                        <span className="w-7 h-7 bg-purple-900/40 text-purple-400 rounded-full flex items-center justify-center font-bold text-xs">
+                    <tr key={rec.id} className="hover:bg-[#F5F6FC]/50 transition-colors">
+                      <td className="p-4 font-bold text-[#171A45] flex items-center space-x-3">
+                        <span className="w-7 h-7 bg-[#6658F5]/10 text-[#6658F5] rounded-lg flex items-center justify-center font-bold text-xs">
                           {rec.employeeName.substring(0, 2).toUpperCase()}
                         </span>
                         <span>{rec.employeeName}</span>
                       </td>
-                      <td className="p-4 text-center font-mono text-slate-200">{rec.checkIn}</td>
-                      <td className="p-4 text-center font-mono text-slate-200">{rec.checkOut || '-- : --'}</td>
-                      <td className="p-4 text-center font-mono text-slate-200">
+                      <td className="p-4 text-center font-mono text-[#171A45] font-semibold">{rec.checkIn}</td>
+                      <td className="p-4 text-center font-mono text-[#70738D] font-semibold">{rec.checkOut || '-- : --'}</td>
+                      <td className="p-4 text-center font-mono text-[#70738D] font-semibold">
                         {rec.workHours !== undefined ? `${rec.workHours.toFixed(2)} hrs` : '--'}
                       </td>
-                      <td className="p-4 text-center font-mono text-slate-200">
+                      <td className="p-4 text-center font-mono text-[#70738D] font-semibold">
                         {rec.extraHours !== undefined ? `${rec.extraHours.toFixed(2)} hrs` : '--'}
                       </td>
                       <td className="p-4 text-center">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-emerald-950/20 text-emerald-400 border border-emerald-800/30">
-                          🟢 Present
+                        <span className="inline-flex items-center justify-center w-24 px-2.5 py-1.2 rounded-lg text-[10px] uppercase font-bold tracking-wider bg-[#43B77A]/10 text-[#43B77A] border border-[#43B77A]/20">
+                          Present
                         </span>
                       </td>
                     </tr>
                   ))}
                   {adminRecords.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-slate-500 font-medium">
+                      <td colSpan={6} className="p-8 text-center text-[#9A9DB5] font-bold">
                         No checked-in employees recorded for {formatDateDisplay(selectedDate)}.
                       </td>
                     </tr>
@@ -168,50 +168,50 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
         </div>
       ) : (
         // ==================== EMPLOYEE PERSONAL VIEW ====================
-        <div className="space-y-6">
+        <div className="space-y-6 animate-slide-up">
           {/* Summary Cards Row */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div className="bg-[#16181d] border border-[#242730] p-5 rounded-xl flex items-center justify-between shadow-md">
+            <div className="bg-white border border-[#E2E6F2] p-5 rounded-[20px] flex items-center justify-between shadow-premium hover:shadow-premium-hover transition-all">
               <div>
-                <span className="text-slate-500 text-xs font-bold uppercase tracking-wider block">Days Present</span>
-                <span className="text-3xl font-extrabold text-emerald-400 mt-1 block">{daysPresent} Days</span>
+                <span className="text-[#70738D] text-xs font-bold uppercase tracking-wider block">Days Present</span>
+                <span className="text-3xl font-extrabold text-[#43B77A] mt-1 block">{daysPresent} Days</span>
               </div>
-              <div className="w-10 h-10 rounded bg-emerald-950/30 border border-emerald-800/50 flex items-center justify-center text-emerald-400 text-lg">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-[#43B77A]/20 flex items-center justify-center text-emerald-400 text-lg">
                 🟢
               </div>
             </div>
             
-            <div className="bg-[#16181d] border border-[#242730] p-5 rounded-xl flex items-center justify-between shadow-md">
+            <div className="bg-white border border-[#E2E6F2] p-5 rounded-[20px] flex items-center justify-between shadow-premium hover:shadow-premium-hover transition-all">
               <div>
-                <span className="text-slate-500 text-xs font-bold uppercase tracking-wider block">Leaves Count</span>
-                <span className="text-3xl font-extrabold text-sky-400 mt-1 block">{daysOnLeave} Days</span>
+                <span className="text-[#70738D] text-xs font-bold uppercase tracking-wider block">Leaves Count</span>
+                <span className="text-3xl font-extrabold text-[#6658F5] mt-1 block">{daysOnLeave} Days</span>
               </div>
-              <div className="w-10 h-10 rounded bg-sky-950/30 border border-sky-800/50 flex items-center justify-center text-sky-400 text-lg">
+              <div className="w-10 h-10 rounded-xl bg-purple-50 border border-[#6658F5]/20 flex items-center justify-center text-[#6658F5] text-lg">
                 ✈️
               </div>
             </div>
 
-            <div className="bg-[#16181d] border border-[#242730] p-5 rounded-xl flex items-center justify-between shadow-md">
+            <div className="bg-white border border-[#E2E6F2] p-5 rounded-[20px] flex items-center justify-between shadow-premium hover:shadow-premium-hover transition-all">
               <div>
-                <span className="text-slate-500 text-xs font-bold uppercase tracking-wider block">Total Working Days</span>
-                <span className="text-3xl font-extrabold text-white mt-1 block">{totalWorkingDays} Days</span>
+                <span className="text-[#70738D] text-xs font-bold uppercase tracking-wider block">Total Working Days</span>
+                <span className="text-3xl font-extrabold text-[#171A45] mt-1 block">{totalWorkingDays} Days</span>
               </div>
-              <div className="w-10 h-10 rounded bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 text-lg font-bold">
+              <div className="w-10 h-10 rounded-xl bg-[#F5F6FC] border border-[#E2E6F2] flex items-center justify-center text-[#70738D] text-lg font-bold">
                 🗓️
               </div>
             </div>
           </div>
 
           {/* Employee Month Table */}
-          <div className="bg-[#16181d] border border-[#242730] rounded-xl overflow-hidden shadow-lg">
-            <div className="px-4 py-3 bg-[#0e0f12] border-b border-[#242730] flex items-center justify-between">
-              <span className="text-xs font-bold text-white uppercase tracking-wider">August 2026 Logs</span>
+          <div className="bg-white border border-[#E2E6F2] rounded-[20px] overflow-hidden shadow-premium">
+            <div className="px-5 py-3.5 bg-[#F5F6FC] border-b border-[#E2E6F2] flex items-center justify-between">
+              <span className="text-xs font-extrabold text-[#171A45] uppercase tracking-wider">August 2026 Logs</span>
             </div>
             
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-[#0e0f12]/50 text-slate-400 border-b border-[#242730] uppercase font-bold tracking-wider">
+                  <tr className="bg-white text-[#70738D] border-b border-[#E2E6F2] uppercase font-bold tracking-wider">
                     <th className="p-4">Date</th>
                     <th className="p-4 text-center">Check In</th>
                     <th className="p-4 text-center">Check Out</th>
@@ -220,38 +220,38 @@ export const AttendanceModule: React.FC<AttendanceModuleProps> = ({
                     <th className="p-4 text-center">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#242730] text-slate-300">
+                <tbody className="divide-y divide-[#E2E6F2] text-[#171A45]">
                   {employeeRecords.map((rec) => (
-                    <tr key={rec.id} className="hover:bg-slate-800/30 transition-colors">
-                      <td className="p-4 font-bold text-white font-mono">
+                    <tr key={rec.id} className="hover:bg-[#F5F6FC]/50 transition-colors">
+                      <td className="p-4 font-bold text-[#171A45] font-mono">
                         {new Date(rec.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </td>
-                      <td className="p-4 text-center font-mono text-slate-200">{rec.checkIn || '--:--'}</td>
-                      <td className="p-4 text-center font-mono text-slate-200">{rec.checkOut || '--:--'}</td>
-                      <td className="p-4 text-center font-mono text-slate-200">
+                      <td className="p-4 text-center font-mono text-[#171A45] font-semibold">{rec.checkIn || '--:--'}</td>
+                      <td className="p-4 text-center font-mono text-[#70738D] font-semibold">{rec.checkOut || '--:--'}</td>
+                      <td className="p-4 text-center font-mono text-[#70738D] font-semibold">
                         {rec.workHours !== undefined ? `${rec.workHours.toFixed(2)} hrs` : '--'}
                       </td>
-                      <td className="p-4 text-center font-mono text-slate-200">
+                      <td className="p-4 text-center font-mono text-[#70738D] font-semibold">
                         {rec.extraHours !== undefined ? `${rec.extraHours.toFixed(2)} hrs` : '--'}
                       </td>
                       <td className="p-4 text-center">
                         <span
-                          className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider border ${
+                          className={`inline-flex items-center justify-center w-24 px-2.5 py-1.2 rounded-lg text-[10px] uppercase font-bold tracking-wider border ${
                             rec.status === 'Present'
-                              ? 'bg-emerald-950/20 text-emerald-400 border-emerald-800/30'
+                              ? 'bg-[#43B77A]/10 text-[#43B77A] border-[#43B77A]/20'
                               : rec.status === 'Leave'
-                              ? 'bg-sky-950/20 text-sky-400 border-sky-800/30'
-                              : 'bg-amber-950/20 text-amber-400 border-amber-800/30'
+                              ? 'bg-[#5D78E8]/10 text-[#5D78E8] border-[#5D78E8]/20'
+                              : 'bg-[#E9A93A]/10 text-[#E9A93A] border-[#E9A93A]/20'
                           }`}
                         >
-                          {rec.status === 'Present' ? '🟢 Present' : rec.status === 'Leave' ? '✈️ Leave' : '🟡 Absent'}
+                          {rec.status === 'Present' ? 'Present' : rec.status === 'Leave' ? 'Leave' : 'Absent'}
                         </span>
                       </td>
                     </tr>
                   ))}
                   {employeeRecords.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-slate-500 font-medium">
+                      <td colSpan={6} className="p-8 text-center text-[#9A9DB5] font-bold">
                         No attendance records logged for the current month.
                       </td>
                     </tr>
