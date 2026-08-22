@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import type { Employee } from '../types';
+import { authApi, employeesApi, mapBackendProfileToEmployee } from '../api';
 
 interface SignInProps {
   onNavigate: (view: string) => void;
   onLoginSuccess: (user: Employee) => void;
-  employees: Employee[];
 }
 
-export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess, employees }) => {
+export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess }) => {
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -22,30 +22,41 @@ export const SignIn: React.FC<SignInProps> = ({ onNavigate, onLoginSuccess, empl
       return;
     }
 
-    // Authenticate client-side against mock employees list
-    // Allow login via generated loginId (e.g. JADO2026001) OR standard email
-    const user = employees.find(
-      (emp) =>
-        (emp.loginId.toLowerCase() === loginId.trim().toLowerCase() ||
-          emp.email.toLowerCase() === loginId.trim().toLowerCase())
-    );
+    try {
+      // 1. Authenticate with backend
+      const authData = await authApi.login(loginId.trim(), password.trim());
 
-    if (!user) {
-      setError('Invalid Login ID or Email.');
-      return;
+      // 2. Determine Employee ID
+      let empId = loginId.trim();
+      if (empId.includes('@')) {
+        // If logged in with email, HR/Admin can query the directory
+        if (authData.role === 'Admin' || authData.role === 'HR') {
+          const list = await employeesApi.list();
+          const matched = list.find((emp: any) => emp.email?.toLowerCase() === empId.toLowerCase());
+          if (matched) {
+            empId = matched.employee_id;
+          } else {
+            setError('Could not find Employee ID associated with this email. Please log in using your Employee ID instead.');
+            return;
+          }
+        } else {
+          setError('Please sign in using your unique Employee ID (e.g., JODO2026003) instead of your email address.');
+          return;
+        }
+      }
+
+      // 3. Retrieve detailed profile
+      const profile = await employeesApi.getProfile(empId);
+      const mappedUser = mapBackendProfileToEmployee(profile);
+
+      // Save user details to localStorage
+      localStorage.setItem('df_user', JSON.stringify(mappedUser));
+
+      // 4. Trigger success callback
+      onLoginSuccess(mappedUser);
+    } catch (err: any) {
+      setError(err.message || 'Incorrect Login ID or password.');
     }
-
-    // In a mock environment, we verify the password
-    // If the user has a custom password (registered or onboarded), check that.
-    // Otherwise, check against the default mock password "TemporaryPassword123!".
-    const expectedPassword = user.password || 'TemporaryPassword123!';
-    if (password !== expectedPassword) {
-      setError('Incorrect password.');
-      return;
-    }
-
-    // Success -> Log the user in and transition to Employees dashboard
-    onLoginSuccess(user);
   };
 
   return (

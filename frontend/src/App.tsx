@@ -11,15 +11,7 @@ import { TopBar } from './components/TopBar';
 import { Dashboard } from './components/Dashboard';
 
 import type { Employee, AttendanceRecord, LeaveRequest, UserRole } from './types';
-import { mockEmployees, mockAttendanceRecords, mockLeaveRequests } from './mockData';
-
-// Helper utilities for date/time logs
-const getCurrentTimeStr = () => {
-  const now = new Date();
-  const hrs = String(now.getHours()).padStart(2, '0');
-  const mins = String(now.getMinutes()).padStart(2, '0');
-  return `${hrs}:${mins}`;
-};
+import { employeesApi, attendanceApi, leavesApi, mapBackendProfileToEmployee, getAuthToken, removeAuthToken } from './api';
 
 const getCurrentDateStr = () => {
   const now = new Date();
@@ -29,13 +21,6 @@ const getCurrentDateStr = () => {
   return `${yr}-${mo}-${dy}`;
 };
 
-const calculateHoursDiff = (start: string, end: string): number => {
-  const [sh, sm] = start.split(':').map(Number);
-  const [eh, em] = end.split(':').map(Number);
-  const diffMinutes = (eh * 60 + em) - (sh * 60 + sm);
-  return Math.max(0, Math.round((diffMinutes / 60) * 100) / 100);
-};
-
 export const App: React.FC = () => {
   // Navigation & Session States
   const [currentView, setCurrentView] = useState<string>('SIGN_IN');
@@ -43,21 +28,10 @@ export const App: React.FC = () => {
   const [currentRole, setCurrentRole] = useState<UserRole>('Employee');
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
 
-  // Global Mock Database States
-  const [employees, setEmployees] = useState<Employee[]>(() => {
-    const saved = localStorage.getItem('df_employees');
-    return saved ? JSON.parse(saved) : mockEmployees;
-  });
-  
-  const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>(() => {
-    const saved = localStorage.getItem('df_attendance');
-    return saved ? JSON.parse(saved) : mockAttendanceRecords;
-  });
-  
-  const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>(() => {
-    const saved = localStorage.getItem('df_leaves');
-    return saved ? JSON.parse(saved) : mockLeaveRequests;
-  });
+  // Global Database States
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
+  const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
 
   // Check In State
   const [checkInState, setCheckInState] = useState<{ checkedIn: boolean; checkInTime: string | null }>(() => {
@@ -65,7 +39,101 @@ export const App: React.FC = () => {
     return saved ? JSON.parse(saved) : { checkedIn: false, checkInTime: null };
   });
 
-  // Persist states in LocalStorage to feel like a real DB
+  // Load session from localStorage on mount
+  useEffect(() => {
+    const token = getAuthToken();
+    const storedUser = localStorage.getItem('df_user');
+    if (token && storedUser) {
+      const userObj = JSON.parse(storedUser);
+      setCurrentUser(userObj);
+      setCurrentRole(userObj.role);
+      setCurrentView('DASHBOARD');
+    }
+  }, []);
+
+  // Sync / Load actual backend data when currentUser is set
+  const loadBackendData = async () => {
+    if (!currentUser) return;
+    try {
+      // 1. Fetch updated profile
+      const profile = await employeesApi.getProfile(currentUser.loginId);
+      const mappedUser = mapBackendProfileToEmployee(profile);
+      setCurrentUser(mappedUser);
+      localStorage.setItem('df_user', JSON.stringify(mappedUser));
+
+      // 2. Fetch employee list (Admin/HR Only)
+      if (currentRole === 'Admin' || currentRole === 'HR Officer') {
+        const list = await employeesApi.list();
+        const mappedList = list.map((emp: any) => mapBackendProfileToEmployee(emp));
+        setEmployees(mappedList);
+
+        // Fetch today's present attendance logs
+        try {
+          const presentLogs = await attendanceApi.getTodayPresent();
+          // Update the checkin status of listed employees
+          setEmployees(prev => prev.map(emp => {
+            const log = presentLogs.find((l: any) => l.employee_id === emp.loginId);
+            return {
+              ...emp,
+              attendanceStatus: log && log.status === 'Present' ? 'Present' : 'Absent'
+            };
+          }));
+        } catch (e) {
+          console.error("Failed to load today's attendance logs:", e);
+        }
+      }
+
+      // 3. Fetch attendance logs for the current logged-in employee
+      try {
+        const myLogs = await attendanceApi.getMyLogs();
+        // Convert logs into AttendanceRecord format
+        const convertedLogs: AttendanceRecord[] = myLogs.map((log: any, idx: number) => {
+          const checkInTime = log.check_in ? new Date(log.check_in).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
+          const checkOutTime = log.check_out ? new Date(log.check_out).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
+          
+          return {
+            id: `a_db_${idx}_${log.date}`,
+            employeeId: currentUser.id,
+            employeeName: currentUser.name,
+            date: log.date,
+            checkIn: checkInTime,
+            checkOut: checkOutTime || undefined,
+            workHours: log.total_hours || 0.0,
+            extraHours: Math.max(0, (log.total_hours || 0.0) - 8.0),
+            status: log.status
+          };
+        });
+
+        setAttendanceRecords(convertedLogs);
+
+        // Sync check-in/out state with today's record (if any)
+        const todayStr = getCurrentDateStr();
+        const todayLog = myLogs.find((l: any) => l.date === todayStr);
+        if (todayLog) {
+          const checkInTime = todayLog.check_in ? new Date(todayLog.check_in).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) : '';
+          setCheckInState({
+            checkedIn: !todayLog.check_out,
+            checkInTime: checkInTime
+          });
+        } else {
+          setCheckInState({ checkedIn: false, checkInTime: null });
+        }
+      } catch (e) {
+        console.error("Failed to fetch my logs:", e);
+      }
+
+    } catch (error) {
+      console.error("Error loading backend data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser) {
+      loadBackendData();
+    }
+  }, [currentUser?.loginId]);
+
+  // Persist states in LocalStorage as fallback
   useEffect(() => {
     localStorage.setItem('df_employees', JSON.stringify(employees));
   }, [employees]);
@@ -86,37 +154,18 @@ export const App: React.FC = () => {
   const handleLoginSuccess = (user: Employee) => {
     setCurrentUser(user);
     setCurrentRole(user.role);
-    
-    // Sync check-in state with today's record (if any exists in DB)
-    const today = getCurrentDateStr();
-    const todayRecord = attendanceRecords.find(r => r.employeeId === user.id && r.date === today);
-    if (todayRecord) {
-      setCheckInState({
-        checkedIn: !todayRecord.checkOut,
-        checkInTime: todayRecord.checkIn
-      });
-    } else {
-      setCheckInState({ checkedIn: false, checkInTime: null });
-    }
-
     setCurrentView('DASHBOARD');
   };
 
   const handleLogout = () => {
+    removeAuthToken();
+    localStorage.removeItem('df_user');
     setCurrentUser(null);
     setCurrentView('SIGN_IN');
     setSelectedEmployee(null);
   };
 
-  const handleRoleChange = (role: UserRole) => {
-    setCurrentRole(role);
-    // If the active user profile changes its role context in state
-    if (currentUser) {
-      const updatedUser = { ...currentUser, role: role };
-      setCurrentUser(updatedUser);
-      setEmployees(prev => prev.map(emp => emp.id === currentUser.id ? updatedUser : emp));
-    }
-  };
+
 
   // Onboarding Operation
   const handleOnboardEmployee = (newEmp: Employee) => {
@@ -132,103 +181,70 @@ export const App: React.FC = () => {
   };
 
   // Check In/Out Systray Operations
-  const handleCheckIn = () => {
+  const handleCheckIn = async () => {
     if (!currentUser) return;
-    const today = getCurrentDateStr();
-    const time = getCurrentTimeStr();
-
-    // 1. Create a new check-in record
-    const newRecord: AttendanceRecord = {
-      id: `a_new_${Date.now()}`,
-      employeeId: currentUser.id,
-      employeeName: currentUser.name,
-      date: today,
-      checkIn: time,
-      status: 'Present'
-    };
-
-    setAttendanceRecords(prev => [newRecord, ...prev]);
-    setCheckInState({ checkedIn: true, checkInTime: time });
-
-    // 2. Set employee status in directory to Present
-    setEmployees(prev => prev.map(emp => {
-      if (emp.id === currentUser.id) {
-        const updated = { ...emp, attendanceStatus: 'Present' as const };
-        if (currentUser.id === emp.id) setCurrentUser(updated);
-        return updated;
-      }
-      return emp;
-    }));
-  };
-
-  const handleCheckOut = () => {
-    if (!currentUser) return;
-    const today = getCurrentDateStr();
-    const time = getCurrentTimeStr();
-
-    // 1. Find and update today's check-in log
-    setAttendanceRecords(prev => prev.map(rec => {
-      if (rec.employeeId === currentUser.id && rec.date === today && !rec.checkOut) {
-        const workHrs = calculateHoursDiff(rec.checkIn, time);
-        const extraHrs = Math.max(0, workHrs - 8.0); // overtime over 8 hours
-        return {
-          ...rec,
-          checkOut: time,
-          workHours: workHrs,
-          extraHours: extraHrs
-        };
-      }
-      return rec;
-    }));
-
-    setCheckInState({ checkedIn: false, checkInTime: null });
-
-    // 2. Reset employee status in directory
-    setEmployees(prev => prev.map(emp => {
-      if (emp.id === currentUser.id) {
-        const updated = { ...emp, attendanceStatus: 'Absent' as const };
-        if (currentUser.id === emp.id) setCurrentUser(updated);
-        return updated;
-      }
-      return emp;
-    }));
-  };
-
-  // Leaves Review Operations
-  const handleApplyLeave = (newLeave: LeaveRequest) => {
-    setLeaveRequests((prev) => [newLeave, ...prev]);
-    
-    // Update employee status if start date is today
-    const today = getCurrentDateStr();
-    if (newLeave.startDate === today && newLeave.status === 'Approved') {
-      setEmployees(prev => prev.map(emp => {
-        if (emp.id === newLeave.employeeId) {
-          return { ...emp, attendanceStatus: 'Leave' as const };
-        }
-        return emp;
-      }));
+    try {
+      await attendanceApi.checkIn();
+      await loadBackendData();
+    } catch (e: any) {
+      alert(e.message || "Failed to check in");
     }
   };
 
-  const handleReviewLeave = (leaveId: string, status: 'Approved' | 'Rejected') => {
-    setLeaveRequests((prev) =>
-      prev.map((req) => (req.id === leaveId ? { ...req, status } : req))
-    );
+  const handleCheckOut = async () => {
+    if (!currentUser) return;
+    try {
+      await attendanceApi.checkOut();
+      await loadBackendData();
+    } catch (e: any) {
+      alert(e.message || "Failed to check out");
+    }
+  };
 
-    // If approved and date is today, update active employee status
-    const targetLeave = leaveRequests.find(r => r.id === leaveId);
-    if (targetLeave && status === 'Approved') {
-      const today = getCurrentDateStr();
-      if (targetLeave.startDate <= today && targetLeave.endDate >= today) {
-        setEmployees(prev => prev.map(emp => {
-          if (emp.id === targetLeave.employeeId) {
-            const updated = { ...emp, attendanceStatus: 'Leave' as const };
-            if (currentUser && currentUser.id === emp.id) setCurrentUser(updated);
-            return updated;
-          }
-          return emp;
-        }));
+  // Leaves Review Operations
+  // Leaves Review Operations
+  const handleApplyLeave = async (newLeave: LeaveRequest, attachment?: File) => {
+    try {
+      const res = await leavesApi.apply({
+        leave_type: newLeave.leaveType as any,
+        start_date: newLeave.startDate,
+        end_date: newLeave.endDate,
+        remarks: newLeave.remarks,
+      });
+
+      if (attachment && currentUser) {
+        try {
+          await employeesApi.uploadDoc(currentUser.loginId, attachment);
+        } catch (docErr: any) {
+          console.error("Failed to upload sick leave certificate:", docErr);
+        }
       }
+
+      const mappedLeave: LeaveRequest = {
+        ...newLeave,
+        id: res.id,
+        employeeId: currentUser?.id || 'e_temp',
+        employeeName: currentUser?.name || 'Employee',
+      };
+
+      setLeaveRequests((prev) => [mappedLeave, ...prev]);
+    } catch (e: any) {
+      alert(e.message || "Failed to submit leave request");
+    }
+  };
+
+  const handleReviewLeave = async (leaveId: string, status: 'Approved' | 'Rejected') => {
+    try {
+      await leavesApi.review(leaveId, {
+        status: status,
+        admin_comments: "Reviewed via HR/Admin Dashboard Panel"
+      });
+
+      setLeaveRequests((prev) =>
+        prev.map((req) => (req.id === leaveId ? { ...req, status } : req))
+      );
+    } catch (e: any) {
+      alert(e.message || "Failed to review leave request");
     }
   };
 
@@ -236,18 +252,17 @@ export const App: React.FC = () => {
 
   if (isAuthView) {
     return (
-      <div className="min-h-screen bg-[#F5F6FC] flex flex-col font-sans select-none overflow-y-auto">
+      <div className="min-h-screen bg-[#F5F6FC] flex flex-col font-sans overflow-y-auto">
         <main className="flex-1 flex flex-col justify-center items-center py-12 px-4">
           {currentView === 'SIGN_IN' && (
             <SignIn
               onNavigate={setCurrentView}
               onLoginSuccess={handleLoginSuccess}
-              employees={employees}
             />
           )}
 
           {currentView === 'SIGN_UP' && (
-            <SignUp onNavigate={setCurrentView} onRegister={handleOnboardEmployee} />
+            <SignUp onNavigate={setCurrentView} />
           )}
         </main>
       </div>
@@ -255,7 +270,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-[#F5F6FC] font-sans select-none overflow-hidden">
+    <div className="flex h-screen bg-[#F5F6FC] font-sans overflow-hidden">
       {/* Sidebar Panel */}
       <Sidebar
         currentView={currentView}
@@ -270,7 +285,6 @@ export const App: React.FC = () => {
         <TopBar
           currentView={currentView}
           currentRole={currentRole}
-          onChangeRole={handleRoleChange}
           currentUser={currentUser!}
           checkInState={checkInState}
           onCheckIn={handleCheckIn}

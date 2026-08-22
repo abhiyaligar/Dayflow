@@ -5,7 +5,7 @@ interface TimeOffModuleProps {
   leaveRequests: LeaveRequest[];
   currentRole: UserRole;
   currentUser: Employee | null;
-  onApplyLeave: (newLeave: LeaveRequest) => void;
+  onApplyLeave: (newLeave: LeaveRequest, attachment?: File) => void;
   onReviewLeave: (leaveId: string, status: 'Approved' | 'Rejected') => void;
 }
 
@@ -82,7 +82,7 @@ export const TimeOffModule: React.FC<TimeOffModuleProps> = ({
       attachmentName: attachment ? attachment.name : undefined
     };
 
-    onApplyLeave(newRequest);
+    onApplyLeave(newRequest, attachment || undefined);
 
     // Reset Form
     setLeaveType('Paid');

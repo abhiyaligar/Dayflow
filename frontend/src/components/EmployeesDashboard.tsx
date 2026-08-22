@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { Employee, UserRole } from '../types';
-import { calculateSalaryInfo } from '../mockData';
+import { calculateSalaryInfo } from '../utils/salary';
+import { employeesApi } from '../api';
 
 interface EmployeesDashboardProps {
   employees: Employee[];
@@ -42,7 +43,7 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
     );
   });
 
-  const handleOnboardSubmit = (e: React.FormEvent) => {
+  const handleOnboardSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -51,76 +52,75 @@ export const EmployeesDashboard: React.FC<EmployeesDashboardProps> = ({
       return;
     }
 
-    // Auto-generate Login ID based on PRD algorithm:
-    // UPPER(first_name[:2]) + UPPER(last_name[:2]) + str(joining_year) + f"{serial_count:03d}"
-    const firstPart = (firstName.trim().substring(0, 2) + lastName.trim().substring(0, 2)).toUpperCase();
-    
-    // Count how many exist for this year
-    const yearMatches = employees.filter((emp) => {
-      // check if the loginId year segment matches joiningYear
-      const yearInId = emp.loginId.substring(4, 8);
-      return yearInId === joiningYear;
-    });
-    const serialCount = yearMatches.length + 1;
-    const serialStr = String(serialCount).padStart(3, '0');
-    const generatedLoginId = `${firstPart}${joiningYear}${serialStr}`;
+    try {
+      // Call backend onboarding API
+      const res = await employeesApi.onboard({
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        email: email.trim(),
+        joining_year: Number(joiningYear),
+        designation: designation.trim(),
+        department: department,
+        joining_date: `${joiningYear}-08-22`,
+        role: role,
+      });
 
-    // Auto-generate secure temporary password
-    const generatedTempPassword = `DF-${firstPart}${joiningYear}!`;
+      // Construct the new employee record
+      const newEmp: Employee = {
+        id: res.id,
+        loginId: res.login_id,
+        name: `${firstName.trim()} ${lastName.trim()}`,
+        email: email.trim(),
+        mobile: mobile.trim(),
+        company: 'Odoo India',
+        department: department,
+        manager: 'Jane Doe',
+        location: 'Gandhinagar, Gujarat',
+        jobPosition: designation.trim(),
+        avatarUrl: `https://api.dicebear.com/7.x/initials/svg?seed=${firstName}+${lastName}`,
+        attendanceStatus: 'Absent',
+        resumeName: 'cv_not_uploaded.pdf',
+        about: 'Newly onboarded team member.',
+        skills: ['HTML', 'JavaScript'],
+        certifications: [],
+        interests: [],
+        role: role,
+        privateInfo: {
+          dateOfBirth: '1998-01-01',
+          residingAddress: 'Gandhinagar, Gujarat',
+          nationality: 'Indian',
+          personalEmail: email.trim(),
+          gender: 'Not Specified',
+          maritalStatus: 'Single',
+          dateOfJoining: `${joiningYear}-08-22`,
+          bankDetails: {
+            accountNumber: '9120100' + Math.floor(10000000 + Math.random() * 90000000),
+            bankName: 'HDFC Bank Ltd',
+            ifscCode: 'HDFC0000148',
+            panNo: 'PAN' + Math.floor(10000 + Math.random() * 90000) + 'X',
+            uanNo: '1004' + Math.floor(10000000 + Math.random() * 90000000),
+            empCode: res.login_id
+          }
+        },
+        salaryInfo: calculateSalaryInfo(Number(salary), 0)
+      };
 
-    // Construct the new employee record
-    const newEmp: Employee = {
-      id: `e_new_${Date.now()}`,
-      loginId: generatedLoginId,
-      name: `${firstName.trim()} ${lastName.trim()}`,
-      email: email.trim(),
-      mobile: mobile.trim(),
-      company: 'Odoo India',
-      department: department,
-      manager: 'Jane Doe', // default
-      location: 'Gandhinagar, Gujarat',
-      jobPosition: designation.trim(),
-      avatarUrl: `https://api.dicebear.com/7.x/initials/svg?seed=${firstName}+${lastName}`,
-      attendanceStatus: 'Absent', // default starting status
-      resumeName: 'cv_not_uploaded.pdf',
-      about: 'Newly onboarded team member.',
-      skills: ['HTML', 'JavaScript'],
-      certifications: [],
-      interests: [],
-      role: role,
-      privateInfo: {
-        dateOfBirth: '1998-01-01',
-        residingAddress: 'Gandhinagar, Gujarat',
-        nationality: 'Indian',
-        personalEmail: email.trim(),
-        gender: 'Not Specified',
-        maritalStatus: 'Single',
-        dateOfJoining: `${joiningYear}-08-22`,
-        bankDetails: {
-          accountNumber: '9120100' + Math.floor(10000000 + Math.random() * 90000000),
-          bankName: 'HDFC Bank Ltd',
-          ifscCode: 'HDFC0000148',
-          panNo: 'PAN' + Math.floor(10000 + Math.random() * 90000) + 'X',
-          uanNo: '1004' + Math.floor(10000000 + Math.random() * 90000000),
-          empCode: 'EMP' + generatedLoginId.substring(8)
-        }
-      },
-      salaryInfo: calculateSalaryInfo(Number(salary), 0)
-    };
+      onOnboard(newEmp);
 
-    onOnboard(newEmp);
-    
-    // Reset uploader form states
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setMobile('');
-    setDesignation('');
-    setSalary('80000');
-    
-    // Show credentials modal
-    setShowModal(false);
-    setShowCredentials({ id: generatedLoginId, tempPass: generatedTempPassword });
+      // Reset form states
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setMobile('');
+      setDesignation('');
+      setSalary('80000');
+      
+      // Show credentials modal
+      setShowModal(false);
+      setShowCredentials({ id: res.login_id, tempPass: res.temporary_password });
+    } catch (err: any) {
+      setError(err.message || 'Failed to onboard employee.');
+    }
   };
 
   const getStatusColor = (status: 'Present' | 'Absent' | 'Leave') => {

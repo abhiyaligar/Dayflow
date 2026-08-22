@@ -4,7 +4,6 @@ import type { UserRole, Employee } from '../types';
 interface TopBarProps {
   currentView: string;
   currentRole: UserRole;
-  onChangeRole: (role: UserRole) => void;
   currentUser: Employee;
   checkInState: { checkedIn: boolean; checkInTime: string | null };
   onCheckIn: () => void;
@@ -14,7 +13,6 @@ interface TopBarProps {
 export const TopBar: React.FC<TopBarProps> = ({
   currentView,
   currentRole,
-  onChangeRole,
   currentUser,
   checkInState,
   onCheckIn,
@@ -121,18 +119,10 @@ export const TopBar: React.FC<TopBarProps> = ({
           )}
         </div>
 
-        {/* Sandbox Role Switcher Selector */}
-        <div className="flex items-center bg-[#F5F6FC] border border-[#E2E6F2] px-3.5 py-1.8 rounded-xl">
-          <span className="text-[10px] uppercase font-extrabold text-[#70738D] mr-2">Role:</span>
-          <select
-            value={currentRole}
-            onChange={(e) => onChangeRole(e.target.value as UserRole)}
-            className="bg-transparent text-xs text-[#171A45] font-bold focus:outline-none cursor-pointer pr-1"
-          >
-            <option value="Admin">Admin</option>
-            <option value="HR Officer">HR Officer</option>
-            <option value="Employee">Employee</option>
-          </select>
+        {/* User Role Badge (Non-changeable, fetched from DB) */}
+        <div className="flex items-center bg-[#6658F5]/10 border border-[#6658F5]/20 px-3.5 py-1.8 rounded-xl select-none">
+          <span className="text-[10px] uppercase font-extrabold text-[#6658F5] mr-1.5">Role:</span>
+          <span className="text-xs text-[#6658F5] font-extrabold">{currentRole}</span>
         </div>
 
         {/* Calendar / Notifications indicators */}

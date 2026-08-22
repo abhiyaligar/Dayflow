@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { Employee, UserRole } from '../types';
-import { calculateSalaryInfo } from '../mockData';
+import { calculateSalaryInfo } from '../utils/salary';
+import { employeesApi, authApi, payrollApi } from '../api';
 
 interface MyProfileProps {
   employee: Employee;
@@ -60,46 +61,72 @@ export const MyProfile: React.FC<MyProfileProps> = ({
   // Live calculated salary preview
   const liveSalaryInfo = calculateSalaryInfo(Number(monthWage), Number(bonus));
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setFeedback({ type: '', message: '' });
 
-    // Construct updated employee details
-    const updatedEmp: Employee = {
-      ...employee,
-      mobile: mobile,
-      location: location,
-      avatarUrl: avatarUrl,
-      about: about,
-      skills: skills.split(',').map(s => s.trim()).filter(Boolean),
-      certifications: certifications.split(',').map(c => c.trim()).filter(Boolean),
-      interests: interests.split(',').map(i => i.trim()).filter(Boolean),
-      privateInfo: {
-        dateOfBirth: dob,
-        residingAddress: address,
-        nationality: nationality,
-        personalEmail: personalEmail,
-        gender: gender,
-        maritalStatus: maritalStatus,
-        dateOfJoining: employee.privateInfo?.dateOfJoining || '2026-08-22',
-        bankDetails: {
-          accountNumber: accountNumber,
-          bankName: bankName,
-          ifscCode: ifscCode,
-          panNo: panNo,
-          uanNo: uanNo,
-          empCode: employee.privateInfo?.bankDetails?.empCode || 'EMP001'
-        }
-      },
-      // Save recalculated salary if Admin, else preserve existing
-      salaryInfo: showSalaryTab ? liveSalaryInfo : employee.salaryInfo
-    };
+    try {
+      const payload = {
+        phone: mobile,
+        address: address,
+        profile_picture_url: avatarUrl,
+        designation: employee.jobPosition,
+        department: employee.department,
+        joining_date: employee.privateInfo?.dateOfJoining || '2026-08-22',
+      };
 
-    onSaveProfile(updatedEmp);
-    setFeedback({ type: 'success', message: 'Profile saved successfully!' });
+      await employeesApi.updateProfile(employee.loginId, payload);
+
+      if (showSalaryTab) {
+        try {
+          await payrollApi.defineSalary(employee.loginId, {
+            defined_wage: liveSalaryInfo.monthWage,
+            wage_type: 'Monthly',
+            performance_bonus: liveSalaryInfo.components.performanceBonus.amount,
+          });
+        } catch (payErr: any) {
+          console.error("Failed to update salary structure:", payErr);
+        }
+      }
+
+      // Construct updated employee details
+      const updatedEmp: Employee = {
+        ...employee,
+        mobile: mobile,
+        location: location,
+        avatarUrl: avatarUrl,
+        about: about,
+        skills: skills.split(',').map(s => s.trim()).filter(Boolean),
+        certifications: certifications.split(',').map(c => c.trim()).filter(Boolean),
+        interests: interests.split(',').map(i => i.trim()).filter(Boolean),
+        privateInfo: {
+          dateOfBirth: dob,
+          residingAddress: address,
+          nationality: nationality,
+          personalEmail: personalEmail,
+          gender: gender,
+          maritalStatus: maritalStatus,
+          dateOfJoining: employee.privateInfo?.dateOfJoining || '2026-08-22',
+          bankDetails: {
+            accountNumber: accountNumber,
+            bankName: bankName,
+            ifscCode: ifscCode,
+            panNo: panNo,
+            uanNo: uanNo,
+            empCode: employee.privateInfo?.bankDetails?.empCode || 'EMP001'
+          }
+        },
+        salaryInfo: showSalaryTab ? liveSalaryInfo : employee.salaryInfo
+      };
+
+      onSaveProfile(updatedEmp);
+      setFeedback({ type: 'success', message: 'Profile saved successfully!' });
+    } catch (err: any) {
+      setFeedback({ type: 'error', message: err.message || 'Failed to save profile. Please try again.' });
+    }
   };
 
-  const handlePasswordChange = (e: React.FormEvent) => {
+  const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     setFeedback({ type: '', message: '' });
 
@@ -108,8 +135,8 @@ export const MyProfile: React.FC<MyProfileProps> = ({
       return;
     }
 
-    if (newPassword.length < 6) {
-      setFeedback({ type: 'error', message: 'New password must be at least 6 characters.' });
+    if (newPassword.length < 8) {
+      setFeedback({ type: 'error', message: 'New password must be at least 8 characters.' });
       return;
     }
 
@@ -118,11 +145,15 @@ export const MyProfile: React.FC<MyProfileProps> = ({
       return;
     }
 
-    // Success
-    setFeedback({ type: 'success', message: 'Password updated successfully!' });
-    setOldPassword('');
-    setNewPassword('');
-    setConfirmNewPassword('');
+    try {
+      await authApi.changePassword(oldPassword, newPassword);
+      setFeedback({ type: 'success', message: 'Password updated successfully!' });
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+    } catch (err: any) {
+      setFeedback({ type: 'error', message: err.message || 'Failed to update password.' });
+    }
   };
 
   const formatCurrency = (amount: number) => {

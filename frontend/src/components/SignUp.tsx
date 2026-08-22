@@ -1,46 +1,36 @@
 import React, { useState } from 'react';
-import type { Employee } from '../types';
+import { authApi } from '../api';
 
 interface SignUpProps {
   onNavigate: (view: string) => void;
-  onRegister: (newEmp: Employee) => void;
 }
 
-export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
-  const [companyName, setCompanyName] = useState('');
-  const [name, setName] = useState('');
+export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
+  const [employeeId, setEmployeeId] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState<'Employee' | 'HR'>('Employee');
   
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
-  const [logoFile, setLogoFile] = useState<File | null>(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [registeredId, setRegisteredId] = useState('');
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setLogoFile(e.target.files[0]);
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess(false);
 
     // Form validations
-    if (!companyName.trim() || !name.trim() || !email.trim() || !phone.trim() || !password.trim() || !confirmPassword.trim()) {
+    if (!employeeId.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
       setError('Please fill in all fields.');
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.');
       return;
     }
 
@@ -49,58 +39,24 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
       return;
     }
 
-    // Auto-generate Login ID based on organization parameters:
-    const nameParts = name.trim().split(' ');
-    const firstName = nameParts[0] || 'User';
-    const lastName = nameParts[1] || 'Name';
-    const firstPart = (firstName.substring(0, 2) + (lastName ? lastName.substring(0, 2) : 'XX')).toUpperCase();
-    const generatedLoginId = `${firstPart}2026001`;
+    try {
+      // Call backend signup API
+      await authApi.signup({
+        employee_id: employeeId.trim(),
+        email: email.trim(),
+        password: password.trim(),
+        role: role,
+      });
 
-    const newEmp: Employee = {
-      id: `e_reg_${Date.now()}`,
-      loginId: generatedLoginId,
-      password: password, // Store custom set password
-      name: name.trim(),
-      email: email.trim(),
-      mobile: phone.trim(),
-      company: companyName.trim(),
-      department: 'Administration',
-      manager: 'None (Board)',
-      location: 'Gandhinagar, Gujarat',
-      jobPosition: 'HR Generalist & Administrator',
-      avatarUrl: `https://api.dicebear.com/7.x/initials/svg?seed=${firstName}+${lastName}`,
-      attendanceStatus: 'Absent',
-      skills: [],
-      certifications: [],
-      interests: [],
-      role: 'Admin', // Registers as Admin of the company
-      privateInfo: {
-        dateOfBirth: '1990-01-01',
-        residingAddress: 'Gandhinagar',
-        nationality: 'Indian',
-        personalEmail: email.trim(),
-        gender: 'Not Specified',
-        maritalStatus: 'Single',
-        dateOfJoining: '2026-08-22',
-        bankDetails: {
-          accountNumber: '9120100' + Math.floor(10000000 + Math.random() * 90000000),
-          bankName: 'HDFC Bank Ltd',
-          ifscCode: 'HDFC0000148',
-          panNo: 'PAN' + Math.floor(10000 + Math.random() * 90000) + 'X',
-          uanNo: '1004' + Math.floor(10000000 + Math.random() * 90000000),
-          empCode: 'EMP001'
-        }
-      }
-    };
-
-    onRegister(newEmp);
-    setRegisteredId(generatedLoginId);
-    setSuccess(true);
-    
-    // Auto-navigate to Sign In page after 4.5 seconds to read credentials
-    setTimeout(() => {
-      onNavigate('SIGN_IN');
-    }, 4500);
+      setSuccess(true);
+      
+      // Auto-navigate to Sign In page after 3 seconds
+      setTimeout(() => {
+        onNavigate('SIGN_IN');
+      }, 3000);
+    } catch (err: any) {
+      setError(err.message || 'Registration failed. Please try again.');
+    }
   };
 
   return (
@@ -126,7 +82,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
         {success && (
           <div className="mb-4 bg-[#43B77A]/10 border border-[#43B77A]/20 text-[#43B77A] px-4 py-2.5 rounded-xl text-xs font-semibold space-y-1">
             <p>Account created successfully!</p>
-            <p className="text-[11px]">Your Login ID is: <strong className="font-mono bg-emerald-100/50 px-1.5 py-0.5 rounded border border-[#43B77A]/30 text-[#43B77A]">{registeredId}</strong></p>
+            <p className="text-[11px]">Your Login ID is: <strong className="font-mono bg-emerald-100/50 px-1.5 py-0.5 rounded border border-[#43B77A]/30 text-[#43B77A]">{employeeId}</strong></p>
             <p className="text-[10px] text-[#43B77A]/80 pt-1">Redirecting to Sign In...</p>
           </div>
         )}
@@ -134,88 +90,49 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
         {/* Registration Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           
-          {/* Logo Upload Widget */}
-          <div className="bg-[#F5F6FC] border border-dashed border-[#E2E6F2] hover:border-[#6658F5] rounded-xl p-4 transition-all">
-            <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-2 text-center">
-              Company Logo Upload
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="employeeId">
+                Employee ID / Login ID
+              </label>
+              <input
+                id="employeeId"
+                type="text"
+                value={employeeId}
+                onChange={(e) => setEmployeeId(e.target.value)}
+                placeholder="e.g. JASM2026001"
+                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="role">
+                Account Role
+              </label>
+              <select
+                id="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value as 'Employee' | 'HR')}
+                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+              >
+                <option value="Employee">Employee</option>
+                <option value="HR">HR Officer</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="email">
+              Email Address
             </label>
-            <div className="flex flex-col items-center justify-center space-y-2">
-              <svg className="w-8 h-8 text-[#9A9DB5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span className="text-xs text-[#70738D] text-center">
-                {logoFile ? `Selected: ${logoFile.name}` : 'PNG, JPG or SVG up to 2MB'}
-              </span>
-              <label className="bg-[#EEEAFE] hover:bg-[#6658F5]/10 text-[#6658F5] border border-[#6658F5]/20 px-3.5 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition-colors shadow-sm">
-                Choose File
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-              </label>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="companyName">
-                Company Name
-              </label>
-              <input
-                id="companyName"
-                type="text"
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="e.g. Odoo India"
-                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="fullName">
-                Full Name
-              </label>
-              <input
-                id="fullName"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Harry Officer"
-                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="email">
-                Email Address
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="e.g. admin@dayflow.com"
-                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="phone">
-                Phone Number
-              </label>
-              <input
-                id="phone"
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="e.g. +91 98765 43210"
-                className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
-              />
-            </div>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="e.g. jane.smith@dayflow.com"
+              className="w-full bg-[#F5F6FC] border border-[#E2E6F2] rounded-xl px-3.5 py-2.5 text-sm text-[#171A45] placeholder-[#9A9DB5] focus:bg-white focus:outline-none focus:border-[#6658F5] focus:ring-1 focus:ring-[#6658F5] transition-all"
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -288,7 +205,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate, onRegister }) => {
             type="submit"
             className="w-full bg-[#6658F5] hover:bg-[#5748E8] active:bg-[#5243EF] text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md shadow-[#6658F5]/10 mt-4"
           >
-            Sign Up
+            Register Account
           </button>
         </form>
 

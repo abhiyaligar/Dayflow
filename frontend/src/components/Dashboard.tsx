@@ -26,9 +26,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
   const totalEmployeesCount = employees.length;
   
   // Men / Women split
-  const menCount = employees.filter(e => e.privateInfo?.gender === 'Male').length || 5;
-  const womenCount = employees.filter(e => e.privateInfo?.gender === 'Female').length || 3;
-  const menPercent = Math.round((menCount / totalEmployeesCount) * 100);
+  const menCount = employees.filter(e => e.privateInfo?.gender === 'Male').length;
+  const womenCount = employees.filter(e => e.privateInfo?.gender === 'Female').length;
+  const menPercent = totalEmployeesCount > 0 ? Math.round((menCount / totalEmployeesCount) * 100) : 0;
 
   // Present Today
   const today = '2026-08-22';
