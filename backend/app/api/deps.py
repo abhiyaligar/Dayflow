@@ -34,7 +34,16 @@ async def get_current_user(
             detail="Could not validate credentials",
         )
     
-    result = await db.execute(select(User).filter(User.id == token_data_sub))
+    import uuid
+    try:
+        user_uuid = uuid.UUID(token_data_sub)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate credentials",
+        )
+
+    result = await db.execute(select(User).filter(User.id == user_uuid))
     user = result.scalars().first()
     if not user:
         raise HTTPException(

@@ -69,10 +69,19 @@ async def review_leave_request(
     current_user: User = Depends(get_current_hr_user),
     db: AsyncSession = Depends(get_db)
 ):
+    import uuid
+    try:
+        leave_uuid = uuid.UUID(leave_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid Leave Request ID format."
+        )
+
     # Fetch leave request
     leave_result = await db.execute(
         select(LeaveRequest)
-        .filter(LeaveRequest.id == leave_id)
+        .filter(LeaveRequest.id == leave_uuid)
         .options(selectinload(LeaveRequest.employee))
     )
     leave = leave_result.scalars().first()

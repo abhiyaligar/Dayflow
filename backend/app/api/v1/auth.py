@@ -1,6 +1,5 @@
 from datetime import timedelta
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -8,7 +7,7 @@ from app.core import security
 from app.core.config import settings
 from app.database import get_db
 from app.models.user import User
-from app.schemas.auth import Token, ChangePasswordPayload, LoginPayload
+from app.schemas.auth import Token, ChangePasswordPayload
 from app.api.deps import get_current_user
 
 router = APIRouter()
@@ -16,8 +15,7 @@ router = APIRouter()
 
 @router.post("/login", response_model=Token)
 async def login(
-    payload: LoginPayload | None = None,
-    form_data: OAuth2PasswordRequestForm = Depends(None),
+    request: Request,
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -26,12 +24,27 @@ async def login(
     username = None
     password = None
 
-    if payload is not None:
-        username = payload.username
-        password = payload.password
-    elif form_data is not None:
-        username = form_data.username
-        password = form_data.password
+    content_type = request.headers.get("content-type", "")
+    if "application/json" in content_type:
+        try:
+            body = await request.json()
+            username = body.get("username")
+            password = body.get("password")
+        except Exception:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid JSON payload"
+            )
+    else:
+        try:
+            form_data = await request.form()
+            username = form_data.get("username")
+            password = form_data.get("password")
+        except Exception:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid form data payload"
+            )
 
     if not username or not password:
         raise HTTPException(

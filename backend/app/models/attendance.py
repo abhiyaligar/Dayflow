@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, date
-from sqlalchemy import String, Date, ForeignKey, DateTime, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy import String, Date, ForeignKey, DateTime, UniqueConstraint, JSON
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
@@ -33,7 +33,7 @@ class Attendance(Base):
         nullable=True
     )
     breaks: Mapped[list | None] = mapped_column(
-        JSONB,
+        JSON,
         default=list,
         nullable=True
     )
