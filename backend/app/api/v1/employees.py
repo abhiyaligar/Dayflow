@@ -144,7 +144,7 @@ async def onboard_employee(
 
 @router.get("", response_model=list[EmployeeOut])
 async def list_employees(
-    current_user: User = Depends(get_current_hr_user),
+    current_user: User = Depends(get_current_hr_or_admin_user),
     db: AsyncSession = Depends(get_db)
 ):
     result = await db.execute(select(Employee))

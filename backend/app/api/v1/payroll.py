@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
-from app.api.deps import get_current_user, get_current_hr_user
+from app.api.deps import get_current_user, get_current_hr_or_admin_user
 from app.database import get_db
 from app.models.user import User
 from app.models.employee import Employee
@@ -21,7 +21,7 @@ router = APIRouter()
 async def define_salary_structure(
     employee_id: str,
     payload: SalaryStructureDefine,
-    current_user: User = Depends(get_current_hr_user),
+    current_user: User = Depends(get_current_hr_or_admin_user),
     db: AsyncSession = Depends(get_db)
 ):
     # Fetch employee profile
@@ -103,8 +103,8 @@ async def generate_payslip(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    # Restriction: non-HR employees can only access their own payslip
-    if current_user.role != "HR" and current_user.login_id != employee_id:
+    # Restriction: non-HR/Admin employees can only access their own payslip
+    if current_user.role not in ["HR", "Admin"] and current_user.login_id != employee_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You do not have permission to view other employee payslips."

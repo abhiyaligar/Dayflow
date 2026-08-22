@@ -16,6 +16,7 @@ from app.models.employee import Employee
 settings.AWS_ACCESS_KEY_ID = None
 settings.AWS_SECRET_ACCESS_KEY = None
 settings.AWS_S3_BUCKET_NAME = None
+settings.AWS_S3_ENDPOINT_URL = None
 
 # Create in-memory SQLite async engine
 DATABASE_URL = "sqlite+aiosqlite:///:memory:"

@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     AWS_SECRET_ACCESS_KEY: str | None = None
     AWS_REGION: str = "us-east-1"
     AWS_S3_BUCKET_NAME: str | None = None
+    AWS_S3_ENDPOINT_URL: str | None = None
 
     # SMTP Email Settings
     SMTP_HOST: str | None = None

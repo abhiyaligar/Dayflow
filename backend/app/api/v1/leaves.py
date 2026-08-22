@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
-from app.api.deps import get_current_user, get_current_hr_user
+from app.api.deps import get_current_user, get_current_hr_or_admin_user
 from app.database import get_db
 from app.models.user import User
 from app.models.employee import Employee
@@ -66,7 +66,7 @@ async def apply_for_leave(
 async def review_leave_request(
     leave_id: str,
     payload: LeaveReviewPayload,
-    current_user: User = Depends(get_current_hr_user),
+    current_user: User = Depends(get_current_hr_or_admin_user),
     db: AsyncSession = Depends(get_db)
 ):
     import uuid
