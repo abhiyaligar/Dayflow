@@ -8,6 +8,8 @@ interface TopBarProps {
   checkInState: { checkedIn: boolean; checkInTime: string | null };
   onCheckIn: () => void;
   onCheckOut: () => void;
+  employeeViewActive: boolean;
+  onToggleEmployeeView: () => void;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
@@ -17,6 +19,8 @@ export const TopBar: React.FC<TopBarProps> = ({
   checkInState,
   onCheckIn,
   onCheckOut,
+  employeeViewActive,
+  onToggleEmployeeView,
 }) => {
   const [systrayOpen, setSystrayOpen] = useState(false);
 
@@ -118,6 +122,25 @@ export const TopBar: React.FC<TopBarProps> = ({
             </div>
           )}
         </div>
+
+        {/* Sandbox view switcher for Admin/HR Officer */}
+        {(currentUser.role === 'Admin' || currentUser.role === 'HR Officer') && (
+          <button
+            onClick={onToggleEmployeeView}
+            className={`flex items-center space-x-1.5 px-3 py-1.8 rounded-xl border text-xs font-bold transition-all shadow-xs ${
+              employeeViewActive
+                ? 'bg-[#E9A93A]/10 border-[#E9A93A]/30 text-[#E9A93A] hover:bg-[#E9A93A]/25'
+                : 'bg-[#6658F5]/10 border-[#6658F5]/20 text-[#6658F5] hover:bg-[#6658F5]/15'
+            }`}
+            title="Toggle Employee Sandbox View Mode"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            <span>{employeeViewActive ? 'Exit Employee View' : 'Employee View Sandbox'}</span>
+          </button>
+        )}
 
         {/* User Role Badge (Non-changeable, fetched from DB) */}
         <div className="flex items-center bg-[#6658F5]/10 border border-[#6658F5]/20 px-3.5 py-1.8 rounded-xl select-none">

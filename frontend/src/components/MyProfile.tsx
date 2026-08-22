@@ -14,7 +14,56 @@ export const MyProfile: React.FC<MyProfileProps> = ({
   currentRole,
   onSaveProfile,
 }) => {
-  const [activeTab, setActiveTab] = useState<'resume' | 'private' | 'salary' | 'security'>('resume');
+  const [activeTab, setActiveTab] = useState<'resume' | 'private' | 'salary' | 'security' | 'documents'>('resume');
+  
+  // Documents Management Local States
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [docLoading, setDocLoading] = useState(false);
+  const [docError, setDocError] = useState('');
+  const [uploadingDoc, setUploadingDoc] = useState(false);
+
+  const loadDocuments = async () => {
+    setDocLoading(true);
+    setDocError('');
+    try {
+      const docs = await employeesApi.listDocs(employee.loginId);
+      setDocuments(docs);
+    } catch (err: any) {
+      setDocError(err.message || 'Failed to load documents.');
+    } finally {
+      setDocLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    loadDocuments();
+  }, [employee.loginId]);
+
+  const handleUploadDoc = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingDoc(true);
+    setDocError('');
+    try {
+      await employeesApi.uploadDoc(employee.loginId, file);
+      await loadDocuments();
+    } catch (err: any) {
+      setDocError(err.message || 'Failed to upload document.');
+    } finally {
+      setUploadingDoc(false);
+    }
+  };
+
+  const handleDeleteDoc = async (docId: string) => {
+    if (!confirm('Are you sure you want to delete this document?')) return;
+    setDocError('');
+    try {
+      await employeesApi.deleteDoc(employee.loginId, docId);
+      await loadDocuments();
+    } catch (err: any) {
+      setDocError(err.message || 'Failed to delete document.');
+    }
+  };
   
   // Local Profile Form States
   const [mobile, setMobile] = useState(employee.mobile);
@@ -261,6 +310,17 @@ export const MyProfile: React.FC<MyProfileProps> = ({
           }`}
         >
           Security
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('documents')}
+          className={`px-4.5 py-2.5 text-xs uppercase tracking-wider font-bold border-b-2 transition-all ${
+            activeTab === 'documents'
+              ? 'border-[#6658F5] text-[#6658F5] bg-[#6658F5]/5'
+              : 'border-transparent text-[#70738D] hover:text-[#171A45] hover:bg-[#F5F6FC]'
+          }`}
+        >
+          Documents
         </button>
       </div>
 
@@ -617,7 +677,7 @@ export const MyProfile: React.FC<MyProfileProps> = ({
         )}
 
         {/* Buttons Row (Only rendered for Resume / Private Info / Salary tabs) */}
-        {activeTab !== 'security' && (
+        {activeTab !== 'security' && activeTab !== 'documents' && (
           <div className="flex justify-end pt-4 border-t border-[#E2E6F2]">
             <button
               type="submit"
@@ -629,9 +689,95 @@ export const MyProfile: React.FC<MyProfileProps> = ({
         )}
       </form>
 
+      {/* Tab 5: Documents list & upload (Independent) */}
+      {activeTab === 'documents' && (
+        <div className="bg-white border border-[#E2E6F2] p-6 rounded-[24px] space-y-6 shadow-premium max-w-4xl mx-auto mt-6">
+          <h3 className="text-sm font-bold text-[#171A45] uppercase tracking-wider border-b border-[#E2E6F2] pb-2">Employee Documents</h3>
+          
+          {docError && (
+            <div className="bg-[#E95D73]/10 border border-[#E95D73]/20 text-[#E95D73] px-4 py-2.5 rounded-xl text-xs font-semibold">
+              {docError}
+            </div>
+          )}
+
+          {/* Document Uploader Area */}
+          <div className="border-2 border-dashed border-[#E2E6F2] hover:border-[#6658F5]/30 p-6 rounded-2xl flex flex-col items-center justify-center transition-all bg-[#F5F6FC]">
+            <svg className="w-8 h-8 text-[#9A9DB5] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            <p className="text-xs font-bold text-[#171A45] mb-1">Upload New Document</p>
+            <p className="text-[10px] text-[#70738D] mb-4">PDF, PNG, JPG, or DOCX (Max 10MB)</p>
+            
+            <label className="relative cursor-pointer bg-[#6658F5] hover:bg-[#5243EF] text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow-sm">
+              <span>{uploadingDoc ? 'Uploading...' : 'Select File'}</span>
+              <input
+                type="file"
+                onChange={handleUploadDoc}
+                disabled={uploadingDoc}
+                className="hidden"
+              />
+            </label>
+          </div>
+
+          {/* Documents List */}
+          {docLoading ? (
+            <div className="text-center py-6 text-xs text-[#70738D] font-bold">Loading employee documents...</div>
+          ) : documents.length === 0 ? (
+            <div className="text-center py-8 border border-[#E2E6F2] rounded-xl text-xs text-[#70738D] bg-white">
+              No documents uploaded yet.
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {documents.map((doc) => (
+                <div key={doc.id} className="flex items-center justify-between p-3.5 bg-white border border-[#E2E6F2] hover:border-[#6658F5]/20 rounded-xl transition-all shadow-xs">
+                  <div className="flex items-center space-x-3 min-w-0">
+                    <div className="w-9 h-9 rounded-lg bg-[#6658F5]/10 flex items-center justify-center text-[#6658F5] flex-shrink-0">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold text-[#171A45] truncate" title={doc.name}>
+                        {doc.name}
+                      </p>
+                      <p className="text-[9px] text-[#9A9DB5] font-semibold uppercase mt-0.5">
+                        Uploaded on {new Date(doc.uploaded_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <a
+                      href={doc.file_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-1.5 hover:bg-[#F5F6FC] rounded-lg text-[#70738D] hover:text-[#6658F5] transition-colors"
+                      title="Download Document"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      </svg>
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteDoc(doc.id)}
+                      className="p-1.5 hover:bg-[#E95D73]/10 rounded-lg text-[#70738D] hover:text-[#E95D73] transition-colors"
+                      title="Delete Document"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Tab 4: Security Password Change (Independent Form) */}
       {activeTab === 'security' && (
-        <form onSubmit={handlePasswordChange} className="bg-white border border-[#E2E6F2] p-6 rounded-[24px] max-w-lg space-y-4 mx-auto shadow-premium animate-slide-up">
+        <form onSubmit={handlePasswordChange} className="bg-white border border-[#E2E6F2] p-6 rounded-[24px] max-w-lg space-y-4 mx-auto shadow-premium animate-slide-up mt-6">
           <h3 className="text-xs font-extrabold text-[#171A45] uppercase tracking-wider mb-4 border-b border-[#E2E6F2] pb-2">
             Change Password
           </h3>

@@ -93,9 +93,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="space-y-8">
           {/* Logo Section */}
           <div className="flex items-center space-x-3 px-3 py-2">
-            <div className="w-9 h-9 bg-white text-[#5243EF] rounded-xl flex items-center justify-center font-bold text-xl tracking-wider shadow-sm">
-              df
-            </div>
+            {localStorage.getItem('df_company_logo') ? (
+              <img src={localStorage.getItem('df_company_logo')!} alt="Logo" className="w-9 h-9 object-cover rounded-xl shadow-sm bg-white" />
+            ) : (
+              <div className="w-9 h-9 bg-white text-[#5243EF] rounded-xl flex items-center justify-center font-bold text-xl tracking-wider shadow-sm">
+                df
+              </div>
+            )}
             <span className="font-extrabold text-xl text-white tracking-tight">Dayflow</span>
           </div>
 

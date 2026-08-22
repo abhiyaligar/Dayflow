@@ -27,6 +27,9 @@ export const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<Employee | null>(null);
   const [currentRole, setCurrentRole] = useState<UserRole>('Employee');
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [employeeViewActive, setEmployeeViewActive] = useState<boolean>(false);
+
+  const effectiveRole = (employeeViewActive && (currentRole === 'Admin' || currentRole === 'HR Officer')) ? 'Employee' : currentRole;
 
   // Global Database States
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -284,11 +287,13 @@ export const App: React.FC = () => {
         {/* Top Header systrays */}
         <TopBar
           currentView={currentView}
-          currentRole={currentRole}
+          currentRole={effectiveRole}
           currentUser={currentUser!}
           checkInState={checkInState}
           onCheckIn={handleCheckIn}
           onCheckOut={handleCheckOut}
+          employeeViewActive={employeeViewActive}
+          onToggleEmployeeView={() => setEmployeeViewActive(!employeeViewActive)}
         />
 
         {/* Scrollable routing viewport */}
@@ -299,7 +304,7 @@ export const App: React.FC = () => {
               attendanceRecords={attendanceRecords}
               leaveRequests={leaveRequests}
               currentUser={currentUser}
-              currentRole={currentRole}
+              currentRole={effectiveRole}
               onNavigate={setCurrentView}
               onReviewLeave={handleReviewLeave}
             />
@@ -308,7 +313,7 @@ export const App: React.FC = () => {
           {currentView === 'EMPLOYEES' && currentUser && (
             <EmployeesDashboard
               employees={employees}
-              currentRole={currentRole}
+              currentRole={effectiveRole}
               onOnboard={handleOnboardEmployee}
               onSelectEmployee={setSelectedEmployee}
             />
@@ -316,9 +321,9 @@ export const App: React.FC = () => {
 
           {currentView === 'MY_PROFILE' && currentUser && (
             <MyProfile
-              key={`${currentUser.id}-${currentRole}`}
+              key={`${currentUser.id}-${effectiveRole}`}
               employee={currentUser}
-              currentRole={currentRole}
+              currentRole={effectiveRole}
               onSaveProfile={handleSaveProfile}
             />
           )}
@@ -326,7 +331,7 @@ export const App: React.FC = () => {
           {currentView === 'ATTENDANCE' && currentUser && (
             <AttendanceModule
               attendanceRecords={attendanceRecords}
-              currentRole={currentRole}
+              currentRole={effectiveRole}
               currentUser={currentUser}
             />
           )}
@@ -334,7 +339,7 @@ export const App: React.FC = () => {
           {currentView === 'TIME_OFF' && currentUser && (
             <TimeOffModule
               leaveRequests={leaveRequests}
-              currentRole={currentRole}
+              currentRole={effectiveRole}
               currentUser={currentUser}
               onApplyLeave={handleApplyLeave}
               onReviewLeave={handleReviewLeave}
@@ -347,7 +352,7 @@ export const App: React.FC = () => {
       {selectedEmployee && (
         <EmployeeDetailModal
           employee={selectedEmployee}
-          currentRole={currentRole}
+          currentRole={effectiveRole}
           onClose={() => setSelectedEmployee(null)}
         />
       )}

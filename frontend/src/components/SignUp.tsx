@@ -11,12 +11,24 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState<'Employee' | 'HR'>('Employee');
+  const [companyLogo, setCompanyLogo] = useState<string | null>(null);
   
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCompanyLogo(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +59,10 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
         password: password.trim(),
         role: role,
       });
+
+      if (companyLogo) {
+        localStorage.setItem('df_company_logo', companyLogo);
+      }
 
       setSuccess(true);
       
@@ -90,6 +106,29 @@ export const SignUp: React.FC<SignUpProps> = ({ onNavigate }) => {
         {/* Registration Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           
+          <div className="border-b border-[#E2E6F2] pb-4 mb-4">
+            <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5">
+              Company Logo
+            </label>
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-xl border border-[#E2E6F2] bg-[#F5F6FC] flex items-center justify-center overflow-hidden">
+                {companyLogo ? (
+                  <img src={companyLogo} alt="Logo Preview" className="w-full h-full object-cover" />
+                ) : (
+                  <svg className="w-6 h-6 text-[#9A9DB5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                )}
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleLogoChange}
+                className="text-xs text-[#70738D] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#6658F5]/10 file:text-[#6658F5] hover:file:bg-[#6658F5]/20 cursor-pointer"
+              />
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-[10px] font-extrabold uppercase tracking-wider text-[#70738D] mb-1.5" htmlFor="employeeId">
