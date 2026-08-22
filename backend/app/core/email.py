@@ -12,7 +12,6 @@ def send_email(to_email: str, subject: str, html_content: str):
         logger.warning(
             f"SMTP is not fully configured. Email to {to_email} with subject '{subject}' was not sent."
         )
-        logger.info(f"Email HTML Content would have been:\n{html_content}")
         return
 
     try:
