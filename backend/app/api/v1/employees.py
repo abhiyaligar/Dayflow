@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
-from app.api.deps import get_current_user, get_current_hr_user, get_current_admin_user
+from app.api.deps import get_current_user, get_current_hr_user, get_current_admin_user, get_current_hr_or_admin_user
 from app.core import security, storage
 from app.database import get_db
 from app.models.user import User
@@ -60,14 +60,21 @@ async def generate_login_id(
 @router.post("/onboard", response_model=EmployeeOnboardResponse, status_code=status.HTTP_201_CREATED)
 async def onboard_employee(
     payload: EmployeeOnboard,
-    current_user: User = Depends(get_current_admin_user),
+    current_user: User = Depends(get_current_hr_or_admin_user),
     db: AsyncSession = Depends(get_db)
 ):
-    if payload.role.lower() == "admin":
+    if payload.role not in ["Employee", "HR", "Admin"]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Admin accounts cannot be created via the API."
+            detail="Invalid role. Must be 'Employee', 'HR', or 'Admin'."
         )
+
+    if current_user.role == "HR":
+        if payload.role != "Employee":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="HR users can only onboard Employees."
+            )
 
     # Check if user email already exists
     email_check = await db.execute(select(User).filter(User.email == payload.email))

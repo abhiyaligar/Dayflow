@@ -30,7 +30,7 @@ async def test_login_success(client: AsyncClient, seeded_users):
 
 @pytest.mark.asyncio
 async def test_onboard_employee(client: AsyncClient, seeded_users):
-    # Try onboarding as HR - should fail with 403 Forbidden
+    # 1. Login as HR
     hr_login_res = await client.post(
         "/api/v1/auth/login",
         data={"username": "hr@dayflow.com", "password": "AdminPassword123"},
@@ -38,7 +38,8 @@ async def test_onboard_employee(client: AsyncClient, seeded_users):
     hr_token = hr_login_res.json()["access_token"]
     hr_headers = {"Authorization": f"Bearer {hr_token}"}
 
-    payload = {
+    # HR tries to onboard an Employee - should succeed
+    payload_employee = {
         "first_name": "Jane",
         "last_name": "Smith",
         "email": "jane@dayflow.com",
@@ -48,42 +49,73 @@ async def test_onboard_employee(client: AsyncClient, seeded_users):
         "joining_date": str(date.today()),
         "role": "Employee"
     }
-    hr_response = await client.post(
+    hr_emp_response = await client.post(
         "/api/v1/employees/onboard",
-        json=payload,
+        json=payload_employee,
         headers=hr_headers
     )
-    assert hr_response.status_code == 403
+    assert hr_emp_response.status_code == 201
+    assert hr_emp_response.json()["login_id"] == "JASM2026001"
 
-    # Login as Admin - should succeed
-    login_res = await client.post(
+    # HR tries to onboard an Admin - should fail with 403 Forbidden
+    payload_admin = payload_employee.copy()
+    payload_admin["email"] = "admin_by_hr@dayflow.com"
+    payload_admin["role"] = "Admin"
+    hr_admin_response = await client.post(
+        "/api/v1/employees/onboard",
+        json=payload_admin,
+        headers=hr_headers
+    )
+    assert hr_admin_response.status_code == 403
+    assert "HR users can only onboard Employees" in hr_admin_response.json()["detail"]
+
+    # HR tries to onboard an HR - should fail with 403 Forbidden
+    payload_hr = payload_employee.copy()
+    payload_hr["email"] = "hr_by_hr@dayflow.com"
+    payload_hr["role"] = "HR"
+    hr_hr_response = await client.post(
+        "/api/v1/employees/onboard",
+        json=payload_hr,
+        headers=hr_headers
+    )
+    assert hr_hr_response.status_code == 403
+    assert "HR users can only onboard Employees" in hr_hr_response.json()["detail"]
+
+    # 2. Login as Admin
+    admin_login_res = await client.post(
         "/api/v1/auth/login",
         data={"username": "admin@dayflow.com", "password": "AdminPassword123"},
     )
-    token = login_res.json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
+    admin_token = admin_login_res.json()["access_token"]
+    admin_headers = {"Authorization": f"Bearer {admin_token}"}
 
-    # Try onboarding another Admin - should fail with 400 Bad Request
-    admin_payload = payload.copy()
-    admin_payload["role"] = "Admin"
-    admin_response = await client.post(
+    # Admin tries to onboard an Admin - should succeed
+    payload_admin_success = payload_employee.copy()
+    payload_admin_success["email"] = "admin_by_admin@dayflow.com"
+    payload_admin_success["first_name"] = "Super"
+    payload_admin_success["last_name"] = "Admin"
+    payload_admin_success["role"] = "Admin"
+    admin_admin_response = await client.post(
         "/api/v1/employees/onboard",
-        json=admin_payload,
-        headers=headers
+        json=payload_admin_success,
+        headers=admin_headers
     )
-    assert admin_response.status_code == 400
-    assert "Admin accounts cannot be created via the API" in admin_response.json()["detail"]
+    assert admin_admin_response.status_code == 201
+    assert admin_admin_response.json()["login_id"] == "SUAD2026001"
 
-    # Onboard Jane Smith as Employee
-    response = await client.post(
+    # Admin tries to onboard an HR - should succeed
+    payload_hr_success = payload_employee.copy()
+    payload_hr_success["email"] = "hr_by_admin@dayflow.com"
+    payload_hr_success["first_name"] = "Manager"
+    payload_hr_success["last_name"] = "HR"
+    payload_hr_success["role"] = "HR"
+    admin_hr_response = await client.post(
         "/api/v1/employees/onboard",
-        json=payload,
-        headers=headers
+        json=payload_hr_success,
+        headers=admin_headers
     )
-    assert response.status_code == 201
-    data = response.json()
-    assert data["login_id"] == "JASM2026001"  # first sequential ID for JASM in 2026
-    assert "temporary_password" in data
+    assert admin_hr_response.status_code == 201
+    assert admin_hr_response.json()["login_id"] == "MAHR2026001"
 
 
 
